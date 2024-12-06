@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -19,9 +18,6 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.port}")
     private Integer redisPort;
-
-    @Value("${spring.data.redis.channel.achievement}")
-    private String achievementChannel;
 
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
@@ -40,10 +36,5 @@ public class RedisConfig {
         template.setValueSerializer(new Jackson2JsonRedisSerializer<>(objectMapper, Object.class));
 
         return template;
-    }
-
-    @Bean
-    ChannelTopic achievementTopic() {
-        return new ChannelTopic(achievementChannel);
     }
 }
