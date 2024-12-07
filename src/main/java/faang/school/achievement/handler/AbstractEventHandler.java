@@ -21,7 +21,8 @@ public abstract class AbstractEventHandler<T> implements EventHandler<T> {
         if (achievementService.isUserHasAchievement(userId, achievement.getId())) {
             userHasAchievement = true;
         } else {
-            achievementService.processAchievementProgress(userId, achievement);
+            var result = achievementService.processAchievementProgress(userId, achievement);
+            System.out.println(result);
         }
 
         return userHasAchievement;

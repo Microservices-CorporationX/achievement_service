@@ -1,9 +1,9 @@
-package faang.school.achievement.publisher.achievement;
+package faang.school.achievement.publisher.redis.achievement;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.achievement.config.redis.RedisTopicsFactory;
 import faang.school.achievement.dto.AchievementEvent;
-import faang.school.achievement.publisher.AbstractEventPublisher;
+import faang.school.achievement.publisher.redis.AbstractEventPublisher;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.Topic;

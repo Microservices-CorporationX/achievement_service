@@ -1,4 +1,4 @@
-package faang.school.achievement.publisher;
+package faang.school.achievement.publisher.redis;
 
 import org.springframework.data.redis.listener.Topic;
 

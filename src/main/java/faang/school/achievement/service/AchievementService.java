@@ -1,5 +1,6 @@
 package faang.school.achievement.service;
 
+import faang.school.achievement.annotations.aop.AchievementAcceptedAspect;
 import faang.school.achievement.cache.AchievementCache;
 import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.exception.ResourceNotFoundException;
@@ -55,15 +56,19 @@ public class AchievementService {
         return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId);
     }
 
+    @AchievementAcceptedAspect
     @Transactional
-    public void processAchievementProgress(long userId, Achievement achievement) {
+    public UserAchievement processAchievementProgress(long userId, Achievement achievement) {
         long achievementId = achievement.getId();
         long baseValue = achievement.getBaseValue();
         AchievementProgress achievementProgress = getOrCreateProgress(userId, achievementId, baseValue);
 
         incrementProgress(achievementProgress);
         if (achievementProgress.getCurrentPoints() >= achievement.getThreshold()) {
-            assignAchievementToUser(achievementProgress);
+            var result = assignAchievementToUser(achievementProgress);
+            return result;
+        } else {
+            return new UserAchievement();
         }
     }
 
@@ -85,8 +90,9 @@ public class AchievementService {
         return achievementProgressRepository.findAllByCompleted(false);
     }
 
+
     @Transactional
-    public void assignAchievementToUser(AchievementProgress achievementProgress) {
+    public UserAchievement assignAchievementToUser(AchievementProgress achievementProgress) {
         achievementProgress.setCompleted(true);
         achievementProgressRepository.save(achievementProgress);
 
@@ -94,6 +100,7 @@ public class AchievementService {
                 .achievement(achievementProgress.getAchievement())
                 .userId(achievementProgress.getUserId())
                 .build();
-        userAchievementRepository.save(userAchievement);
+        UserAchievement createdUserAchievement = userAchievementRepository.save(userAchievement);
+        return createdUserAchievement;
     }
 }

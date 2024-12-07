@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.achievement.config.redis.RedisTopicsFactory;
 import faang.school.achievement.dto.AchievementEvent;
+import faang.school.achievement.publisher.redis.achievement.AchievementPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

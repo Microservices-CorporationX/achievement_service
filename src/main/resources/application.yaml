@@ -34,3 +34,16 @@ server:
 project-service:
   host: localhost
   port: 8082
+
+kafka:
+  server: localhost:9092
+  topic:
+    achievement-accepted-topic: achievement-accepted-topic
+  partitions: 1
+  replicas: 1
+
+app:
+  async:
+    kafka:
+      core-pool-size: 10
+      max-pool-size: 10

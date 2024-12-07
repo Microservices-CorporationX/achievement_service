@@ -34,6 +34,16 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql")
 
     /**
+     * Message broker
+     */
+    implementation("org.springframework.kafka:spring-kafka")
+
+    /**
+     * AOP
+     */
+    implementation("org.aspectj:aspectjweaver:1.9.19")
+
+    /**
      * Utils & Logging
      */
     implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
