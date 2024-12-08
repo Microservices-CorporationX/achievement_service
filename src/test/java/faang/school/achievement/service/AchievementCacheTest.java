@@ -4,6 +4,7 @@ import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.mapper.achievement.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.repository.AchievementRepository;
+import faang.school.achievement.service.achievement.AchievementCache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;

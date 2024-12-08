@@ -1,7 +1,7 @@
 package faang.school.achievement.controller;
 
 import faang.school.achievement.dto.AchievementDto;
-import faang.school.achievement.service.AchievementCache;
+import faang.school.achievement.service.achievement.AchievementCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
