@@ -1,8 +1,8 @@
-package faang.school.achievement.listener.impl;
+package faang.school.achievement.listener.impl.project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.achievement.event.project.ProjectEvent;
-import faang.school.achievement.event_handler.impl.project.ProjectEventHandler;
+import faang.school.achievement.event_handler.impl.project.ProjectAchievementHandler;
 import faang.school.achievement.listener.RedisContainerMessageListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,15 +24,15 @@ public class ProjectEventListener implements MessageListener, RedisContainerMess
     private String projectChannel;
 
     private final ObjectMapper objectMapper;
-    private final List<ProjectEventHandler> eventHandlers;
+    private final List<ProjectAchievementHandler> eventHandlers;
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
             ProjectEvent event = objectMapper.readValue(message.getBody(), ProjectEvent.class);
             eventHandlers.forEach(handler -> handler.handleEvent(event));
-        }catch (IOException e) {
-            log.error(e.getMessage(),e);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
             throw new RuntimeException(e.getMessage());
         }
     }

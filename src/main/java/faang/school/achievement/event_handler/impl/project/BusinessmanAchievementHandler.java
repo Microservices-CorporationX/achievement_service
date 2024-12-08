@@ -6,7 +6,7 @@ import faang.school.achievement.service.achievement.AchievementService;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BusinessmanAchievementHandler extends ProjectEventHandler {
+public class BusinessmanAchievementHandler extends ProjectAchievementHandler {
 
     public BusinessmanAchievementHandler(AchievementService achievementService,
                                          AchievementCache achievementCache) {

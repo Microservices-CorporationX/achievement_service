@@ -6,8 +6,10 @@ import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AchievementService {
@@ -16,7 +18,10 @@ public class AchievementService {
     private final UserAchievementRepository userAchievementRepository;
 
     public boolean hasAchievement(Long userId, Long achievementId) {
-        return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId);
+        boolean result = userAchievementRepository.
+                existsByUserIdAndAchievementId(userId, achievementId);
+        log.info("hasAchievement result: {}, for user with Id: {}", result, userId);
+        return result;
     }
 
     public void createProgressIfNecessary(Long userId, Long achievementId) {
@@ -30,7 +35,14 @@ public class AchievementService {
                         achievementId, userId)));
     }
 
+    public void saveProgress(AchievementProgress progress) {
+        achievementProgressRepository.save(progress);
+        log.info("Save progress: {}", progress);
+    }
+
     public void giveAchievement(UserAchievement userAchievement) {
         userAchievementRepository.save(userAchievement);
+        log.info("Achievement: {} gave successfully to user with Id: {}",
+                userAchievement.getAchievement().getTitle(), userAchievement.getUserId());
     }
 }

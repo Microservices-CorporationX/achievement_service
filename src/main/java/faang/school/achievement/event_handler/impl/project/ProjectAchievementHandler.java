@@ -10,9 +10,8 @@ import faang.school.achievement.service.achievement.AchievementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 
-//there is class EventHandler !!!
 @RequiredArgsConstructor
-public abstract class ProjectEventHandler implements EventHandler<ProjectEvent> {
+public abstract class ProjectAchievementHandler implements EventHandler<ProjectEvent> {
 
     private final AchievementService achievementService;
     private final AchievementCache achievementCache;
@@ -26,7 +25,7 @@ public abstract class ProjectEventHandler implements EventHandler<ProjectEvent> 
             AchievementProgress achievementProgress =
                     achievementService.getProgress(event.getAuthorId(), achievement.getId());
             achievementProgress.increment();
-//            achievementService.save(achievementProgress);
+            achievementService.saveProgress(achievementProgress);
 
             if (achievementProgress.getCurrentPoints() >= achievement.getPoints()) {
                 UserAchievement userAchievement = UserAchievement.builder()
