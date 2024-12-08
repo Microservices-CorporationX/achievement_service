@@ -18,11 +18,11 @@ public class AchievementController {
 
     @GetMapping("/{achievement}")
     public AchievementDto getAchievement(@PathVariable("achievement") String title) {
-        return achievementCache.get(title);
+        return achievementCache.getDto(title);
     }
 
     @GetMapping
-    public List<AchievementDto> getAchievement() {
+    public List<AchievementDto> getAchievements() {
         return achievementCache.getAll();
     }
 

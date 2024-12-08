@@ -43,8 +43,8 @@ class AchievementCacheTest {
         achievementCache.fillCache();
 
         verify(achievementRepository, times(1)).findAll();
-        AchievementDto result1 = achievementCache.get("Achievement1");
-        AchievementDto result2 = achievementCache.get("Achievement2");
+        Achievement result1 = achievementCache.get("Achievement1");
+        Achievement result2 = achievementCache.get("Achievement2");
         assertEquals("Achievement1", result1.getTitle());
         assertEquals("Achievement2", result2.getTitle());
     }
