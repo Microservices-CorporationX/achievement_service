@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 
 @RequiredArgsConstructor
-public abstract class ProjectAchievementHandler implements EventHandler<ProjectEvent> {
+public abstract class AbstractProjectAchievementHandler implements EventHandler<ProjectEvent> {
 
     private final AchievementService achievementService;
     private final AchievementCache achievementCache;

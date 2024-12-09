@@ -4,7 +4,7 @@ import faang.school.achievement.event.project.ProjectEvent;
 import faang.school.achievement.service.achievement.AchievementCache;
 import faang.school.achievement.service.achievement.AchievementService;
 
-public class EventHandlerForTest extends ProjectAchievementHandler {
+public class EventHandlerForTest extends AbstractProjectAchievementHandler {
 
     public EventHandlerForTest(AchievementService achievementService, AchievementCache achievementCache) {
         super(achievementService, achievementCache);
