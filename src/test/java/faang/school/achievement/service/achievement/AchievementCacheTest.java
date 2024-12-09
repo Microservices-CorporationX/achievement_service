@@ -82,5 +82,4 @@ class AchievementCacheTest {
         assertEquals("Achievement1", result.get(0).getTitle());
         assertEquals("Achievement2", result.get(1).getTitle());
     }
-
 }
