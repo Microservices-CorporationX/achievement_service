@@ -41,6 +41,7 @@ public class AchievementCache {
                 }
             }
         }
+        log.info("Achievement with title {} fetched from cache",title);
         return achievement;
     }
 

@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -24,6 +25,7 @@ public class AchievementService {
         return result;
     }
 
+    @Transactional
     public void createProgressIfNecessary(Long userId, Long achievementId) {
         achievementProgressRepository.createProgressIfNecessary(userId, achievementId);
     }
@@ -37,7 +39,8 @@ public class AchievementService {
 
     public void saveProgress(AchievementProgress progress) {
         achievementProgressRepository.save(progress);
-        log.info("Save progress: {}", progress);
+        log.info("Save AchievementProgress with Id: {}, for user with Id: {}",
+                progress.getId(), progress.getUserId());
     }
 
     public void giveAchievement(UserAchievement userAchievement) {
