@@ -33,7 +33,7 @@ class AchievementCacheTest {
 
     @Test
     void fillCacheTest() {
-        Achievement achievementFirst=  new Achievement();
+        Achievement achievementFirst = new Achievement();
         achievementFirst.setTitle("Achievement1");
         Achievement achievementSecond = new Achievement();
         achievementSecond.setTitle("Achievement2");
@@ -50,7 +50,7 @@ class AchievementCacheTest {
 
     @Test
     void getInDBTest() {
-        Achievement achievementFirst=  new Achievement();
+        Achievement achievementFirst = new Achievement();
         achievementFirst.setTitle("Achievement1");
         Achievement achievementSecond = new Achievement();
         achievementSecond.setTitle("Achievement2");
@@ -68,7 +68,7 @@ class AchievementCacheTest {
 
     @Test
     void getAllTest() {
-        Achievement achievementFirst=  new Achievement();
+        Achievement achievementFirst = new Achievement();
         achievementFirst.setTitle("Achievement1");
         Achievement achievementSecond = new Achievement();
         achievementSecond.setTitle("Achievement2");
@@ -82,5 +82,4 @@ class AchievementCacheTest {
         assertEquals("Achievement1", result.get(0).getTitle());
         assertEquals("Achievement2", result.get(1).getTitle());
     }
-
 }
