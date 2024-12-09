@@ -30,7 +30,7 @@ public class AchievementCache {
                 .forEach(achievement -> achievementsByTitle.put(achievement.getTitle(), achievement));
     }
 
-    public AchievementDto get(String title) {
+    public Achievement getAchievement(String title) {
         Achievement achievement = achievementsByTitle.get(title);
         if (achievement == null) {
             for (Achievement achievementFromDB : achievementRepository.findAll()) {
@@ -41,7 +41,11 @@ public class AchievementCache {
                 }
             }
         }
-        return achievementMapper.toDto(achievement);
+        return achievement;
+    }
+
+    public AchievementDto get(String title) {
+        return achievementMapper.toDto(getAchievement(title));
     }
 
     public List<AchievementDto> getAll() {

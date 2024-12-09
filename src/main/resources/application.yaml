@@ -12,7 +12,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
@@ -27,6 +27,13 @@ spring:
       channel:
         achievement: achievement_channel
         follower: follower_channel
+        skill: skill_channel
+
+async:
+  thread-name-prefix: AsyncThread-
+  core-pool-size: 5
+  max-pool-size: 10
+  queue_capacity: 25
 
 server:
   port: 8085
