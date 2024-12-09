@@ -20,7 +20,7 @@ public abstract class ProjectAchievementHandler implements EventHandler<ProjectE
     public void handleAchievement(String achievementName, ProjectEvent event) {
         Achievement achievement = achievementCache.get(achievementName);
 
-        if (!achievementService.hasAchievement(event.getAuthorId(), event.getProjectId())) {
+        if (!achievementService.hasAchievement(event.getAuthorId(), achievement.getId())) {
             achievementService.createProgressIfNecessary(event.getAuthorId(), achievement.getId());
             AchievementProgress achievementProgress =
                     achievementService.getProgress(event.getAuthorId(), achievement.getId());
