@@ -29,6 +29,12 @@ public class AchievementProgressService {
 
     @Transactional
     public AchievementProgress saveProgress(AchievementProgress achievementProgress) {
+        log.info("User {} have point {} of {} for achievement {}",
+                achievementProgress.getUserId(),
+                achievementProgress.getCurrentPoints(),
+                achievementProgress.getAchievement().getPoints(),
+                achievementProgress.getAchievement().getTitle()
+        );
         return achievementProgressRepository.save(achievementProgress);
     }
 }

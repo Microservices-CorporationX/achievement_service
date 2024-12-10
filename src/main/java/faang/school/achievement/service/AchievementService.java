@@ -35,6 +35,10 @@ public class AchievementService {
 
     @Transactional
     public void giveAchievement(UserAchievement userAchievement) {
+        log.info("User {} give achievement {}",
+                userAchievement.getUserId(),
+                userAchievement.getAchievement().getTitle()
+        );
         userAchievementRepository.save(userAchievement);
     }
 }
