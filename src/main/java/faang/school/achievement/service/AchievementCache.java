@@ -1,10 +1,9 @@
 package faang.school.achievement.service;
 
-import faang.school.achievement.dto.AchievementDto;
-import faang.school.achievement.mapper.achievement.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.repository.AchievementRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,39 +11,49 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AchievementCache {
 
-    private final AchievementRepository achievementRepository;
-    private final AchievementMapper achievementMapper;
+    private static final String KEY_MAP = "Achievements";
 
-    private Map<String, Achievement> achievementsByTitle = new HashMap<>();
+    private final AchievementRepository achievementRepository;
+    private final RedisService redisService;
 
     @PostConstruct
     public void fillCache() {
-        log.info("Achievements saved in cache");
+        Map<String, Achievement> achievementsByTitle = new HashMap<>();
         achievementRepository.findAll()
                 .forEach(achievement -> achievementsByTitle.put(achievement.getTitle(), achievement));
+
+        redisService.saveAchievement(KEY_MAP, achievementsByTitle);
+        log.info("Achievements saved in cache");
     }
 
-    public AchievementDto get(String title) {
-        Achievement achievement = achievementsByTitle.get(title);
+    @PreDestroy
+    private void clearingCache() {
+        redisService.cleanAchievements();
+        log.info("Achievement cache cleared");
+    }
+
+
+    public Achievement get(String title) {
+        Achievement achievement = redisService.getAchievement(KEY_MAP, title);
         if (achievement == null) {
-            for (Achievement achievementFromDB : achievementRepository.findAll()) {
-                if (achievementFromDB.getTitle().equals(title)) {
-                    achievement = achievementFromDB;
-                    achievementsByTitle.put(achievement.getTitle(), achievement);
-                    break;
-                }
+            clearingCache();
+            fillCache();
+            achievement = redisService.getAchievement(KEY_MAP, title);
+            if (achievement == null) {
+                throw new NoSuchElementException("Achievement with title " + title + " no such");
             }
         }
-        return achievementMapper.toDto(achievement);
+        return achievement;
     }
 
-    public List<AchievementDto> getAll() {
-        return achievementMapper.toDtoList(achievementsByTitle.values().stream().toList());
+    public List<Achievement> getAll() {
+        return redisService.getAllAchievements(KEY_MAP);
     }
 }
