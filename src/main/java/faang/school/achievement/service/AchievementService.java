@@ -13,12 +13,14 @@ import faang.school.achievement.repository.AchievementRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AchievementService {
 
     private final AchievementMapper achievementMapper;
@@ -28,10 +30,12 @@ public class AchievementService {
     private final List<AchievementFilter> achievementFilters;
 
     public List<AchievementDto> getAllPossibleAchievements(AchievementFilterDto filterDto) {
+        log.info("Trying to get all possible achievements with the following filters: {}", filterDto);
         return achievementMapper.toAchievementDto(getFilteredAchievements(filterDto));
     }
 
     public List<AchievementDto> getAllUserAchievements(long userId) {
+        log.info("Trying to get all achievements for user: {}", userId);
         List<UserAchievement> userAchievements = userAchievementRepository.findByUserId(userId);
         List<Achievement> achievements = userAchievements.stream()
                 .map(UserAchievement::getAchievement)
@@ -40,11 +44,13 @@ public class AchievementService {
     }
 
     public List<AchievementProgressDto> getUnfinishedUserAchievements(long userId) {
+        log.info("Trying to get all unfinished achievements for user: {}", userId);
         List<AchievementProgress> unfinishedUserAchievements = achievementProgressRepository.findByUserId(userId);
         return achievementMapper.toAchievementProgressDto(unfinishedUserAchievements);
     }
 
     public AchievementDto getAchievement(long achievementId) {
+        log.info("Trying to get achievement: {}", achievementId);
         return achievementMapper.toAchievementDto(getAchievementById(achievementId));
     }
 
