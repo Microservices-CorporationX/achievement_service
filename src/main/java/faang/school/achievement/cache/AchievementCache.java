@@ -3,6 +3,7 @@ package faang.school.achievement.cache;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.repository.AchievementRepository;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ import java.util.Map;
 public class AchievementCache {
 
     private final AchievementRepository achievementRepository;
+    @Getter
     private Map<String, Achievement> cache = new HashMap<>();
 
     @PostConstruct
