@@ -43,6 +43,7 @@ public class AchievementCache {
         }
         return achievement;
     }
+
     public AchievementDto get(String title) {
         return achievementMapper.toDto(getAchievement(title));
     }
