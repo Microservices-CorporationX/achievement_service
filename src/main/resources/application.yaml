@@ -39,3 +39,10 @@ logging:
 project-service:
   host: localhost
   port: 8082
+
+async:
+  achievement-thread-pool:
+      core-pool-size: 5
+      max-pool-size: 10
+      queue_capacity: 25
+      thread-name-prefix: achievement-handling-thread-

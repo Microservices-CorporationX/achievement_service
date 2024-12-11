@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class BusinessmanAchievementHandler extends AbstractProjectAchievementHandler {
 
+private final String ACHIEVEMENT_TITLE = "BUSINESSMAN";
+
     public BusinessmanAchievementHandler(AchievementService achievementService,
                                          AchievementCache achievementCache) {
         super(achievementService, achievementCache);
@@ -15,6 +17,6 @@ public class BusinessmanAchievementHandler extends AbstractProjectAchievementHan
 
     @Override
     public void handleEvent(ProjectEvent event) {
-        handleAchievement("BUSINESSMAN", event);
+        handleAchievement(ACHIEVEMENT_TITLE, event);
     }
 }
