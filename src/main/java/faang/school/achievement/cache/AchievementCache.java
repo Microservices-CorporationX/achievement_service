@@ -22,12 +22,12 @@ public class AchievementCache {
     public AchievementCache(AchievementRepository achievementRepository) {
         this.achievementRepository = achievementRepository;
         initializeCache();
-        log.info("Achievement cache initialized");
     }
 
     private void initializeCache() {
         achievementRepository.findAll().forEach(achievement ->
                 achievementMap.put(achievement.getTitle(), achievement));
+        log.info("Achievement cache initialized");
     }
 
     public Optional<Achievement> getAchievement(String title) {
