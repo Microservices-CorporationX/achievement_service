@@ -1,6 +1,5 @@
 package faang.school.achievement.service.achievement;
 
-import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.mapper.achievement.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.repository.AchievementRepository;
@@ -31,9 +30,10 @@ class AchievementCacheTest {
     @InjectMocks
     private AchievementCache achievementCache;
 
+
     @Test
     void fillCacheTest() {
-        Achievement achievementFirst=  new Achievement();
+        Achievement achievementFirst = new Achievement();
         achievementFirst.setTitle("Achievement1");
         Achievement achievementSecond = new Achievement();
         achievementSecond.setTitle("Achievement2");
@@ -50,7 +50,7 @@ class AchievementCacheTest {
 
     @Test
     void getInDBTest() {
-        Achievement achievementFirst=  new Achievement();
+        Achievement achievementFirst = new Achievement();
         achievementFirst.setTitle("Achievement1");
         Achievement achievementSecond = new Achievement();
         achievementSecond.setTitle("Achievement2");
@@ -60,7 +60,7 @@ class AchievementCacheTest {
         when(achievementRepository.findAll()).thenReturn(List.of(achievementFirst, achievementSecond));
         achievementCache.get(achievementSecond.getTitle());
 
-        List<AchievementDto> result = achievementCache.getAll();
+        List<Achievement> result = achievementCache.getAll();
         assertEquals(2, result.size());
         assertEquals("Achievement1", result.get(0).getTitle());
         assertEquals("Achievement2", result.get(1).getTitle());
@@ -68,7 +68,7 @@ class AchievementCacheTest {
 
     @Test
     void getAllTest() {
-        Achievement achievementFirst=  new Achievement();
+        Achievement achievementFirst = new Achievement();
         achievementFirst.setTitle("Achievement1");
         Achievement achievementSecond = new Achievement();
         achievementSecond.setTitle("Achievement2");
@@ -76,7 +76,7 @@ class AchievementCacheTest {
         when(achievementRepository.findAll()).thenReturn(List.of(achievementFirst, achievementSecond));
         achievementCache.fillCache();
 
-        List<AchievementDto> result = achievementCache.getAll();
+        List<Achievement> result = achievementCache.getAll();
 
         assertEquals(2, result.size());
         assertEquals("Achievement1", result.get(0).getTitle());

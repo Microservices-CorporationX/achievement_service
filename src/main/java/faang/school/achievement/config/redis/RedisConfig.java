@@ -20,19 +20,17 @@ public class RedisConfig {
     private int port;
 
     @Bean
-    JedisConnectionFactory jedisConnectionFactory() {
+    public JedisConnectionFactory jedisConnectionFactory() {
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(host, port);
         return new JedisConnectionFactory(config);
     }
 
     @Bean
     RedisMessageListenerContainer redisContainer(List<RedisContainerMessageListener> listeners) {
-        RedisMessageListenerContainer container
-                = new RedisMessageListenerContainer();
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
         listeners.forEach(listener -> container.addMessageListener(
-                listener.getListenerAdapter(),listener.getChannelTopic()));
-
+                listener.getListenerAdapter(), listener.getChannelTopic()));
         return container;
     }
 }

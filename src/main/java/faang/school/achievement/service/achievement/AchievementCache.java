@@ -41,7 +41,7 @@ public class AchievementCache {
                 }
             }
         }
-        log.info("Achievement with title {} fetched from cache",title);
+        log.info("Achievement with title {} fetched from cache", title);
         return achievement;
     }
 
@@ -49,7 +49,7 @@ public class AchievementCache {
         return achievementMapper.toDto(get(title));
     }
 
-    public List<AchievementDto> getAll() {
-        return achievementMapper.toDtoList(achievementsByTitle.values().stream().toList());
+    public List<Achievement> getAll() {
+        return achievementsByTitle.values().stream().toList();
     }
 }
