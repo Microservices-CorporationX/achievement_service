@@ -27,6 +27,13 @@ spring:
       channel:
         achievement: achievement_channel
         follower: follower_channel
+        comment: comment_channel
+
+async:
+  thread-name-prefix: AsyncThread-
+  core-pool-size: 5
+  max-pool-size: 10
+  queue-capacity: 25
 
 server:
   port: 8085
