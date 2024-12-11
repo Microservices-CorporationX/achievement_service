@@ -2,6 +2,7 @@ package faang.school.achievement.service;
 
 import faang.school.achievement.cache.AchievementCache;
 import faang.school.achievement.dto.AchievementDto;
+import faang.school.achievement.exception.AchievementException;
 import faang.school.achievement.filters.achievement.AchievementFilter;
 import faang.school.achievement.mapper.AchievementMapper;
 import faang.school.achievement.model.Achievement;
@@ -51,7 +52,7 @@ public class AchievementService {
         Achievement achievement = achievementRepository.findById(achievementId)
                 .orElseThrow(() -> {
                     log.error("Achievement {} doesn't exist", achievementId);
-                    return new RuntimeException("Achievement doesn't exist");
+                    return new AchievementException("Achievement doesn't exist");
                 });
 
         return mapper.toDto(achievement);

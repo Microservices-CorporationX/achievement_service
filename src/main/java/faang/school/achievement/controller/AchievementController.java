@@ -6,6 +6,7 @@ import faang.school.achievement.service.AchievementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/achievements")
+@RequestMapping("/api/v1/achievements")
 @RequiredArgsConstructor
 public class AchievementController {
 
     private final AchievementService achievementService;
 
-    @GetMapping("/all")
+    @PostMapping("/all")
     public List<AchievementDto>  getAll(@RequestBody AchievementDto filters) {
         return achievementService.getAll(filters);
     }
@@ -35,8 +36,8 @@ public class AchievementController {
         return achievementService.get(achievementId);
     }
 
-    @GetMapping("/{userId}/unearned")
-    public List<AchievementDto> getByUserIdUnearned(@PathVariable Long userId) {
+    @GetMapping("/unearned")
+    public List<AchievementDto> getByUserIdUnearned(@RequestParam("user") Long userId) {
         return achievementService.getByUserIdUnearned(userId);
     }
 }
