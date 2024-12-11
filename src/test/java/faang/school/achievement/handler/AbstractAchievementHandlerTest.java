@@ -4,7 +4,6 @@ import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.event.AlbumCreatedEvent;
 import faang.school.achievement.service.AchievementCache;
-import faang.school.achievement.service.AchievementProgressService;
 import faang.school.achievement.service.AchievementService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,9 +26,6 @@ public class AbstractAchievementHandlerTest {
     @Mock
     private AchievementService achievementService;
 
-    @Mock
-    private AchievementProgressService achievementProgressService;
-
     @InjectMocks
     private LibrarianAchievementHandler librarianAchievementHandler;
 
@@ -46,7 +42,7 @@ public class AbstractAchievementHandlerTest {
 
         librarianAchievementHandler.handleAchievement(event, titleAchievement);
 
-        verify(achievementProgressService, times(0))
+        verify(achievementService, times(0))
                 .createProgressIfNecessary(event.getUserId(), achievement.getId());
     }
 
@@ -63,7 +59,7 @@ public class AbstractAchievementHandlerTest {
         achievementProgress.setCurrentPoints(5);
         when(achievementCache.get("Test")).thenReturn(achievement);
         when(achievementService.hasAchievement(event.getUserId(),achievement.getId())).thenReturn(false);
-        when(achievementProgressService.getProgress(event.getUserId(), achievement.getId())).thenReturn(achievementProgress);
+        when(achievementService.getProgress(event.getUserId(), achievement.getId())).thenReturn(achievementProgress);
 
         librarianAchievementHandler.handleAchievement(event, titleAchievement);
 
@@ -84,7 +80,7 @@ public class AbstractAchievementHandlerTest {
         achievementProgress.setCurrentPoints(9);
         when(achievementCache.get("Test")).thenReturn(achievement);
         when(achievementService.hasAchievement(event.getUserId(),achievement.getId())).thenReturn(false);
-        when(achievementProgressService.getProgress(event.getUserId(), achievement.getId())).thenReturn(achievementProgress);
+        when(achievementService.getProgress(event.getUserId(), achievement.getId())).thenReturn(achievementProgress);
 
         librarianAchievementHandler.handleAchievement(event, titleAchievement);
 
