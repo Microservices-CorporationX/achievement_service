@@ -7,7 +7,6 @@ import faang.school.achievement.listener.AbstractEventListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.Topic;
-import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,11 +22,6 @@ public class SkillEventListener extends AbstractEventListener<SkillAcquiredEvent
             List<EventHandler<SkillAcquiredEvent>> abstractEventHandlers
     ) {
         super(objectMapper, abstractEventHandlers);
-    }
-
-    @Override
-    public MessageListenerAdapter getAdapter() {
-        return new MessageListenerAdapter(this);
     }
 
     @Override
