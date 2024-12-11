@@ -1,4 +1,4 @@
-package faang.school.achievement.event_handler.impl.project;
+package faang.school.achievement.handler.impl.project;
 
 import faang.school.achievement.event.project.ProjectEvent;
 import faang.school.achievement.model.Achievement;

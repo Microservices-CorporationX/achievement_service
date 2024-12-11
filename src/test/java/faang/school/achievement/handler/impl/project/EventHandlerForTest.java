@@ -1,4 +1,4 @@
-package faang.school.achievement.event_handler.impl.project;
+package faang.school.achievement.handler.impl.project;
 
 import faang.school.achievement.event.project.ProjectEvent;
 import faang.school.achievement.service.achievement.AchievementCache;
@@ -12,6 +12,6 @@ public class EventHandlerForTest extends AbstractProjectAchievementHandler {
 
     @Override
     public void handleEvent(ProjectEvent event) {
-        handleAchievement("achievementName",event);
+        handleAchievement("achievementName", event);
     }
 }

@@ -1,7 +1,7 @@
-package faang.school.achievement.event_handler.impl.project;
+package faang.school.achievement.handler.impl.project;
 
 import faang.school.achievement.event.project.ProjectEvent;
-import faang.school.achievement.event_handler.EventHandler;
+import faang.school.achievement.handler.EventHandler;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;

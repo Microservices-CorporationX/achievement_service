@@ -2,8 +2,8 @@ package faang.school.achievement.listener.impl.project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.achievement.event.project.ProjectEvent;
-import faang.school.achievement.event_handler.impl.project.BusinessmanAchievementHandler;
-import faang.school.achievement.event_handler.impl.project.AbstractProjectAchievementHandler;
+import faang.school.achievement.handler.EventHandler;
+import faang.school.achievement.handler.impl.project.BusinessmanAchievementHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +33,7 @@ class ProjectEventListenerTest {
     @BeforeEach
     void setUp() {
         businessmanAchievementHandler = mock(BusinessmanAchievementHandler.class);
-        List<AbstractProjectAchievementHandler> projectAchievementHandlers = new ArrayList<>();
+        List<EventHandler<ProjectEvent>> projectAchievementHandlers = new ArrayList<>();
         projectAchievementHandlers.add(businessmanAchievementHandler);
 
         projectEventListener = new ProjectEventListener(objectMapper, projectAchievementHandlers);

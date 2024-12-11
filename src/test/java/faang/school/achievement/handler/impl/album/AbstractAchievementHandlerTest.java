@@ -1,10 +1,10 @@
-package faang.school.achievement.handler;
+package faang.school.achievement.handler.impl.album;
 
+import faang.school.achievement.event.album.AlbumCreatedEvent;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
-import faang.school.achievement.event.AlbumCreatedEvent;
-import faang.school.achievement.service.AchievementCache;
-import faang.school.achievement.service.AchievementService;
+import faang.school.achievement.service.achievement.AchievementCache;
+import faang.school.achievement.service.achievement.AchievementService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,7 +38,7 @@ public class AbstractAchievementHandlerTest {
         achievement.setTitle(titleAchievement);
         achievement.setId(2L);
         when(achievementCache.get("Test")).thenReturn(achievement);
-        when(achievementService.hasAchievement(event.getUserId(),achievement.getId())).thenReturn(true);
+        when(achievementService.hasAchievement(event.getUserId(), achievement.getId())).thenReturn(true);
 
         librarianAchievementHandler.handleAchievement(event, titleAchievement);
 
@@ -58,7 +58,7 @@ public class AbstractAchievementHandlerTest {
         AchievementProgress achievementProgress = new AchievementProgress();
         achievementProgress.setCurrentPoints(5);
         when(achievementCache.get("Test")).thenReturn(achievement);
-        when(achievementService.hasAchievement(event.getUserId(),achievement.getId())).thenReturn(false);
+        when(achievementService.hasAchievement(event.getUserId(), achievement.getId())).thenReturn(false);
         when(achievementService.getProgress(event.getUserId(), achievement.getId())).thenReturn(achievementProgress);
 
         librarianAchievementHandler.handleAchievement(event, titleAchievement);
@@ -79,7 +79,7 @@ public class AbstractAchievementHandlerTest {
         AchievementProgress achievementProgress = new AchievementProgress();
         achievementProgress.setCurrentPoints(9);
         when(achievementCache.get("Test")).thenReturn(achievement);
-        when(achievementService.hasAchievement(event.getUserId(),achievement.getId())).thenReturn(false);
+        when(achievementService.hasAchievement(event.getUserId(), achievement.getId())).thenReturn(false);
         when(achievementService.getProgress(event.getUserId(), achievement.getId())).thenReturn(achievementProgress);
 
         librarianAchievementHandler.handleAchievement(event, titleAchievement);

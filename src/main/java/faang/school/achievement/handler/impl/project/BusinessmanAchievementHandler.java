@@ -1,14 +1,15 @@
-package faang.school.achievement.event_handler.impl.project;
+package faang.school.achievement.handler.impl.project;
 
 import faang.school.achievement.event.project.ProjectEvent;
 import faang.school.achievement.service.achievement.AchievementCache;
 import faang.school.achievement.service.achievement.AchievementService;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BusinessmanAchievementHandler extends AbstractProjectAchievementHandler {
 
-private final String ACHIEVEMENT_TITLE = "BUSINESSMAN";
+    private final String ACHIEVEMENT_TITLE = "BUSINESSMAN";
 
     public BusinessmanAchievementHandler(AchievementService achievementService,
                                          AchievementCache achievementCache) {
@@ -16,6 +17,7 @@ private final String ACHIEVEMENT_TITLE = "BUSINESSMAN";
     }
 
     @Override
+    @Async("achievementHandlingExecutor")
     public void handleEvent(ProjectEvent event) {
         handleAchievement(ACHIEVEMENT_TITLE, event);
     }

@@ -1,5 +1,7 @@
 package faang.school.achievement.service.achievement;
 
+import faang.school.achievement.dto.AchievementDto;
+import faang.school.achievement.mapper.achievement.AchievementMapper;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
 import faang.school.achievement.repository.AchievementProgressRepository;
@@ -10,13 +12,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AchievementService {
 
+    private final AchievementMapper achievementMapper;
+    private final AchievementCache achievementCache;
     private final AchievementProgressRepository achievementProgressRepository;
     private final UserAchievementRepository userAchievementRepository;
+
+    public AchievementDto get(String title) {
+        return achievementMapper.toDto(achievementCache.get(title));
+    }
+
+    public List<AchievementDto> getAll() {
+        return achievementMapper.toDtoList(achievementCache.getAll());
+    }
 
     public boolean hasAchievement(Long userId, Long achievementId) {
         boolean result = userAchievementRepository.

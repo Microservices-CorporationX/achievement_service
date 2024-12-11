@@ -1,14 +1,14 @@
-package faang.school.achievement.listener;
+package faang.school.achievement.listener.impl.album;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import faang.school.achievement.event.album.AlbumCreatedEvent;
 import faang.school.achievement.handler.EventHandler;
-import faang.school.achievement.event.AlbumCreatedEvent;
+import faang.school.achievement.listener.RedisContainerMessageListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.data.redis.listener.Topic;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class AlbumEventListener implements MessageListener, RedisListener {
+public class AlbumEventListener implements MessageListener, RedisContainerMessageListener {
 
     private final ObjectMapper objectMapper;
     private final List<EventHandler<AlbumCreatedEvent>> handlers;
@@ -33,7 +33,7 @@ public class AlbumEventListener implements MessageListener, RedisListener {
         }
     }
 
-    public Topic getTopic() {
+    public ChannelTopic getChannelTopic() {
         return new ChannelTopic(channelName);
     }
 }

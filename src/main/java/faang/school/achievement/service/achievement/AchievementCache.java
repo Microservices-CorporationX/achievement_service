@@ -1,7 +1,5 @@
 package faang.school.achievement.service.achievement;
 
-import faang.school.achievement.dto.AchievementDto;
-import faang.school.achievement.mapper.achievement.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.repository.AchievementRepository;
 import jakarta.annotation.PostConstruct;
@@ -19,7 +17,6 @@ import java.util.Map;
 public class AchievementCache {
 
     private final AchievementRepository achievementRepository;
-    private final AchievementMapper achievementMapper;
 
     private Map<String, Achievement> achievementsByTitle = new HashMap<>();
 
@@ -43,10 +40,6 @@ public class AchievementCache {
         }
         log.info("Achievement with title {} fetched from cache", title);
         return achievement;
-    }
-
-    public AchievementDto getDto(String title) {
-        return achievementMapper.toDto(get(title));
     }
 
     public List<Achievement> getAll() {

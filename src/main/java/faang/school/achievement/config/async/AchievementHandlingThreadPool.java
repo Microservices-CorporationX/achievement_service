@@ -1,4 +1,4 @@
-package faang.school.achievement.config.thread_pool;
+package faang.school.achievement.config.async;
 
 import faang.school.achievement.properties.AchievementThreadPoolProperties;
 import lombok.RequiredArgsConstructor;
