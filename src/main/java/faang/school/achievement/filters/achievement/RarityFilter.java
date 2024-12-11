@@ -12,7 +12,7 @@ public class RarityFilter implements AchievementFilter{
     }
 
     @Override
-    public Stream<Achievement> apply(Stream<Achievement> achievements, AchievementDto filters) {
+    public Stream<AchievementDto> apply(Stream<AchievementDto> achievements, AchievementDto filters) {
         return achievements.filter(achievement -> achievement.getRarity().equals(filters.getRarity()));
     }
 }

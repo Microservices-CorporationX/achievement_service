@@ -19,80 +19,45 @@ public class AchievementFilterTest {
 
     @Test
     public void testTitleFilter() {
-        AchievementFilter filter = new TitleFilter();
-        AchievementDto filters = setUpAchievementDto();
-
-        Achievement first = Achievement.builder()
-                .title("title")
-                .description("no")
-                .rarity(Rarity.LEGENDARY).build();
-
-        Achievement second = Achievement.builder()
-                .title("name")
-                .description("description")
-                .rarity(Rarity.LEGENDARY).build();
-
-        Achievement third = Achievement.builder()
-                .title("third")
-                .description("third")
-                .rarity(Rarity.COMMON).build();
-
-        Stream<Achievement> achievements = Stream.of(first, second, third);
-        Stream<Achievement> result = filter.apply(achievements, filters);
+        Stream<AchievementDto> result = getResult(new TitleFilter());
 
         Assertions.assertEquals(1, result.toList().size());
     }
 
     @Test
     public void testDescriptionFilter() {
-        AchievementFilter filter = new DescriptionFilter();
-        AchievementDto filters = setUpAchievementDto();
-
-        Achievement first = Achievement.builder()
-                .title("title")
-                .description("no")
-                .rarity(Rarity.LEGENDARY).build();
-
-        Achievement second = Achievement.builder()
-                .title("name")
-                .description("description")
-                .rarity(Rarity.LEGENDARY).build();
-
-        Achievement third = Achievement.builder()
-                .title("third")
-                .description("third")
-                .rarity(Rarity.COMMON).build();
-
-        Stream<Achievement> achievements = Stream.of(first, second, third);
-        Stream<Achievement> result = filter.apply(achievements, filters);
+        Stream<AchievementDto> result = getResult(new DescriptionFilter());
 
         Assertions.assertEquals(1, result.toList().size());
     }
 
     @Test
     public void testRarityFilter() {
-        AchievementFilter filter = new RarityFilter();
+        Stream<AchievementDto> result = getResult(new RarityFilter());
+
+        Assertions.assertEquals(2, result.toList().size());
+    }
+
+    private Stream<AchievementDto> getResult(AchievementFilter filter) {
         AchievementDto filters = setUpAchievementDto();
 
-        Achievement first = Achievement.builder()
+        AchievementDto first = AchievementDto.builder()
                 .title("title")
                 .description("no")
                 .rarity(Rarity.LEGENDARY).build();
 
-        Achievement second = Achievement.builder()
+        AchievementDto second = AchievementDto.builder()
                 .title("name")
                 .description("description")
                 .rarity(Rarity.LEGENDARY).build();
 
-        Achievement third = Achievement.builder()
+        AchievementDto third = AchievementDto.builder()
                 .title("third")
                 .description("third")
                 .rarity(Rarity.COMMON).build();
 
-        Stream<Achievement> achievements = Stream.of(first, second, third);
-        Stream<Achievement> result = filter.apply(achievements, filters);
-
-        Assertions.assertEquals(2, result.toList().size());
+        Stream<AchievementDto> achievements = Stream.of(first, second, third);
+        return filter.apply(achievements, filters);
     }
 
     private AchievementDto setUpAchievementDto() {

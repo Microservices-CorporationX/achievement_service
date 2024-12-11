@@ -31,12 +31,12 @@ public class AchievementService {
     private final UserAchievementRepository userAchievementRepository;
 
     public List<AchievementDto> getAll(AchievementDto filters) {
-        Stream<Achievement> achievements = cache.getCache().values().stream();
+        Stream<AchievementDto> achievements = cache.getCache().values().stream();
 
         return achievementFilters.stream()
                 .filter(filter -> filter.isApplicable(filters))
                 .flatMap(filter -> filter.apply(achievements, filters))
-                .map(mapper::toDto).toList();
+                .toList();
     }
 
     public List<AchievementDto> getByUserId(Long userId) {

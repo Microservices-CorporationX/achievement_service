@@ -12,7 +12,7 @@ public class TitleFilter implements AchievementFilter{
     }
 
     @Override
-    public Stream<Achievement> apply(Stream<Achievement> achievements, AchievementDto filters) {
+    public Stream<AchievementDto> apply(Stream<AchievementDto> achievements, AchievementDto filters) {
         return achievements
                 .filter(achievement -> achievement.getTitle().toLowerCase()
                         .contains(filters.getTitle().toLowerCase()));
