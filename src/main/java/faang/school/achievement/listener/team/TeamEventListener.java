@@ -24,10 +24,13 @@ public class TeamEventListener implements MessageListener {
     public void onMessage(Message message, byte[] pattern) {
         try {
             TeamEvent event = objectMapper.readValue(message.getBody(), TeamEvent.class);
-
+            handlers.forEach(eventHandler -> {
+                log.debug("Handling event with handler: {}", eventHandler.getClass().getSimpleName());
+                eventHandler.handleEvent(event);
+            });
         } catch (IOException e) {
             log.error("Error reading value");
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to read TeamEvent from message body", e);
         }
 
     }
