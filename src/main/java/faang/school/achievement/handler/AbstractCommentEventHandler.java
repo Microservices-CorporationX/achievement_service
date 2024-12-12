@@ -18,7 +18,7 @@ public abstract class AbstractCommentEventHandler implements EventHandler<Commen
 
     @Async("commentHandlingExecutor")
     public void handleCommentEvent(CommentEventDto event, String titleAchievement) {
-        Achievement achievement = achievementCache.getAchievement(titleAchievement);
+        Achievement achievement = achievementCache.get(titleAchievement);
         if (!achievementService.hasAchievement(event.getCommenterId(), achievement.getId())) {
             achievementService.createProgressIfNecessary(event.getCommenterId(), achievement.getId());
             AchievementProgress achievementProgress = achievementService.getProgress(event.getCommenterId(), achievement.getId());
