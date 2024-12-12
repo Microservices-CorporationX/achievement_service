@@ -1,7 +1,5 @@
 package faang.school.achievement.service;
 
-import faang.school.achievement.dto.AchievementDto;
-import faang.school.achievement.mapper.achievement.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.repository.AchievementRepository;
 import jakarta.annotation.PostConstruct;
@@ -19,18 +17,17 @@ import java.util.Map;
 public class AchievementCache {
 
     private final AchievementRepository achievementRepository;
-    private final AchievementMapper achievementMapper;
 
     private Map<String, Achievement> achievementsByTitle = new HashMap<>();
 
     @PostConstruct
     public void fillCache() {
-        log.info("Achievements saved in cache");
         achievementRepository.findAll()
                 .forEach(achievement -> achievementsByTitle.put(achievement.getTitle(), achievement));
+        log.info("Achievements saved in cache");
     }
 
-    public Achievement getAchievement(String title) {
+    public Achievement get(String title) {
         Achievement achievement = achievementsByTitle.get(title);
         if (achievement == null) {
             for (Achievement achievementFromDB : achievementRepository.findAll()) {
@@ -44,11 +41,7 @@ public class AchievementCache {
         return achievement;
     }
 
-    public AchievementDto get(String title) {
-        return achievementMapper.toDto(getAchievement(title));
-    }
-
-    public List<AchievementDto> getAll() {
-        return achievementMapper.toDtoList(achievementsByTitle.values().stream().toList());
+    public List<Achievement> getAll() {
+        return achievementsByTitle.values().stream().toList();
     }
 }

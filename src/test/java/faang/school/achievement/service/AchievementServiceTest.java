@@ -1,28 +1,33 @@
 package faang.school.achievement.service;
 
+import faang.school.achievement.dto.AchievementDto;
+import faang.school.achievement.exception.EntityNotFoundException;
+import faang.school.achievement.mapper.achievement.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
 import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class AchievementServiceTest {
+class AchievementServiceTest {
 
     @Mock
     private UserAchievementRepository userAchievementRepository;
@@ -30,94 +35,103 @@ public class AchievementServiceTest {
     @Mock
     private AchievementProgressRepository achievementProgressRepository;
 
+    @Spy
+    private AchievementMapper achievementMapper = Mappers.getMapper(AchievementMapper.class);
+
+    @Mock
+    private AchievementCache achievementCache;
+
     @InjectMocks
     private AchievementService achievementService;
 
+
     @Test
-    public void hasAchievementTrue() {
+    void getTest() {
+        Achievement achievementFirst = new Achievement();
+        achievementFirst.setTitle("Achievement");
+        when(achievementCache.get("Achievement")).thenReturn(achievementFirst);
+
+        AchievementDto achievementDto = achievementService.get("Achievement");
+
+        assertEquals(achievementFirst.getTitle(), achievementDto.getTitle());
+    }
+
+    @Test
+    void getAllTest() {
+        Achievement achievementFirst = new Achievement();
+        achievementFirst.setTitle("Achievement1");
+        Achievement achievementSecond = new Achievement();
+        achievementSecond.setTitle("Achievement2");
+        when(achievementCache.getAll()).thenReturn(List.of(achievementFirst, achievementSecond));
+
+        List<AchievementDto> result = achievementService.getAll();
+
+        assertEquals(2, result.size());
+        assertEquals(achievementFirst.getTitle(), result.get(0).getTitle());
+        assertEquals(achievementSecond.getTitle(), result.get(1).getTitle());
+    }
+
+    @Test
+    void hasAchievementTest() {
         long userId = 1L;
         long achievementId = 2L;
-
         when(userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId)).thenReturn(true);
 
         boolean result = achievementService.hasAchievement(userId, achievementId);
 
-        verify(userAchievementRepository).existsByUserIdAndAchievementId(userId, achievementId);
         assertTrue(result);
     }
 
     @Test
-    public void hasAchievementFalse() {
-        long userId = 1L;
-        long achievementId = 2L;
+    void giveAchievementTest() {
+        UserAchievement userAchievement = new UserAchievement();
+        userAchievement.setUserId(1L);
+        userAchievement.setAchievement(new Achievement());
 
-        when(userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId)).thenReturn(false);
+        achievementService.giveAchievement(userAchievement);
 
-        boolean result = achievementService.hasAchievement(userId, achievementId);
-
-        verify(userAchievementRepository).existsByUserIdAndAchievementId(userId, achievementId);
-        assertFalse(result);
+        verify(userAchievementRepository, times(1)).save(userAchievement);
     }
 
     @Test
-    public void createProgressIfNecessaryTest() {
+    void createProgressIfNecessaryTest() {
         long userId = 1L;
         long achievementId = 2L;
-
-        doNothing().when(achievementProgressRepository).createProgressIfNecessary(userId, achievementId);
 
         achievementService.createProgressIfNecessary(userId, achievementId);
 
-        verify(achievementProgressRepository).createProgressIfNecessary(userId, achievementId);
+        verify(achievementProgressRepository, times(1)).createProgressIfNecessary(userId, achievementId);
     }
 
     @Test
-    public void getProgressTest() {
+    void getProgressThrowTest() {
+        long userId = 1L;
+        long achievementId = 2L;
+
+        assertThrows(EntityNotFoundException.class, () -> achievementService.getProgress(userId, achievementId));
+    }
+
+    @Test
+    void getProgressTest() {
         long userId = 1L;
         long achievementId = 2L;
         AchievementProgress achievementProgress = new AchievementProgress();
-
         when(achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId))
                 .thenReturn(Optional.of(achievementProgress));
 
         achievementService.getProgress(userId, achievementId);
 
-        verify(achievementProgressRepository).findByUserIdAndAchievementId(userId, achievementId);
+        verify(achievementProgressRepository, times(1)).findByUserIdAndAchievementId(userId, achievementId);
     }
 
     @Test
-    public void getProgressThrowsExceptionTest() {
-        long userId = 1L;
-        long achievementId = 2L;
-
-        when(achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId))
-                .thenThrow(EntityNotFoundException.class);
-
-        assertThrows(EntityNotFoundException.class,
-                () -> achievementService.getProgress(userId, achievementId));
-    }
-
-    @Test
-    public void saveProgressTest() {
+    void saveProgressTest() {
         AchievementProgress achievementProgress = new AchievementProgress();
+        achievementProgress.setUserId(1L);
+        achievementProgress.setAchievement(new Achievement());
 
         achievementService.saveProgress(achievementProgress);
 
-        verify(achievementProgressRepository).save(achievementProgress);
+        verify(achievementProgressRepository, times(1)).save(achievementProgress);
     }
-
-    @Test
-    public void giveAchievementTest() {
-        Achievement achievement = new Achievement();
-        achievement.setTitle("test");
-
-        UserAchievement userAchievement = new UserAchievement();
-        userAchievement.setUserId(1L);
-        userAchievement.setAchievement(achievement);
-
-        achievementService.giveAchievement(userAchievement);
-
-        verify(userAchievementRepository).save(userAchievement);
-    }
-
 }
