@@ -43,12 +43,12 @@ public class ExpertAchievementHandlerTest {
         CommentEventDto eventDto = new CommentEventDto();
         eventDto.setCommenterId(userId);
 
-        when(achievementCache.getAchievement(achievementName)).thenReturn(achievement);
+        when(achievementCache.get(achievementName)).thenReturn(achievement);
         when(achievementService.hasAchievement(userId, achievementId)).thenReturn(true);
 
         eventHandlerForTest.handleEvent(eventDto);
 
-        verify(achievementCache).getAchievement(achievementName);
+        verify(achievementCache).get(achievementName);
         verify(achievementService).hasAchievement(userId, achievementId);
         verify(achievementService, times(0)).createProgressIfNecessary(userId, achievementId);
     }
@@ -68,13 +68,13 @@ public class ExpertAchievementHandlerTest {
         AchievementProgress achievementProgress = new AchievementProgress();
         achievementProgress.setCurrentPoints(1);
 
-        when(achievementCache.getAchievement(achievementName)).thenReturn(achievement);
+        when(achievementCache.get(achievementName)).thenReturn(achievement);
         when(achievementService.hasAchievement(userId, achievementId)).thenReturn(false);
         when(achievementService.getProgress(userId, achievementId)).thenReturn(achievementProgress);
 
         eventHandlerForTest.handleEvent(eventDto);
 
-        verify(achievementCache).getAchievement(achievementName);
+        verify(achievementCache).get(achievementName);
         verify(achievementService).hasAchievement(userId, achievementId);
         verify(achievementService).createProgressIfNecessary(userId, achievementId);
         verify(achievementService).getProgress(userId, achievementId);
@@ -105,13 +105,13 @@ public class ExpertAchievementHandlerTest {
         userAchievement.setAchievement(achievement);
         userAchievement.setUserId(userId);
 
-        when(achievementCache.getAchievement(achievementName)).thenReturn(achievement);
+        when(achievementCache.get(achievementName)).thenReturn(achievement);
         when(achievementService.hasAchievement(userId, achievementId)).thenReturn(false);
         when(achievementService.getProgress(userId, achievementId)).thenReturn(achievementProgress);
 
         eventHandlerForTest.handleEvent(commentEventDto);
 
-        verify(achievementCache).getAchievement(achievementName);
+        verify(achievementCache).get(achievementName);
         verify(achievementService).hasAchievement(userId, achievementId);
         verify(achievementService).createProgressIfNecessary(userId, achievementId);
         verify(achievementService).getProgress(userId, achievementId);
