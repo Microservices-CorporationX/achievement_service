@@ -2,9 +2,11 @@ package faang.school.achievement.service.achievement;
 
 import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.mapper.achievement.AchievementMapper;
+import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
 import faang.school.achievement.repository.AchievementProgressRepository;
+import faang.school.achievement.repository.AchievementRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class AchievementService {
     private final AchievementCache achievementCache;
     private final AchievementProgressRepository achievementProgressRepository;
     private final UserAchievementRepository userAchievementRepository;
+    private final AchievementRepository achievementRepository;
 
     public AchievementDto get(String title) {
         return achievementMapper.toDto(achievementCache.get(title));
@@ -57,9 +60,17 @@ public class AchievementService {
                 progress.getId(), progress.getUserId());
     }
 
-    public void giveAchievement(UserAchievement userAchievement) {
+    public void giveAchievement(Long userId, Long achievementId) {
+        UserAchievement userAchievement = UserAchievement.builder()
+                .userId(userId)
+                .achievement(getAchievementById(achievementId))
+                .build();
         userAchievementRepository.save(userAchievement);
-        log.info("Achievement: {} gave successfully to user with Id: {}",
-                userAchievement.getAchievement().getTitle(), userAchievement.getUserId());
+        log.info("User with id: {} received achievement with id: {}", userId, achievementId);
+    }
+
+    private Achievement getAchievementById(Long achievementId) {
+        return achievementRepository.findById(achievementId)
+                .orElseThrow(() -> new EntityNotFoundException("Achievement not found"));
     }
 }

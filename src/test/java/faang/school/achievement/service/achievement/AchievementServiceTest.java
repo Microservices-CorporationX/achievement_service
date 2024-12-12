@@ -6,6 +6,7 @@ import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
 import faang.school.achievement.repository.AchievementProgressRepository;
+import faang.school.achievement.repository.AchievementRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -33,13 +34,16 @@ class AchievementServiceTest {
     AchievementProgressRepository achievementProgressRepository;
 
     @Mock
-    UserAchievementRepository achievementRepository;
+    UserAchievementRepository userAchievementRepository;
 
     @Spy
     private AchievementMapper achievementMapper = Mappers.getMapper(AchievementMapper.class);
 
     @Mock
     private AchievementCache achievementCache;
+
+    @Mock
+    AchievementRepository achievementRepository;
 
     @InjectMocks
     AchievementService achievementService;
@@ -75,12 +79,12 @@ class AchievementServiceTest {
         long achievementId = 1L;
         long userId = 2L;
 
-        when(achievementRepository.
+        when(userAchievementRepository.
                 existsByUserIdAndAchievementId(userId, achievementId)).thenReturn(true);
 
         achievementService.hasAchievement(userId, achievementId);
 
-        verify(achievementRepository, times(1)).
+        verify(userAchievementRepository, times(1)).
                 existsByUserIdAndAchievementId(userId, achievementId);
     }
 
@@ -136,16 +140,21 @@ class AchievementServiceTest {
 
     @Test
     public void giveAchievementTest() {
+       long userId = 1L;
+       long achievementId = 1L;
         Achievement achievement = Achievement.builder()
+                .id(achievementId)
                 .title("Title")
                 .build();
         UserAchievement userAchievement = UserAchievement.builder()
-                .userId(1L)
+                .userId(userId)
                 .achievement(achievement)
                 .build();
 
-        achievementService.giveAchievement(userAchievement);
+        when(achievementRepository.findById(achievementId)).thenReturn(Optional.ofNullable(achievement));
 
-        verify(achievementRepository, times(1)).save(userAchievement);
+        achievementService.giveAchievement(userId, achievementId);
+
+        verify(userAchievementRepository, times(1)).save(userAchievement);
     }
 }
