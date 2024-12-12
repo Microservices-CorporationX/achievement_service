@@ -1,4 +1,4 @@
-package faang.school.achievement.service;
+package faang.school.achievement.service.achievement;
 
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.repository.AchievementRepository;
@@ -38,6 +38,7 @@ public class AchievementCache {
                 }
             }
         }
+        log.info("Achievement with title {} fetched from cache", title);
         return achievement;
     }
 

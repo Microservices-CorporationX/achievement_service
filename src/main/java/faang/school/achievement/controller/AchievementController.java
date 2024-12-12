@@ -1,7 +1,7 @@
 package faang.school.achievement.controller;
 
 import faang.school.achievement.dto.AchievementDto;
-import faang.school.achievement.service.AchievementService;
+import faang.school.achievement.service.achievement.AchievementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,5 +25,4 @@ public class AchievementController {
     public List<AchievementDto> getAchievement() {
         return achievementService.getAll();
     }
-
 }
