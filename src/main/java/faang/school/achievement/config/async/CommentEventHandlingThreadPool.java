@@ -1,6 +1,6 @@
 package faang.school.achievement.config.async;
 
-import faang.school.achievement.properties.AsyncProperties;
+import faang.school.achievement.properties.CommentThreadPoolProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,7 @@ import java.util.concurrent.Executor;
 @Configuration
 @RequiredArgsConstructor
 public class CommentEventHandlingThreadPool {
-    private final AsyncProperties properties;
+    private final CommentThreadPoolProperties properties;
 
     @Bean
     public Executor commentHandlingExecutor() {

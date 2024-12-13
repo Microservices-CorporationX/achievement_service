@@ -4,8 +4,8 @@ import faang.school.achievement.event.CommentEventDto;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
-import faang.school.achievement.service.AchievementCache;
-import faang.school.achievement.service.AchievementService;
+import faang.school.achievement.service.achievement.AchievementCache;
+import faang.school.achievement.service.achievement.AchievementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -28,7 +28,7 @@ public abstract class AbstractCommentEventHandler implements EventHandler<Commen
                 UserAchievement userAchievement = new UserAchievement();
                 userAchievement.setUserId(event.getCommenterId());
                 userAchievement.setAchievement(achievement);
-                achievementService.giveAchievement(userAchievement);
+                achievementService.giveAchievement(event.getCommenterId(), achievement.getId());
             }
         }
     }
