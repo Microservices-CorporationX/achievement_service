@@ -13,8 +13,8 @@ import java.util.concurrent.Executor;
 public class AsyncConfig {
     private final AsyncProperties properties;
 
-    @Bean(name = "eventHandlingTaskExecutor")
-    public Executor taskExecutor() {
+    @Bean
+    public Executor eventHandlingTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setThreadNamePrefix(properties.getThreadNamePrefix());
         executor.setCorePoolSize(properties.getCorePoolSize());
