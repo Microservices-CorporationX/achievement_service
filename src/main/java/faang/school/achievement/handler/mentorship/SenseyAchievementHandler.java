@@ -51,7 +51,7 @@ public class SenseyAchievementHandler implements MentorshipHandler {
             achievementProgress.increment();
 
             log.info("validate progress for enough points and condition");
-            if (achievementProgress.getCurrentPoints() == achievement.getPoints() && userDto.getMenteesIds().size() > 29) {
+            if (achievementProgress.getCurrentPoints() >= achievement.getPoints() && userDto.getMenteesIds().size() > 29) {
                 UserAchievement userAchievement = new UserAchievement();
 
                 userAchievement.setAchievement(achievement);
