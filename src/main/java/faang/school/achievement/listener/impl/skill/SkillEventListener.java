@@ -1,13 +1,12 @@
-package faang.school.achievement.listener.impl;
+package faang.school.achievement.listener.impl.skill;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import faang.school.achievement.event.SkillAcquiredEvent;
+import faang.school.achievement.event.skill.SkillAcquiredEvent;
 import faang.school.achievement.handler.EventHandler;
 import faang.school.achievement.listener.AbstractEventListener;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.data.redis.listener.Topic;
-import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -26,17 +25,12 @@ public class SkillEventListener extends AbstractEventListener<SkillAcquiredEvent
     }
 
     @Override
-    public MessageListenerAdapter getAdapter() {
-        return new MessageListenerAdapter(this);
-    }
-
-    @Override
-    public Topic getTopic() {
+    public ChannelTopic getChannelTopic() {
         return new ChannelTopic(channelName);
     }
 
     @Override
-    public Class<SkillAcquiredEvent> getEventClass() {
-        return SkillAcquiredEvent.class;
+    public void onMessage(Message message, byte[] pattern) {
+        processEvent(message, SkillAcquiredEvent.class);
     }
 }

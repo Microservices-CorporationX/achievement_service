@@ -31,6 +31,6 @@ public class ProjectEventListener extends AbstractEventListener<ProjectEvent> {
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        processEvent(message,ProjectEvent.class);
+        processEvent(message, ProjectEvent.class);
     }
 }

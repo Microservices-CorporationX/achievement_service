@@ -1,9 +1,9 @@
-package faang.school.achievement.handler.impl;
+package faang.school.achievement.handler.impl.skill;
 
-import faang.school.achievement.event.SkillAcquiredEvent;
+import faang.school.achievement.event.skill.SkillAcquiredEvent;
 import faang.school.achievement.handler.AbstractEventHandler;
-import faang.school.achievement.handler.AchievementProgressHandler;
-import faang.school.achievement.service.AchievementCache;
+import faang.school.achievement.service.achievement.AchievementCache;
+import faang.school.achievement.service.achievement.AchievementService;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,13 +12,13 @@ public class WhoeverAchievementHandler extends AbstractEventHandler<SkillAcquire
 
     public WhoeverAchievementHandler(
             AchievementCache achievementCache,
-            AchievementProgressHandler achievementProgressHandler
+            AchievementService achievementService
     ) {
-        super(achievementCache, achievementProgressHandler);
+        super(achievementCache, achievementService);
     }
 
     @Override
-    public void handle(SkillAcquiredEvent event) {
+    public void handleEvent(SkillAcquiredEvent event) {
         handleAchievement(event.getRecipientId(), ACHIEVEMENT_TITLE);
     }
 }

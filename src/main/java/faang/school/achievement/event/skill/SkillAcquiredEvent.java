@@ -1,4 +1,4 @@
-package faang.school.achievement.event;
+package faang.school.achievement.event.skill;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

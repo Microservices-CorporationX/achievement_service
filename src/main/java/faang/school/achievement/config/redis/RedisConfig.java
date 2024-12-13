@@ -1,7 +1,7 @@
 package faang.school.achievement.config.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import faang.school.achievement.listener.impl.SkillEventListener;
+import faang.school.achievement.listener.RedisContainerMessageListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +12,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
@@ -40,12 +42,12 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisMessageListenerContainer redisContainer(
-            SkillEventListener skillEventListener
-    ) {
+    public RedisMessageListenerContainer redisContainer(List<RedisContainerMessageListener> listeners) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
-        container.addMessageListener(skillEventListener.getAdapter(), skillEventListener.getTopic());
+        listeners.forEach(listener ->
+                container.addMessageListener(listener.getAdapter(), listener.getChannelTopic())
+        );
         return container;
     }
 }

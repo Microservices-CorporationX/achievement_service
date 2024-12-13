@@ -5,6 +5,7 @@ import faang.school.achievement.mapper.achievement.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
+import faang.school.achievement.publisher.AchievementPublisher;
 import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.AchievementRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
@@ -44,6 +45,9 @@ class AchievementServiceTest {
 
     @Mock
     AchievementRepository achievementRepository;
+
+    @Mock
+    AchievementPublisher achievementPublisher;
 
     @InjectMocks
     AchievementService achievementService;
@@ -133,15 +137,15 @@ class AchievementServiceTest {
     public void saveProgressTest() {
         AchievementProgress achievementProgress = AchievementProgress.builder().build();
 
-        achievementService.saveProgress(achievementProgress);
+        achievementService.updateProgress(achievementProgress);
 
         verify(achievementProgressRepository, times(1)).save(achievementProgress);
     }
 
     @Test
     public void giveAchievementTest() {
-       long userId = 1L;
-       long achievementId = 1L;
+        long userId = 1L;
+        long achievementId = 1L;
         Achievement achievement = Achievement.builder()
                 .id(achievementId)
                 .title("Title")
