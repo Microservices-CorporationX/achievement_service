@@ -7,7 +7,7 @@ public interface RedisContainerMessageListener {
 
     ChannelTopic getChannelTopic();
 
-    default MessageListenerAdapter getListenerAdapter(){
+    default MessageListenerAdapter getAdapter(){
         return new MessageListenerAdapter(this);
     }
 }

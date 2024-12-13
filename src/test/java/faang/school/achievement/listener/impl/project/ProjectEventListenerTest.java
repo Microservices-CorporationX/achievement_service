@@ -1,9 +1,10 @@
 package faang.school.achievement.listener.impl.project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import faang.school.achievement.event.project.ProjectEvent;
+import faang.school.achievement.event.ProjectEvent;
 import faang.school.achievement.handler.EventHandler;
-import faang.school.achievement.handler.impl.project.BusinessmanAchievementHandler;
+import faang.school.achievement.handler.impl.BusinessmanAchievementHandler;
+import faang.school.achievement.listener.impl.ProjectEventListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

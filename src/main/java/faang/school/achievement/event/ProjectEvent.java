@@ -1,4 +1,4 @@
-package faang.school.achievement.event.project;
+package faang.school.achievement.event;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
