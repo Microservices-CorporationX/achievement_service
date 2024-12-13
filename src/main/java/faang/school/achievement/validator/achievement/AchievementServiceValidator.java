@@ -1,7 +1,9 @@
 package faang.school.achievement.validator.achievement;
 
 import faang.school.achievement.model.UserAchievement;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AchievementServiceValidator {
     public void checkId(long... ids) {
         for (long i : ids) {
