@@ -1,4 +1,4 @@
-package faang.school.achievement.handler;
+package faang.school.achievement.message.handler;
 
 public interface EventHandler<T> {
 
