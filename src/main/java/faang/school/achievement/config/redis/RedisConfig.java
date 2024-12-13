@@ -1,7 +1,6 @@
 package faang.school.achievement.config.redis;
 
-import faang.school.achievement.listener.RedisListener;
-import lombok.RequiredArgsConstructor;
+import faang.school.achievement.listener.RedisContainerMessageListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,10 +11,7 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import java.util.List;
 
 @Configuration
-@RequiredArgsConstructor
 public class RedisConfig {
-
-    private final List<RedisListener> listeners;
 
     @Value("${spring.data.redis.host}")
     private String host;
@@ -30,11 +26,11 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisMessageListenerContainer redisContainer() {
+    RedisMessageListenerContainer redisContainer(List<RedisContainerMessageListener> listeners) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
-        listeners.forEach(redisListener ->
-                container.addMessageListener(redisListener.getAdapter(), redisListener.getTopic()));
+        listeners.forEach(listener -> container.addMessageListener(
+                listener.getListenerAdapter(), listener.getChannelTopic()));
         return container;
     }
 }
