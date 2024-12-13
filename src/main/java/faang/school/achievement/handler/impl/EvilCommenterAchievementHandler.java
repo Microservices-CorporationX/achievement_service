@@ -1,6 +1,6 @@
-package faang.school.achievement.handler.impl.comment;
+package faang.school.achievement.handler.impl;
 
-import faang.school.achievement.event.comment.CommentEvent;
+import faang.school.achievement.event.CommentEvent;
 import faang.school.achievement.handler.AbstractEventHandler;
 
 import faang.school.achievement.service.achievement.AchievementCache;

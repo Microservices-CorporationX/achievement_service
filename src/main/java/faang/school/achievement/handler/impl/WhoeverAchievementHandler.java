@@ -1,6 +1,6 @@
-package faang.school.achievement.handler.impl.skill;
+package faang.school.achievement.handler.impl;
 
-import faang.school.achievement.event.skill.SkillAcquiredEvent;
+import faang.school.achievement.event.SkillAcquiredEvent;
 import faang.school.achievement.handler.AbstractEventHandler;
 import faang.school.achievement.service.achievement.AchievementCache;
 import faang.school.achievement.service.achievement.AchievementService;

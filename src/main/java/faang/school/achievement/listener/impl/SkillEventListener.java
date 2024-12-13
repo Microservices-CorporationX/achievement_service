@@ -1,7 +1,7 @@
-package faang.school.achievement.listener.impl.skill;
+package faang.school.achievement.listener.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import faang.school.achievement.event.skill.SkillAcquiredEvent;
+import faang.school.achievement.event.SkillAcquiredEvent;
 import faang.school.achievement.handler.EventHandler;
 import faang.school.achievement.listener.AbstractEventListener;
 import org.springframework.beans.factory.annotation.Value;

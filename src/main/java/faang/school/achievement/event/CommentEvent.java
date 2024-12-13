@@ -1,4 +1,4 @@
-package faang.school.achievement.event.comment;
+package faang.school.achievement.event;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,7 @@
-package faang.school.achievement.listener.impl.comment;
+package faang.school.achievement.listener.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import faang.school.achievement.event.comment.CommentEvent;
+import faang.school.achievement.event.CommentEvent;
 import faang.school.achievement.handler.EventHandler;
 import faang.school.achievement.listener.AbstractEventListener;
 import org.springframework.beans.factory.annotation.Value;
