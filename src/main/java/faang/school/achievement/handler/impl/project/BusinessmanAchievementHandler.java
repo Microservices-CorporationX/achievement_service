@@ -1,5 +1,6 @@
 package faang.school.achievement.handler.impl.project;
 
+import faang.school.achievement.event.like.LikePostEvent;
 import faang.school.achievement.event.project.ProjectEvent;
 import faang.school.achievement.handler.AbstractEventHandler;
 import faang.school.achievement.service.achievement.AchievementCache;
@@ -15,6 +16,11 @@ public class BusinessmanAchievementHandler extends AbstractEventHandler<ProjectE
     public BusinessmanAchievementHandler(AchievementService achievementService,
                                          AchievementCache achievementCache) {
         super(achievementCache, achievementService);
+    }
+
+    @Override
+    public boolean canHandleEventType(Class<?> eventType) {
+        return ProjectEvent.class.equals(eventType);
     }
 
     @Override

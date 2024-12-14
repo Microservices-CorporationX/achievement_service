@@ -17,6 +17,11 @@ public class ILoveEveryoneAchievementHandler extends AbstractEventHandler<LikePo
     }
 
     @Override
+    public boolean canHandleEventType(Class<?> eventType) {
+        return LikePostEvent.class.equals(eventType);
+    }
+
+    @Override
     public void handleEvent(LikePostEvent event) {
         handleAchievement(event.getLikedUserId(), ACHIEVEMENT_TITLE);
     }
