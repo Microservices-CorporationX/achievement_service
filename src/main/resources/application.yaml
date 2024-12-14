@@ -25,9 +25,12 @@ spring:
       port: 6379
       host: localhost
       channel:
+        album: album_channel
         achievement: achievement_channel
         follower: follower_channel
         skill: skill_channel
+        project: project_channel
+        comment: comment_channel
 
 async:
   thread-name-prefix: AsyncThread-
