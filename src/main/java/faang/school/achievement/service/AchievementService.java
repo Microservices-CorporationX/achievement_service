@@ -1,9 +1,11 @@
 package faang.school.achievement.service;
 
+import faang.school.achievement.dto.achievement.AchievementEvent;
 import faang.school.achievement.exception.DataValidationException;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
+import faang.school.achievement.publisher.AchievementEventPublisher;
 import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ public class AchievementService {
 
     private final UserAchievementRepository userAchievementRepository;
     private final AchievementProgressRepository achievementProgressRepository;
+    private final AchievementEventPublisher achievementEventPublisher;
 
     public boolean hasAchievement(long userId, long achievementId) {
         return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId);
@@ -46,5 +49,7 @@ public class AchievementService {
                 .userId(userId)
                 .build());
         log.info("User with ID {} received a new achievement.", userId);
+
+        achievementEventPublisher.publish(new AchievementEvent(achievement.getTitle(), userId));
     }
 }
