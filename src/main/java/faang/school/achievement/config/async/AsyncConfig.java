@@ -11,10 +11,11 @@ import java.util.concurrent.Executor;
 @Configuration
 @RequiredArgsConstructor
 public class AsyncConfig {
+
     private final AsyncProperties properties;
 
     @Bean
-    public Executor taskExecutor() {
+    public Executor eventHandlingTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setThreadNamePrefix(properties.getThreadNamePrefix());
         executor.setCorePoolSize(properties.getCorePoolSize());

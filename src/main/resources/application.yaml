@@ -12,7 +12,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
-    show-sql: false
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
@@ -28,7 +28,6 @@ spring:
         album: album_channel
         achievement: achievement_channel
         follower: follower_channel
-        skill: skill_channel
         project: project_channel
         comment: comment_channel
 

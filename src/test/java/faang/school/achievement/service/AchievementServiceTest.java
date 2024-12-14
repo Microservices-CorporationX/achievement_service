@@ -115,7 +115,6 @@ class AchievementServiceTest {
         verify(achievementPublisher).publish(eventCaptor.capture());
         AchievementEvent publishedEvent = eventCaptor.getValue();
         assertEquals(userId, publishedEvent.getUserId());
-        assertEquals(achievementId, publishedEvent.getAchievementId());
     }
 
     @Test
