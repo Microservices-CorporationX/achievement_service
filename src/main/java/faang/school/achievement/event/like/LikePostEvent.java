@@ -1,14 +1,23 @@
-package faang.school.achievement.dto;
+package faang.school.achievement.event.like;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-@Data
+@Setter
+@Getter
 @Builder
-public class LikePostEventDto {
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+public class LikePostEvent {
 
     @NotNull
     private Long authorPostId;
