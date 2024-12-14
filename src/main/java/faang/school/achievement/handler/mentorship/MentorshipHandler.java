@@ -1,7 +1,7 @@
 package faang.school.achievement.handler.mentorship;
 
-import faang.school.achievement.event.MentorshipStartEvent;
+import faang.school.achievement.event.MentorshipAcceptedEvent;
 
 public interface MentorshipHandler {
-    void startHandling(MentorshipStartEvent mentorshipStartEvent);
+    void startHandling(MentorshipAcceptedEvent mentorshipAcceptedEvent);
 }

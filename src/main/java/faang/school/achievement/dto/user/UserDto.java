@@ -1,11 +1,14 @@
 package faang.school.achievement.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDto {
     private long id;
     private String username;
@@ -20,4 +23,5 @@ public class UserDto {
     private List<Long> mentorsIds;
     private List<Long> goalsIds;
     private List<Long> skillsIds;
+    private Locale locale;
 }

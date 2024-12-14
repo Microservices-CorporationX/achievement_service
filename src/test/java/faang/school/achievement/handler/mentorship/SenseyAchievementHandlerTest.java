@@ -3,8 +3,7 @@ package faang.school.achievement.handler.mentorship;
 import faang.school.achievement.client.UserServiceClient;
 import faang.school.achievement.config.context.UserContext;
 import faang.school.achievement.dto.user.UserDto;
-import faang.school.achievement.event.MentorshipStartEvent;
-import faang.school.achievement.listener.MentorshipEventListener;
+import faang.school.achievement.event.MentorshipAcceptedEvent;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
@@ -13,7 +12,6 @@ import faang.school.achievement.validator.achievement.SenseyAchievementHandlerVa
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -40,7 +38,7 @@ class SenseyAchievementHandlerTest {
     private UserContext userContext;
     @Mock
     private SenseyAchievementHandlerValidator validator;
-    private MentorshipStartEvent event;
+    private MentorshipAcceptedEvent event;
     @Mock
     private UserDto userDto;
     @Mock
@@ -50,11 +48,11 @@ class SenseyAchievementHandlerTest {
 
     @BeforeEach
     void setUp() {
-        event = new MentorshipStartEvent();
+        event = new MentorshipAcceptedEvent();
 
         event.setUserContextId(1111);
-        event.setMenteeId(13);
-        event.setMentorId(14);
+        event.setRequesterUserId(13);
+        event.setRequesterUserId(14);
     }
 
     @Test
@@ -72,10 +70,10 @@ class SenseyAchievementHandlerTest {
         senseyAchievementHandler.startHandling(event);
 
         verify(userContext).setUserId(event.getUserContextId());
-        verify(userServiceClient).getUser(event.getMentorId());
+        verify(userServiceClient).getUser(event.getReceiverUserId());
         verify(achievementService).getAchievementByTitle("SENSEI");
         verify(achievement).getId();
-        verify(achievementService).hasAchievement(event.getMentorId(), 2L);
+        verify(achievementService).hasAchievement(event.getReceiverUserId(), 2L);
         verify(achievementProgress).increment();
         verify(achievementProgress).getCurrentPoints();
         verify(achievement).getPoints();
@@ -83,6 +81,7 @@ class SenseyAchievementHandlerTest {
 
         verify(achievementService).createNewUserAchievement(any(UserAchievement.class));
     }
+
     @Test
     void testAchievementIsNotGranted() {
         setUpForMainTest();
@@ -92,10 +91,10 @@ class SenseyAchievementHandlerTest {
         senseyAchievementHandler.startHandling(event);
 
         verify(userContext).setUserId(event.getUserContextId());
-        verify(userServiceClient).getUser(event.getMentorId());
+        verify(userServiceClient).getUser(event.getReceiverUserId());
         verify(achievementService).getAchievementByTitle("SENSEI");
         verify(achievement).getId();
-        verify(achievementService).hasAchievement(event.getMentorId(), 2L);
+        verify(achievementService).hasAchievement(event.getReceiverUserId(), 2L);
         verify(achievementProgress).increment();
         verify(achievementProgress).getCurrentPoints();
         verify(achievement).getPoints();
@@ -104,12 +103,12 @@ class SenseyAchievementHandlerTest {
         verify(achievementService, never()).createNewUserAchievement(any());
     }
 
-    private void setUpForMainTest(){
-        when(userServiceClient.getUser(event.getMentorId())).thenReturn(userDto);
+    private void setUpForMainTest() {
+        when(userServiceClient.getUser(event.getReceiverUserId())).thenReturn(userDto);
         when(achievementService.getAchievementByTitle("SENSEI")).thenReturn(achievement);
         when(achievement.getId()).thenReturn(2L);
-        when(achievementService.hasAchievement(event.getMentorId(), 2L)).thenReturn(false);
-        when(achievementService.getProgress(event.getMentorId(), 2L)).thenReturn(achievementProgress);
+        when(achievementService.hasAchievement(event.getReceiverUserId(), 2L)).thenReturn(false);
+        when(achievementService.getProgress(event.getReceiverUserId(), 2L)).thenReturn(achievementProgress);
         when(achievementProgress.getCurrentPoints()).thenReturn(30L);
         when(achievement.getPoints()).thenReturn(30L);
         when(userDto.getMenteesIds()).thenReturn(new ArrayList<>(Arrays.asList(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L,

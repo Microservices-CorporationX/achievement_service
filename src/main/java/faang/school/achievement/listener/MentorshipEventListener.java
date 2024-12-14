@@ -2,9 +2,8 @@ package faang.school.achievement.listener;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import faang.school.achievement.event.MentorshipStartEvent;
+import faang.school.achievement.event.MentorshipAcceptedEvent;
 import faang.school.achievement.handler.mentorship.MentorshipHandler;
-import jakarta.persistence.Column;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -23,7 +22,7 @@ public class MentorshipEventListener implements MessageListener {
     @Override
     public void onMessage(Message message, byte[] pattern) {
         String stringJson = new String(message.getBody());
-        MentorshipStartEvent startEvent = mapJsonToEvent(stringJson);
+        MentorshipAcceptedEvent startEvent = mapJsonToEvent(stringJson);
 
         for (MentorshipHandler handler : mentorshipHandlers) {
             log.info("calling startHandling for all MentorshipHandler");
@@ -31,11 +30,11 @@ public class MentorshipEventListener implements MessageListener {
         }
     }
 
-    public MentorshipStartEvent mapJsonToEvent(String stringJson) {
-        MentorshipStartEvent startEvent = null;
+    public MentorshipAcceptedEvent mapJsonToEvent(String stringJson) {
+        MentorshipAcceptedEvent startEvent = null;
         try {
             log.info("map jsonString to startEvent");
-            startEvent = objectMapper.readValue(stringJson, MentorshipStartEvent.class);
+            startEvent = objectMapper.readValue(stringJson, MentorshipAcceptedEvent.class);
             return startEvent;
         } catch (JsonProcessingException e) {
             log.error("invalid json message", e);

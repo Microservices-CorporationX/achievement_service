@@ -3,7 +3,7 @@ package faang.school.achievement.handler.mentorship;
 import faang.school.achievement.client.UserServiceClient;
 import faang.school.achievement.config.context.UserContext;
 import faang.school.achievement.dto.user.UserDto;
-import faang.school.achievement.event.MentorshipStartEvent;
+import faang.school.achievement.event.MentorshipAcceptedEvent;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
@@ -29,12 +29,12 @@ public class SenseyAchievementHandler implements MentorshipHandler {
     @Override
     @Async
     @Transactional
-    public void startHandling(MentorshipStartEvent mentorshipStartEvent) {
+    public void startHandling(MentorshipAcceptedEvent mentorshipAcceptedEvent) {
         log.info("validate mentorshipStartEvent");
-        validator.validateMentorshipStartEvent(mentorshipStartEvent);
+        validator.validateMentorshipStartEvent(mentorshipAcceptedEvent);
 
-        long mentorId = mentorshipStartEvent.getMentorId();
-        userContext.setUserId(mentorshipStartEvent.getUserContextId());
+        long mentorId = mentorshipAcceptedEvent.getReceiverUserId();
+        userContext.setUserId(mentorshipAcceptedEvent.getUserContextId());
 
         log.info("getting user dto from user service by mentor id using feign client");
         UserDto userDto = userServiceClient.getUser(mentorId);

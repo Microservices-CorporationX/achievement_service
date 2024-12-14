@@ -1,13 +1,12 @@
 package faang.school.achievement.validator.achievement;
 
-import faang.school.achievement.event.MentorshipStartEvent;
-import org.springframework.context.annotation.Configuration;
+import faang.school.achievement.event.MentorshipAcceptedEvent;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SenseyAchievementHandlerValidator {
-    public void validateMentorshipStartEvent(MentorshipStartEvent mentorshipStartEvent) {
-        if (mentorshipStartEvent == null || mentorshipStartEvent.getMenteeId() < 0 || mentorshipStartEvent.getMentorId() < 0 || mentorshipStartEvent.getUserContextId() < 0) {
+    public void validateMentorshipStartEvent(MentorshipAcceptedEvent mentorshipAcceptedEvent) {
+        if (mentorshipAcceptedEvent == null || mentorshipAcceptedEvent.getRequesterUserId() < 0 || mentorshipAcceptedEvent.getRequesterUserId() < 0 || mentorshipAcceptedEvent.getUserContextId() < 0) {
             throw new IllegalArgumentException("Invalid mentorshipStartEvent object");
         }
     }

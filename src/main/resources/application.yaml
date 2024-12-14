@@ -24,7 +24,7 @@ spring:
       channel:
         achievement: achievement_channel
         follower: follower_channel
-        mentorship_channel: mentorship_accept
+        mentorship_channel: mentorship_accepted_topic
 
 server:
   port: 8085
