@@ -2,7 +2,6 @@ package faang.school.achievement.cache;
 
 import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.mapper.AchievementMapper;
-import faang.school.achievement.model.Achievement;
 import faang.school.achievement.repository.AchievementRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

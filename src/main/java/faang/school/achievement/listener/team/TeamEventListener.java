@@ -2,7 +2,7 @@ package faang.school.achievement.listener.team;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.achievement.handler.team.TeamEventHandler;
-import faang.school.achievement.model.event.team.TeamEvent;
+import faang.school.achievement.dto.team.TeamEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;

@@ -1,4 +1,4 @@
-package faang.school.achievement.model.event.team;
+package faang.school.achievement.dto.team;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

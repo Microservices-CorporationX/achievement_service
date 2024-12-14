@@ -1,10 +1,10 @@
 package faang.school.achievement.handler.team.manager;
 
 import faang.school.achievement.cache.AchievementCache;
+import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.exception.DataValidationException;
-import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
-import faang.school.achievement.model.event.team.TeamEvent;
+import faang.school.achievement.dto.team.TeamEvent;
 import faang.school.achievement.service.AchievementService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,8 +46,10 @@ public class ManagerAchievementHandlerTest {
     @Test
     public void testHandleEventIfUserAlreadyHasAchievement() {
         TeamEvent event = prepareEvent();
-        when(achievementCache.get(anyString())).thenReturn(new Achievement());
-        when(achievementService.hasAchievement(event.getAuthorId(), 0L)).thenReturn(true);
+        AchievementDto achievement = prepareAchievementDto();
+        AchievementProgress achievementProgress = prepareAchievementProgress(10);
+        when(achievementCache.get(anyString())).thenReturn(achievement);
+        when(achievementService.getProgress(event.getAuthorId(), achievement.getId())).thenReturn(achievementProgress);
 
         boolean result = managerAchievementHandler.handleEvent(event);
 
@@ -57,14 +59,8 @@ public class ManagerAchievementHandlerTest {
     @Test
     public void testHandleEventIfUserGivenAchievement() {
         TeamEvent event = prepareEvent();
-        Achievement achievement = Achievement.builder()
-                .id(1L)
-                .points(10L)
-                .build();
-        AchievementProgress achievementProgress = AchievementProgress.builder()
-                .id(2L)
-                .currentPoints(9L)
-                .build();
+        AchievementDto achievement = prepareAchievementDto();
+        AchievementProgress achievementProgress = prepareAchievementProgress(9);
         when(achievementCache.get(anyString())).thenReturn(achievement);
         when(achievementService.hasAchievement(event.getAuthorId(), 1L)).thenReturn(false);
         when(achievementService.getProgress(event.getAuthorId(), achievement.getId())).thenReturn(achievementProgress);
@@ -80,14 +76,8 @@ public class ManagerAchievementHandlerTest {
     @Test
     public void testHandleEventIfUserNotGivenAchievement() {
         TeamEvent event = prepareEvent();
-        Achievement achievement = Achievement.builder()
-                .id(1L)
-                .points(10L)
-                .build();
-        AchievementProgress achievementProgress = AchievementProgress.builder()
-                .id(2L)
-                .currentPoints(8L)
-                .build();
+        AchievementDto achievement = prepareAchievementDto();
+        AchievementProgress achievementProgress = prepareAchievementProgress(8);
         when(achievementCache.get(anyString())).thenReturn(achievement);
         when(achievementService.hasAchievement(event.getAuthorId(), 1L)).thenReturn(false);
         when(achievementService.getProgress(event.getAuthorId(), achievement.getId())).thenReturn(achievementProgress);
@@ -104,6 +94,20 @@ public class ManagerAchievementHandlerTest {
                 .id(1L)
                 .authorId(2L)
                 .projectId(3L)
+                .build();
+    }
+
+    private AchievementDto prepareAchievementDto() {
+        return AchievementDto.builder()
+                .id(1L)
+                .points(10L)
+                .build();
+    }
+
+    private AchievementProgress prepareAchievementProgress(long currentPoints) {
+        return AchievementProgress.builder()
+                .id(2L)
+                .currentPoints(currentPoints)
                 .build();
     }
 }

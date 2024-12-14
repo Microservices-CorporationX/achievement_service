@@ -1,6 +1,8 @@
 package faang.school.achievement.service;
 
+import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.exception.DataValidationException;
+import faang.school.achievement.mapper.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
@@ -19,6 +21,7 @@ public class AchievementService {
 
     private final UserAchievementRepository userAchievementRepository;
     private final AchievementProgressRepository achievementProgressRepository;
+    private final AchievementMapper achievementMapper;
 
     public boolean hasAchievement(long userId, long achievementId) {
         return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId);
@@ -40,9 +43,9 @@ public class AchievementService {
         achievementProgressRepository.save(progress);
     }
 
-    public void giveAchievement(Achievement achievement, long userId) {
+    public void giveAchievement(AchievementDto achievement, long userId) {
         userAchievementRepository.save(UserAchievement.builder()
-                .achievement(achievement)
+                .achievement(achievementMapper.toEntity(achievement))
                 .userId(userId)
                 .build());
         log.info("User with ID {} received a new achievement.", userId);

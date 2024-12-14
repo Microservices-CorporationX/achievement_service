@@ -2,7 +2,7 @@ package faang.school.achievement.listener.team;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.achievement.handler.team.TeamEventHandler;
-import faang.school.achievement.model.event.team.TeamEvent;
+import faang.school.achievement.dto.team.TeamEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

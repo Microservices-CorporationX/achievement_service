@@ -1,6 +1,9 @@
 package faang.school.achievement.service;
 
+import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.exception.DataValidationException;
+import faang.school.achievement.mapper.AchievementMapper;
+import faang.school.achievement.mapper.AchievementMapperImpl;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
@@ -11,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -30,6 +34,9 @@ public class AchievementServiceTest {
 
     @Mock
     private AchievementProgressRepository achievementProgressRepository;
+
+    @Spy
+    private AchievementMapperImpl achievementMapper;
 
     @InjectMocks
     private AchievementService achievementService;
@@ -100,9 +107,9 @@ public class AchievementServiceTest {
 
     @Test
     public void testGiveAchievement() {
-        Achievement achievement = Achievement.builder().build();
+        AchievementDto achievement = AchievementDto.builder().build();
         UserAchievement userAchievement = UserAchievement.builder()
-                .achievement(achievement)
+                .achievement(achievementMapper.toEntity(achievement))
                 .userId(userId)
                 .build();
         achievementService.giveAchievement(achievement, userId);

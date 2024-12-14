@@ -1,15 +1,14 @@
 package faang.school.achievement.handler.team.manager;
 
 import faang.school.achievement.cache.AchievementCache;
+import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.exception.DataValidationException;
 import faang.school.achievement.handler.team.TeamEventHandler;
-import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
-import faang.school.achievement.model.event.team.TeamEvent;
+import faang.school.achievement.dto.team.TeamEvent;
 import faang.school.achievement.service.AchievementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -23,7 +22,7 @@ public class ManagerAchievementHandler extends TeamEventHandler {
     @Override
     public boolean handleEvent(TeamEvent event) {
         log.info("Starting handleEvent for authorId: {}", event.getAuthorId());
-        Achievement achievement = achievementCache.get("MANAGER");
+        AchievementDto achievement = achievementCache.get("MANAGER");
 
         if (achievement == null) {
             log.error("Achievement with key 'MANAGER' not found.");
