@@ -22,8 +22,8 @@ spring:
       port: 6379
       host: localhost
       channel:
-        achievement: achievement_channel
-        follower: follower_channel
+        achievement-channel: achievement_channel
+        follower-channel: follower_channel
 
 server:
   port: 8085
