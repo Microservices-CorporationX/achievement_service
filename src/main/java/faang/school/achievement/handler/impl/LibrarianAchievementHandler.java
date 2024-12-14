@@ -20,4 +20,9 @@ public class LibrarianAchievementHandler extends AbstractEventHandler<AlbumCreat
     public void handleEvent(AlbumCreatedEvent event) {
         handleAchievement(event.getUserId(), ACHIEVEMENT_TITLE);
     }
+
+    @Override
+    public Class<AlbumCreatedEvent> getEventClass() {
+        return AlbumCreatedEvent.class;
+    }
 }

@@ -20,4 +20,9 @@ public class BusinessmanAchievementHandler extends AbstractEventHandler<ProjectE
     public void handleEvent(ProjectEvent event) {
         handleAchievement(event.getAuthorId(), ACHIEVEMENT_TITLE);
     }
+
+    @Override
+    public Class<ProjectEvent> getEventClass() {
+        return ProjectEvent.class;
+    }
 }
