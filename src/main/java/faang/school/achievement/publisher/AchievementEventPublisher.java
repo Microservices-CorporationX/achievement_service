@@ -1,6 +1,6 @@
 package faang.school.achievement.publisher;
 
-import faang.school.achievement.dto.AchievementEventDto;
+import faang.school.achievement.dto.event.AchievementEventDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
