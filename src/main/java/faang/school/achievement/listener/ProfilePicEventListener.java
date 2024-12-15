@@ -20,12 +20,13 @@ import java.util.List;
 public class ProfilePicEventListener implements MessageListener {
 
     private final List<EventHandler> handlers;
+    private final ObjectMapper objectMapper;
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
             String json = new String(message.getBody());
-            ProfilePicEvent event = new ObjectMapper().readValue(json, ProfilePicEvent.class);
+            ProfilePicEvent event = objectMapper.readValue(json, ProfilePicEvent.class);
             log.info("Received event: {}", event);
 
             handlers.forEach(handler -> handler.handleEvent(event));
