@@ -3,6 +3,7 @@ package faang.school.achievement.config.redis;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import faang.school.achievement.listener.ConglomerateAchievementEventListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,8 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -34,9 +37,9 @@ public class RedisConfig {
     }
 
     @Bean
-    public ChannelTopic achievementChannelTopic() {
-        log.info(CREATE_CHANNEL_LOG_MESSAGE, redisProperties.getAchievementChannel());
-        return new ChannelTopic(redisProperties.getAchievementChannel());
+    public ChannelTopic teamChannel() {
+        log.info(CREATE_CHANNEL_LOG_MESSAGE, redisProperties.getTeamChannel());
+        return new ChannelTopic(redisProperties.getTeamChannel());
     }
 
     @Bean
@@ -59,4 +62,21 @@ public class RedisConfig {
         return redisTemplate;
     }
 
+    @Bean
+    public RedisMessageListenerContainer container(LettuceConnectionFactory lettuceConnectionFactory,
+                                                   MessageListenerAdapter conglomerateAchievementEventListenerAdapter) {
+            log.info("Настройка RedisMessageListenerContainer...");
+            RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+            container.setConnectionFactory(lettuceConnectionFactory);
+            container.addMessageListener(conglomerateAchievementEventListenerAdapter, new ChannelTopic(redisProperties.getTeamChannel()));
+
+            log.info("RedisMessageListenerContainer успешно настроен для канала 'team_channel'.");
+            return container;
+    }
+
+    @Bean
+    MessageListenerAdapter conglomerateAchievementEventListenerAdapter(ConglomerateAchievementEventListener conglomerateAchievementEventListener) {
+        log.info("Настройка ConglomerateAchievementEventListener для обработки сообщений...");
+        return new MessageListenerAdapter(conglomerateAchievementEventListener, "onMessage");
+    }
 }

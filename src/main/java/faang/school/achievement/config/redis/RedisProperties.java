@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RedisProperties {
 
-    @Value("${spring.data.redis.channel.achievement}")
-    private String achievementChannel;
+    @Value("${spring.data.redis.channel.team}")
+    private String teamChannel;
     @Value("${spring.data.redis.port}")
     private int port;
     @Value("${spring.data.redis.host}")
