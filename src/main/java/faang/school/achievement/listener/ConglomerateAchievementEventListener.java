@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.achievement.dto.event.AchievementEventDto;
 import faang.school.achievement.handler.ConglomerateAchievementHandler;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class ConglomerateAchievementEventListener implements MessageListener {
 
     private final ConglomerateAchievementHandler conglomerateAchievementHandler;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     public ConglomerateAchievementEventListener(ConglomerateAchievementHandler conglomerateAchievementHandler) {
