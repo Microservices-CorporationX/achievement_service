@@ -24,6 +24,7 @@ spring:
       channel:
         achievement: achievement_channel
         follower: follower_channel
+        mentorship_channel: mentorship_accepted_topic
 
 server:
   port: 8085
@@ -32,6 +33,11 @@ logging:
   level:
     root: info
 
-project-service:
-  host: localhost
-  port: 8082
+services:
+  project-service:
+    host: localhost
+    port: 8082
+
+  user-service:
+    host: localhost
+    port: 8080
