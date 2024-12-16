@@ -1,10 +1,12 @@
 package faang.school.achievement.config.redis;
 
+import faang.school.achievement.listener.ProfilePicEventListener;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -12,12 +14,15 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @RequiredArgsConstructor
 @Configuration
 @Slf4j
+@EnableCaching
 public class RedisConfig {
 
     private final RedisProperties redisProperties;
@@ -37,6 +42,8 @@ public class RedisConfig {
     public ChannelTopic achievementChannelTopic() {
         log.info(CREATE_CHANNEL_LOG_MESSAGE, redisProperties.getAchievementChannel());
         return new ChannelTopic(redisProperties.getAchievementChannel());
+    public ChannelTopic profilePicChannel() {
+        return new ChannelTopic(redisProperties.getProfilePicChannel());
     }
 
     @Bean
@@ -55,8 +62,19 @@ public class RedisConfig {
         redisTemplate.setHashValueSerializer(serializer);
 
         log.info("RedisTemplate создан и сериализаторы настроены.");
-
-        return redisTemplate;
+    public RedisMessageListenerContainer redisMessageListenerContainer(
+            RedisConnectionFactory connectionFactory,
+            MessageListenerAdapter messageListenerAdapter,
+            ChannelTopic profilePicChannel) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(messageListenerAdapter, profilePicChannel);
+        return container;
     }
 
+    @Bean
+    public MessageListenerAdapter messageListenerAdapter(ProfilePicEventListener listener) {
+        return new MessageListenerAdapter(listener);
+        return redisTemplate;
+    }
 }
