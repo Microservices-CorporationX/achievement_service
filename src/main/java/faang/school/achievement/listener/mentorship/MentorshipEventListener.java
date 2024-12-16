@@ -1,8 +1,8 @@
-package faang.school.achievement.listener.team;
+package faang.school.achievement.listener.mentorship;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import faang.school.achievement.handler.team.TeamEventHandler;
-import faang.school.achievement.dto.team.TeamEvent;
+import faang.school.achievement.dto.mentorship.MentorshipStartEvent;
+import faang.school.achievement.handler.mentorship.MentorshipEventHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -15,22 +15,22 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class TeamEventListener implements MessageListener {
+public class MentorshipEventListener implements MessageListener {
 
-    private final List<TeamEventHandler> handlers;
+    private final List<MentorshipEventHandler> handlers;
     private final ObjectMapper objectMapper;
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
-            TeamEvent event = objectMapper.readValue(message.getBody(), TeamEvent.class);
+            MentorshipStartEvent event = objectMapper.readValue(message.getBody(), MentorshipStartEvent.class);
             handlers.forEach(eventHandler -> {
                 log.debug("Handling event with handler: {}", eventHandler.getClass().getSimpleName());
                 eventHandler.handleEvent(event);
             });
         } catch (IOException e) {
-            log.error("Error reading value");
-            throw new RuntimeException("Failed to read TeamEvent from message body", e);
+            log.error("Error reading value from {}", message.getChannel());
+            throw new RuntimeException("Failed to read MentorshipStartEvent from message body", e);
         }
     }
 }

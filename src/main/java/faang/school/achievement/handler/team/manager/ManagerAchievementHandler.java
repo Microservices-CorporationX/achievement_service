@@ -9,6 +9,7 @@ import faang.school.achievement.dto.team.TeamEvent;
 import faang.school.achievement.service.AchievementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -20,7 +21,8 @@ public class ManagerAchievementHandler extends TeamEventHandler {
     private final AchievementService achievementService;
 
     @Override
-    public boolean handleEvent(TeamEvent event) {
+//    @Async
+    public void handleEvent(TeamEvent event) {
         log.info("Starting handleEvent for authorId: {}", event.getAuthorId());
         AchievementDto achievement = achievementCache.get("MANAGER");
 
@@ -31,7 +33,7 @@ public class ManagerAchievementHandler extends TeamEventHandler {
 
         if (achievementService.hasAchievement(event.getAuthorId(), achievement.getId())) {
             log.debug("The user with ID {} already has the Manager achievement.", event.getAuthorId());
-            return false;
+            return;
         }
 
         achievementService.createProgressIfNecessary(event.getAuthorId(), achievement.getId());
@@ -42,9 +44,7 @@ public class ManagerAchievementHandler extends TeamEventHandler {
         if (achievement.getPoints() == progress.getCurrentPoints()) {
             log.info("User with ID {} has now received the Manager achievement.", event.getAuthorId());
             achievementService.giveAchievement(achievement, event.getAuthorId());
-            return true;
         }
         log.info("Finished handleEvent for authorId: {}", event.getAuthorId());
-        return false;
     }
 }

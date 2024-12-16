@@ -1,5 +1,6 @@
 package faang.school.achievement.config.redis;
 
+import faang.school.achievement.listener.mentorship.MentorshipEventListener;
 import faang.school.achievement.listener.team.TeamEventListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,9 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.channel.team}")
     private String teamChannel;
+
+    @Value("${spring.data.redis.channel.mentorship}")
+    private String mentorshipChannel;
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
@@ -52,10 +56,22 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisMessageListenerContainer redisContainer(MessageListenerAdapter teamListener) {
+    public MessageListenerAdapter mentorshipListener(MentorshipEventListener mentorshipEventListener) {
+        return new MessageListenerAdapter(mentorshipEventListener);
+    }
+
+    @Bean
+    public ChannelTopic mentorshipTopic() {
+        return new ChannelTopic(mentorshipChannel);
+    }
+
+    @Bean
+    public RedisMessageListenerContainer redisContainer(MessageListenerAdapter teamListener,
+                                                        MessageListenerAdapter mentorshipListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
         container.addMessageListener(teamListener, teamTopic());
+        container.addMessageListener(mentorshipListener, mentorshipTopic());
         return container;
     }
 }
