@@ -9,7 +9,6 @@ import faang.school.achievement.dto.team.TeamEvent;
 import faang.school.achievement.service.AchievementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -21,7 +20,6 @@ public class ManagerAchievementHandler extends TeamEventHandler {
     private final AchievementService achievementService;
 
     @Override
-//    @Async
     public void handleEvent(TeamEvent event) {
         log.info("Starting handleEvent for authorId: {}", event.getAuthorId());
         AchievementDto achievement = achievementCache.get("MANAGER");

@@ -9,7 +9,6 @@ import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.service.AchievementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -21,7 +20,6 @@ public class SenseiAchievementHandler extends MentorshipEventHandler {
     private final AchievementService achievementService;
 
     @Override
-//    @Async
     public void handleEvent(MentorshipStartEvent event) {
         log.info("Starting handleEvent for authorId: {}", event.getMentorId());
 
