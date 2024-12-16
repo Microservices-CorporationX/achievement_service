@@ -42,6 +42,8 @@ public class RedisConfig {
     public ChannelTopic achievementChannelTopic() {
         log.info(CREATE_CHANNEL_LOG_MESSAGE, redisProperties.getAchievementChannel());
         return new ChannelTopic(redisProperties.getAchievementChannel());
+    }
+    @Bean
     public ChannelTopic profilePicChannel() {
         return new ChannelTopic(redisProperties.getProfilePicChannel());
     }
@@ -62,19 +64,21 @@ public class RedisConfig {
         redisTemplate.setHashValueSerializer(serializer);
 
         log.info("RedisTemplate создан и сериализаторы настроены.");
-    public RedisMessageListenerContainer redisMessageListenerContainer(
-            RedisConnectionFactory connectionFactory,
-            MessageListenerAdapter messageListenerAdapter,
-            ChannelTopic profilePicChannel) {
-        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(messageListenerAdapter, profilePicChannel);
-        return container;
+        return redisTemplate;
     }
 
     @Bean
     public MessageListenerAdapter messageListenerAdapter(ProfilePicEventListener listener) {
         return new MessageListenerAdapter(listener);
-        return redisTemplate;
+    }
+
+    @Bean
+    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory connectionFactory,
+                                                                       MessageListenerAdapter messageListenerAdapter,
+                                                                       ChannelTopic profilePicChannel) {
+            RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+            container.setConnectionFactory(connectionFactory);
+            container.addMessageListener(messageListenerAdapter, profilePicChannel);
+            return container;
     }
 }
