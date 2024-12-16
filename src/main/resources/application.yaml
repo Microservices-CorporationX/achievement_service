@@ -24,6 +24,9 @@ spring:
       channel:
         achievement: achievement_channel
         follower: follower_channel
+        album: album_channel
+    achievement:
+      librarian: LIBRARIAN
 
 server:
   port: 8085
