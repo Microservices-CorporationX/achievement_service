@@ -22,7 +22,7 @@ class AchievementCacheTest {
     private AchievementRepository achievementRepository;
 
     @Mock
-    private RedisService redisService;
+    private AchievementRedisService redisService;
 
     @InjectMocks
     private AchievementCache achievementCache;

@@ -1,7 +1,6 @@
 package faang.school.achievement.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.redis.testcontainers.RedisContainer;
 import faang.school.achievement.dto.AchievementDto;
@@ -37,7 +36,8 @@ public class AchievementControllerIT {
     @Autowired
     protected MockMvc mockMvc;
 
-    private ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Container
     public static PostgreSQLContainer<?> POSTGRESQL_CONTAINER =

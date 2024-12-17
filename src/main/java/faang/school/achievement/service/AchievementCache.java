@@ -21,7 +21,7 @@ public class AchievementCache {
     private static final String KEY_MAP = "Achievements";
 
     private final AchievementRepository achievementRepository;
-    private final RedisService redisService;
+    private final AchievementRedisService redisService;
 
     @PostConstruct
     public void fillCache() {

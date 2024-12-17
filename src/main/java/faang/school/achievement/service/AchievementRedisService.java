@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class RedisService {
+public class AchievementRedisService {
 
     private final ObjectMapper objectMapper;
     private final RedisTemplate<String, Map<String, Achievement>> redisTemplate;
