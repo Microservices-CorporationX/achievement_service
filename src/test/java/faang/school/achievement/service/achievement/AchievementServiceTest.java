@@ -8,6 +8,8 @@ import faang.school.achievement.model.UserAchievement;
 import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.AchievementRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
+import faang.school.achievement.service.AchievementCache;
+import faang.school.achievement.service.AchievementService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
