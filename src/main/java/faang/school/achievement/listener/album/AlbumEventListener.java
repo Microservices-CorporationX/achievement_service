@@ -31,8 +31,8 @@ public class AlbumEventListener implements MessageListener {
                 asyncHandlerService.handle(handler, event);
             });
         } catch (IOException e) {
-            log.error("Error reading value");
-            throw new RuntimeException(e);
+            log.error("Failed to read album creation event from message body", e);
+            throw new RuntimeException("Failed to read album creation event from message body");
         }
     }
 }

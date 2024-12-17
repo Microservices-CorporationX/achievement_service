@@ -1,4 +1,4 @@
-package faang.school.achievement.handler;
+package faang.school.achievement.dto;
 
 import faang.school.achievement.model.Rarity;
 import lombok.AllArgsConstructor;
