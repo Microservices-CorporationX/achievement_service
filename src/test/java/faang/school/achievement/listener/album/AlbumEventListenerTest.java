@@ -58,7 +58,6 @@ class AlbumEventListenerTest {
     @Test
     public void testOnMessageIfThrowsIOException() throws IOException {
         AlbumCreatedEvent event = prepareEvent();
-        Message message = mock(Message.class);
         byte[] messageBody = objectMapper.writeValueAsBytes(event);
         when(objectMapper.readValue(message.getBody(), AlbumCreatedEvent.class)).thenThrow(new IOException());
 
