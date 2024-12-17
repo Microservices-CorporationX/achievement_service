@@ -1,5 +1,7 @@
-package faang.school.achievement.service;
+package faang.school.achievement.service.achievement;
 
+import faang.school.achievement.dto.AchievementDto;
+import faang.school.achievement.mapper.achievement.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.repository.AchievementRepository;
 import jakarta.annotation.PostConstruct;

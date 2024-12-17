@@ -26,4 +26,5 @@ public class AchievementController {
     public List<AchievementDto> getAllAchievement() {
         return achievementService.getAll();
     }
+
 }
