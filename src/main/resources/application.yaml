@@ -26,6 +26,7 @@ spring:
         follower: follower_channel
         team: team_channel
         mentorship: mentorship_channel
+        recommendation: recommendation_channel
 
 server:
   port: 8085

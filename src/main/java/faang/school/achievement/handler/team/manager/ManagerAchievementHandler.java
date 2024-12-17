@@ -30,7 +30,7 @@ public class ManagerAchievementHandler extends TeamEventHandler {
         }
 
         if (achievementService.hasAchievement(event.getAuthorId(), achievement.getId())) {
-            log.debug("The user with ID {} already has the Manager achievement.", event.getAuthorId());
+            log.debug("The user with ID {} already has the 'MANAGER' achievement.", event.getAuthorId());
             return;
         }
 
@@ -40,7 +40,7 @@ public class ManagerAchievementHandler extends TeamEventHandler {
         achievementService.saveProgress(progress);
 
         if (achievement.getPoints() == progress.getCurrentPoints()) {
-            log.info("User with ID {} has now received the Manager achievement.", event.getAuthorId());
+            log.info("User with ID {} has now received the 'MANAGER' achievement.", event.getAuthorId());
             achievementService.giveAchievement(achievement, event.getAuthorId());
         }
         log.info("Finished handleEvent for authorId: {}", event.getAuthorId());

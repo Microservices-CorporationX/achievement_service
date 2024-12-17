@@ -1,4 +1,4 @@
-package faang.school.achievement.config.handlers.mentorship;
+package faang.school.achievement.config.executor.mentorship;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

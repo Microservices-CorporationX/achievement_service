@@ -21,7 +21,7 @@ public class SenseiAchievementHandler extends MentorshipEventHandler {
 
     @Override
     public void handleEvent(MentorshipStartEvent event) {
-        log.info("Starting handleEvent for authorId: {}", event.getMentorId());
+        log.info("Starting handleEvent for mentorId: {}", event.getMentorId());
 
         AchievementDto achievement = achievementCache.get("SENSEI");
 
@@ -31,7 +31,7 @@ public class SenseiAchievementHandler extends MentorshipEventHandler {
         }
 
         if (achievementService.hasAchievement(event.getMentorId(), achievement.getId())) {
-            log.debug("The user with ID {} already has the Sensei achievement.", event.getMentorId());
+            log.debug("The user with ID {} already has the 'SENSEI' achievement.", event.getMentorId());
             return;
         }
 
@@ -41,9 +41,9 @@ public class SenseiAchievementHandler extends MentorshipEventHandler {
         achievementService.saveProgress(progress);
 
         if (achievement.getPoints() == progress.getCurrentPoints()) {
-            log.info("User with ID {} has now received the Sensei achievement.", event.getMentorId());
+            log.info("User with ID {} has now received the 'SENSEI' achievement.", event.getMentorId());
             achievementService.giveAchievement(achievement, event.getMentorId());
         }
-        log.info("Finished handleEvent for authorId: {}", event.getMentorId());
+        log.info("Finished handleEvent for mentorId: {}", event.getMentorId());
     }
 }
