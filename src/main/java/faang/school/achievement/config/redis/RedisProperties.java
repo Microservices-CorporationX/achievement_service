@@ -8,12 +8,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RedisProperties {
 
-    @Value("${spring.data.redis.host}")
-    private String redisHost;
-
+    @Value("${spring.data.redis.channel.achievement}")
+    private String achievementChannel;
     @Value("${spring.data.redis.port}")
-    private int redisPort;
-
+    private int port;
+    @Value("${spring.data.redis.host}")
+    private String host;
     @Value("${spring.data.redis.channel.profile-pic}")
     private String profilePicChannel;
 }
