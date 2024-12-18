@@ -6,6 +6,6 @@ import org.springframework.scheduling.annotation.Async;
 
 public abstract class RecommendationEventHandler implements EventHandler<RecommendationEvent> {
 
-    @Async("recommendationEventPool")
+    @Async("taskExecutor")
     public abstract void handleEvent(RecommendationEvent event);
 }

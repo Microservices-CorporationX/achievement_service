@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 public abstract class MentorshipEventHandler implements EventHandler<MentorshipStartEvent> {
 
-    @Async("mentorshipEventPool")
+    @Async("taskExecutor")
     public abstract void handleEvent(MentorshipStartEvent event);
 }
