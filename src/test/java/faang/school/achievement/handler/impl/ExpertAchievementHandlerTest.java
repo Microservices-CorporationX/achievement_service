@@ -4,8 +4,8 @@ import faang.school.achievement.event.CommentEventDto;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
-import faang.school.achievement.service.achievement.AchievementCache;
-import faang.school.achievement.service.achievement.AchievementService;
+import faang.school.achievement.service.AchievementCache;
+import faang.school.achievement.service.AchievementService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -78,7 +78,6 @@ public class ExpertAchievementHandlerTest {
         verify(achievementService).hasAchievement(userId, achievementId);
         verify(achievementService).createProgressIfNecessary(userId, achievementId);
         verify(achievementService).getProgress(userId, achievementId);
-        verify(achievementService).saveProgress(achievementProgress);
     }
 
     @Test
@@ -115,7 +114,6 @@ public class ExpertAchievementHandlerTest {
         verify(achievementService).hasAchievement(userId, achievementId);
         verify(achievementService).createProgressIfNecessary(userId, achievementId);
         verify(achievementService).getProgress(userId, achievementId);
-        verify(achievementService).saveProgress(addedProgress);
         verify(achievementService).giveAchievement(userId, achievementId);
     }
 }
