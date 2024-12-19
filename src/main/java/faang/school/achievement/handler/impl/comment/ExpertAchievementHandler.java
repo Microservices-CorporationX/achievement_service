@@ -1,4 +1,4 @@
-package faang.school.achievement.handler.impl;
+package faang.school.achievement.handler.impl.comment;
 
 import faang.school.achievement.event.CommentEventDto;
 import faang.school.achievement.handler.AbstractCommentEventHandler;
