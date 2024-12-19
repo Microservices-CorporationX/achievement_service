@@ -1,8 +1,9 @@
 package faang.school.achievement.service.achievement;
 
-import faang.school.achievement.mapper.achievement.AchievementMapper;
+import faang.school.achievement.mapper.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.repository.AchievementRepository;
+import faang.school.achievement.service.AchievementCache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
@@ -82,5 +83,4 @@ class AchievementCacheTest {
         assertEquals("Achievement1", result.get(0).getTitle());
         assertEquals("Achievement2", result.get(1).getTitle());
     }
-
 }
