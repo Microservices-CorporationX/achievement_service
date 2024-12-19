@@ -32,6 +32,7 @@ class AchievementMapperTest {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
+
         dto = AchievementCacheDto.builder()
                 .id(1L)
                 .title("title")

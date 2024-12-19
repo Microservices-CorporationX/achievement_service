@@ -38,11 +38,13 @@ class AchievementServiceTest {
 
     private Cache cache;
 
+    private String achievementName;
     private Achievement achievement;
     private AchievementCacheDto dto;
 
     @BeforeEach
     void setUp() {
+        achievementName = "expert";
         cache = cacheManager.getCache("achievements");
         if (cache != null) {
             cache.clear();
@@ -58,6 +60,7 @@ class AchievementServiceTest {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
+
         dto = AchievementCacheDto.builder()
                 .id(1L)
                 .title("EXPERT")
@@ -71,13 +74,12 @@ class AchievementServiceTest {
     @Test
     @DisplayName("Test get achievement dto by name: first call: returns dto and caches result")
     void testGetAchievementDtoFromCacheByNameFirstCall() {
-        String name = "expert";
-        when(achievementRepository.findByName(name.toUpperCase())).thenReturn(Optional.of(achievement));
+        when(achievementRepository.findByName(achievementName.toUpperCase())).thenReturn(Optional.of(achievement));
         when(achievementMapper.toDto(achievement)).thenReturn(dto);
 
-        AchievementCacheDto result = achievementService.getAchievementDtoFromCacheByName(name);
+        AchievementCacheDto result = achievementService.getAchievementDtoFromCacheByName(achievementName);
 
-        verify(achievementRepository, times(1)).findByName(name.toUpperCase());
+        verify(achievementRepository, times(1)).findByName(achievementName.toUpperCase());
         verify(achievementMapper, times(1)).toDto(achievement);
 
         assertNotNull(result);
@@ -86,7 +88,7 @@ class AchievementServiceTest {
         cache = cacheManager.getCache("achievements");
         assertNotNull(cache);
 
-        AchievementCacheDto cachedResult = cache.get(name.toUpperCase(), AchievementCacheDto.class);
+        AchievementCacheDto cachedResult = cache.get(achievementName.toUpperCase(), AchievementCacheDto.class);
         assertNotNull(cachedResult);
         assertEquals(dto, cachedResult);
     }
@@ -94,14 +96,13 @@ class AchievementServiceTest {
     @Test
     @DisplayName("Test get achievement dto by name: two calls: returns dto and caches result")
     void testGetAchievementDtoByNameFromCacheTwoCalls() {
-        String name = "expert";
-        when(achievementRepository.findByName(name.toUpperCase())).thenReturn(Optional.of(achievement));
+        when(achievementRepository.findByName(achievementName.toUpperCase())).thenReturn(Optional.of(achievement));
         when(achievementMapper.toDto(achievement)).thenReturn(dto);
 
-        AchievementCacheDto firstCall = achievementService.getAchievementDtoFromCacheByName(name);
-        AchievementCacheDto secondCall = achievementService.getAchievementDtoFromCacheByName(name);
+        AchievementCacheDto firstCall = achievementService.getAchievementDtoFromCacheByName(achievementName);
+        AchievementCacheDto secondCall = achievementService.getAchievementDtoFromCacheByName(achievementName);
 
-        verify(achievementRepository, times(1)).findByName(name.toUpperCase());
+        verify(achievementRepository, times(1)).findByName(achievementName.toUpperCase());
         verify(achievementMapper, times(1)).toDto(achievement);
 
         assertNotNull(firstCall);
@@ -111,7 +112,7 @@ class AchievementServiceTest {
         cache = cacheManager.getCache("achievements");
         assertNotNull(cache);
 
-        AchievementCacheDto cachedResult = cache.get(name.toUpperCase(), AchievementCacheDto.class);
+        AchievementCacheDto cachedResult = cache.get(achievementName.toUpperCase(), AchievementCacheDto.class);
         assertNotNull(cachedResult);
         assertEquals(dto, cachedResult);
     }
