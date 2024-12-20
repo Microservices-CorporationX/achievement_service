@@ -11,7 +11,6 @@ import java.util.concurrent.Executor;
 @Configuration
 @RequiredArgsConstructor
 public class AsyncConfig {
-
     private final AsyncProperties properties;
 
     @Bean

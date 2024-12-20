@@ -1,8 +1,8 @@
-package faang.school.achievement.service.achievement;
+package faang.school.achievement.service;
 
 import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.event.AchievementEvent;
-import faang.school.achievement.mapper.achievement.AchievementMapper;
+import faang.school.achievement.mapper.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
@@ -74,6 +74,7 @@ public class AchievementService {
                 .userId(userId)
                 .build();
         achievementPublisher.publish(achievementEvent);
+        log.info("Achievement Event has been published");
     }
 
     private Achievement getAchievementById(Long achievementId) {

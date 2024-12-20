@@ -1,4 +1,4 @@
-package faang.school.achievement.mapper.achievement;
+package faang.school.achievement.mapper;
 
 import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.model.Achievement;
