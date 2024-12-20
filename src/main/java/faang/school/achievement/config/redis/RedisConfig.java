@@ -13,6 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 
 import java.util.List;
 import java.util.Map;
@@ -49,11 +50,21 @@ public class RedisConfig {
     }
 
     @Bean
-    RedisMessageListenerContainer redisContainer(List<RedisContainerMessageListener> listeners) {
+    public RedisTemplate<String, Object> redisTemplate() {
+        final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(jedisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(objectMapper, Object.class));
+        return redisTemplate;
+    }
+
+    @Bean
+    public RedisMessageListenerContainer redisContainer(List<RedisContainerMessageListener> listeners) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
-        listeners.forEach(listener -> container.addMessageListener(
-                listener.getListenerAdapter(), listener.getChannelTopic()));
+        listeners.forEach(listener ->
+                container.addMessageListener(listener.getAdapter(), listener.getChannelTopic())
+        );
         return container;
     }
 }

@@ -28,7 +28,14 @@ spring:
         album: album_channel
         achievement: achievement_channel
         follower: follower_channel
+        skill: skill_channel
         project: project_channel
+
+async:
+  thread-name-prefix: AsyncThread-
+  core-pool-size: 5
+  max-pool-size: 10
+  queue_capacity: 25
 
 server:
   port: 8085
@@ -40,10 +47,3 @@ logging:
 project-service:
   host: localhost
   port: 8082
-
-async:
-  achievement-thread-pool:
-      core-pool-size: 5
-      max-pool-size: 10
-      queue_capacity: 25
-      thread-name-prefix: achievement-handling-thread-

@@ -1,7 +1,7 @@
-package faang.school.achievement.listener.impl.project;
+package faang.school.achievement.listener.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import faang.school.achievement.event.project.ProjectEvent;
+import faang.school.achievement.event.ProjectEvent;
 import faang.school.achievement.handler.EventHandler;
 import faang.school.achievement.listener.AbstractEventListener;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +31,6 @@ public class ProjectEventListener extends AbstractEventListener<ProjectEvent> {
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        processEvent(message,ProjectEvent.class);
+        processEvent(message, ProjectEvent.class);
     }
 }

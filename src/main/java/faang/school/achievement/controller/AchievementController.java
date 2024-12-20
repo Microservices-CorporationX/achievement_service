@@ -23,8 +23,7 @@ public class AchievementController {
     }
 
     @GetMapping
-    public List<AchievementDto> getAllAchievement() {
+    public List<AchievementDto> getAchievement() {
         return achievementService.getAll();
     }
-
 }

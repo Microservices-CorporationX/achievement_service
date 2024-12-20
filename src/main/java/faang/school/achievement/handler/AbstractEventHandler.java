@@ -39,6 +39,7 @@ public abstract class AbstractEventHandler<T> implements EventHandler<T> {
             achievementService.giveAchievement(userId, achievement.getId());
             log.info("User with id: {} received achievement with id: {}", userId, achievement.getId());
         }
-        achievementService.saveProgress(progress);
+
+        achievementService.updateProgress(progress);
     }
 }

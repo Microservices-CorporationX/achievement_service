@@ -60,4 +60,5 @@ class AchievementCacheTest {
         assertEquals(achievementFirst.getTitle(), result.get(0).getTitle());
         assertEquals(achievementSecond.getTitle(), result.get(1).getTitle());
     }
+
 }

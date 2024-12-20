@@ -1,10 +1,12 @@
 package faang.school.achievement.service;
 
 import faang.school.achievement.dto.AchievementDto;
-import faang.school.achievement.mapper.achievement.AchievementMapper;
+import faang.school.achievement.event.AchievementEvent;
+import faang.school.achievement.mapper.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
+import faang.school.achievement.publisher.AchievementPublisher;
 import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.AchievementRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
@@ -20,12 +22,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AchievementService {
-
-    private final AchievementMapper achievementMapper;
     private final AchievementCache achievementCache;
+    private final AchievementMapper achievementMapper;
+    private final AchievementRepository achievementRepository;
     private final AchievementProgressRepository achievementProgressRepository;
     private final UserAchievementRepository userAchievementRepository;
-    private final AchievementRepository achievementRepository;
+    private final AchievementPublisher achievementPublisher;
 
     public AchievementDto get(String title) {
         log.info("Requested achievement with title " + title);
@@ -37,11 +39,9 @@ public class AchievementService {
         return achievementMapper.toDtoList(achievementCache.getAll());
     }
 
+    @Transactional(readOnly = true)
     public boolean hasAchievement(Long userId, Long achievementId) {
-        boolean result = userAchievementRepository.
-                existsByUserIdAndAchievementId(userId, achievementId);
-        log.info("hasAchievement result: {}, for user with Id: {}", result, userId);
-        return result;
+        return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId);
     }
 
     @Transactional
@@ -49,19 +49,19 @@ public class AchievementService {
         achievementProgressRepository.createProgressIfNecessary(userId, achievementId);
     }
 
+    @Transactional(readOnly = true)
     public AchievementProgress getProgress(Long userId, Long achievementId) {
         return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId)
-                .orElseThrow(() -> new EntityNotFoundException(String.format(
-                        "Achievement with Id: %d not found, for user with Id: %d",
-                        achievementId, userId)));
+                .orElseThrow(() -> new EntityNotFoundException("AchievementProgress not found"));
     }
 
-    public void saveProgress(AchievementProgress progress) {
-        achievementProgressRepository.save(progress);
-        log.info("Save AchievementProgress with Id: {}, for user with Id: {}",
-                progress.getId(), progress.getUserId());
+    @Transactional
+    public void updateProgress(AchievementProgress achievementProgress) {
+        achievementProgressRepository.save(achievementProgress);
+        log.info("Progress with id: {} updated successfully", achievementProgress.getId());
     }
 
+    @Transactional
     public void giveAchievement(Long userId, Long achievementId) {
         UserAchievement userAchievement = UserAchievement.builder()
                 .userId(userId)
@@ -69,6 +69,11 @@ public class AchievementService {
                 .build();
         userAchievementRepository.save(userAchievement);
         log.info("User with id: {} received achievement with id: {}", userId, achievementId);
+        AchievementEvent achievementEvent = AchievementEvent.builder()
+                .achievementId(achievementId)
+                .userId(userId)
+                .build();
+        achievementPublisher.publish(achievementEvent);
     }
 
     private Achievement getAchievementById(Long achievementId) {
