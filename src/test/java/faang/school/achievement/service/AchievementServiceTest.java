@@ -1,20 +1,8 @@
 package faang.school.achievement.service;
 
 import faang.school.achievement.dto.AchievementDto;
-import faang.school.achievement.mapper.achievement.AchievementMapper;
-import faang.school.achievement.model.Achievement;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mapstruct.factory.Mappers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import faang.school.achievement.event.AchievementEvent;
+import faang.school.achievement.mapper.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
@@ -25,11 +13,14 @@ import faang.school.achievement.repository.UserAchievementRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -89,7 +80,7 @@ class AchievementServiceTest {
         assertEquals(achievementSecond.getTitle(), achievementDtos.get(1).getTitle());
     }
 
-}
+    @Test
     void hasAchievementTest() {
         Long userId = 1L;
         Long achievementId = 2L;
