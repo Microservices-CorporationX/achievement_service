@@ -146,8 +146,8 @@ class AchievementServiceTest {
 
     @Test
     public void giveAchievementTest() {
-       long userId = 1L;
-       long achievementId = 1L;
+        long userId = 1L;
+        long achievementId = 1L;
         Achievement achievement = Achievement.builder()
                 .id(achievementId)
                 .title("Title")

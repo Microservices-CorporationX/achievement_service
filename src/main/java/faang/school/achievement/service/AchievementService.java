@@ -61,17 +61,20 @@ public class AchievementService {
 
     @Transactional
     public void giveAchievement(Long userId, Long achievementId) {
+        Achievement achievement = getAchievementById(achievementId);
         UserAchievement userAchievement = UserAchievement.builder()
                 .userId(userId)
-                .achievement(getAchievementById(achievementId))
+                .achievement(achievement)
                 .build();
         userAchievementRepository.save(userAchievement);
         log.info("User with id: {} received achievement with id: {}", userId, achievementId);
         AchievementEvent achievementEvent = AchievementEvent.builder()
-                .achievementId(achievementId)
+                .title(achievement.getTitle())
+                .description(achievement.getDescription())
                 .userId(userId)
                 .build();
         achievementPublisher.publish(achievementEvent);
+        log.info("Achievement Event has been published");
     }
 
     private Achievement getAchievementById(Long achievementId) {
