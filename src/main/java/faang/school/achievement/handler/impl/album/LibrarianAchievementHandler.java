@@ -1,6 +1,6 @@
-package faang.school.achievement.handler.impl;
+package faang.school.achievement.handler.impl.album;
 
-import faang.school.achievement.event.AlbumCreatedEvent;
+import faang.school.achievement.event.album.AlbumCreatedEvent;
 import faang.school.achievement.handler.AbstractEventHandler;
 import faang.school.achievement.service.AchievementCache;
 import faang.school.achievement.service.AchievementService;
@@ -22,7 +22,7 @@ public class LibrarianAchievementHandler extends AbstractEventHandler<AlbumCreat
     }
 
     @Override
-    public Class<AlbumCreatedEvent> getEventClass() {
-        return AlbumCreatedEvent.class;
+    public boolean supportsEvent(Class<?> eventType) {
+        return AlbumCreatedEvent.class.equals(eventType);
     }
 }

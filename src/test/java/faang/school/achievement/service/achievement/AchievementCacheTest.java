@@ -29,7 +29,7 @@ class AchievementCacheTest {
     private AchievementMapper achievementMapper = Mappers.getMapper(AchievementMapper.class);
 
     @InjectMocks
-    private faang.school.achievement.service.achievement.AchievementCache achievementCache;
+    private AchievementCache achievementCache;
 
 
     @Test

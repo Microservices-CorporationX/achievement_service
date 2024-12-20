@@ -1,7 +1,7 @@
-package faang.school.achievement.listener.impl;
+package faang.school.achievement.listener.impl.album;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import faang.school.achievement.event.CommentEvent;
+import faang.school.achievement.event.album.AlbumCreatedEvent;
 import faang.school.achievement.handler.EventHandler;
 import faang.school.achievement.listener.AbstractEventListener;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,23 +12,23 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class CommentEventListener extends AbstractEventListener<CommentEvent> {
+public class AlbumEventListener extends AbstractEventListener<AlbumCreatedEvent> {
 
-    @Value("${spring.data.redis.channel.comment}")
-    private String commentChannel;
+    @Value("${spring.data.redis.channel.album}")
+    private String channelName;
 
-    public CommentEventListener(ObjectMapper objectMapper,
-                                List<EventHandler<CommentEvent>> eventHandlers) {
+    public AlbumEventListener(ObjectMapper objectMapper,
+                              List<EventHandler<AlbumCreatedEvent>> eventHandlers) {
         super(objectMapper, eventHandlers);
     }
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        processEvent(message, CommentEvent.class);
+        processEvent(message, AlbumCreatedEvent.class);
     }
 
     @Override
     public ChannelTopic getChannelTopic() {
-        return new ChannelTopic(commentChannel);
+        return new ChannelTopic(channelName);
     }
 }

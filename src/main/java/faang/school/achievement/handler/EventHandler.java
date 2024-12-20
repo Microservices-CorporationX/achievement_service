@@ -4,5 +4,5 @@ public interface EventHandler<T> {
 
     void handleEvent(T event);
 
-    Class<?> getEventClass();
+    boolean supportsEvent(Class<?> eventType);
 }

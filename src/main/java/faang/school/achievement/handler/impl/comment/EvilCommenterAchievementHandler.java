@@ -1,9 +1,9 @@
-package faang.school.achievement.handler.impl;
+package faang.school.achievement.handler.impl.comment;
 
-import faang.school.achievement.event.CommentEvent;
+import faang.school.achievement.event.comment.CommentEvent;
 import faang.school.achievement.handler.AbstractEventHandler;
-import faang.school.achievement.service.achievement.AchievementCache;
-import faang.school.achievement.service.achievement.AchievementService;
+import faang.school.achievement.service.AchievementCache;
+import faang.school.achievement.service.AchievementService;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,8 +11,8 @@ public class EvilCommenterAchievementHandler extends AbstractEventHandler<Commen
 
     private final static String EVIL_COMMENTER_TITLE = "EVIL COMMENTER";
 
-    public EvilCommenterAchievementHandler(AchievementService achievementService,
-                                           AchievementCache achievementCache) {
+    public EvilCommenterAchievementHandler(AchievementCache achievementCache,
+                                       AchievementService achievementService) {
         super(achievementCache, achievementService);
     }
 
@@ -22,7 +22,7 @@ public class EvilCommenterAchievementHandler extends AbstractEventHandler<Commen
     }
 
     @Override
-    public Class<CommentEvent> getEventClass() {
-        return CommentEvent.class;
+    public boolean supportsEvent(Class<?> eventType) {
+        return CommentEvent.class.equals(eventType);
     }
 }

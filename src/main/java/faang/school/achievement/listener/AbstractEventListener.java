@@ -1,7 +1,6 @@
 package faang.school.achievement.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import faang.school.achievement.exception.NotFoundException;
 import faang.school.achievement.handler.EventHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,15 +22,8 @@ public abstract class AbstractEventListener<T> implements MessageListener, Redis
             log.info("Received message for event - {}", eventType.getSimpleName());
             T event = objectMapper.readValue(message.getBody(), eventType);
             handlers.stream()
-                    .filter(handler -> handler.getEventClass().equals(eventType))
-                    .findFirst()
-                    .orElseThrow(() -> {
-                        String exceptionMessage =
-                                String.format("Event handler wasn't found for event: %s", eventType);
-                        NotFoundException e = new NotFoundException(exceptionMessage);
-                        log.error(exceptionMessage, e);
-                        return e;
-                    }).handleEvent(event);
+                    .filter(handler -> handler.supportsEvent(eventType))
+                    .forEach(handler -> handler.handleEvent(event));
         } catch (IOException e) {
             String exceptionMessage = String.format("Unable to parse event: %s, with message: %s",
                     eventType.getName(), message);
