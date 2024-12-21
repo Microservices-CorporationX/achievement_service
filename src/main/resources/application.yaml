@@ -14,16 +14,26 @@ spring:
       hibernate:
         format_sql: true
 
+
+
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
   data:
     redis:
-      port: 6379
       host: localhost
-      channel:
+      port: 6379
+      channels:
         achievement: achievement_channel
         follower: follower_channel
+        skill: skill_channel
+
+async:
+  core-pool-size: 4
+  max-pool-size: 10
+  queue-capacity: 100
+  thread-name-prefix: PostService-Async-
+
 
 server:
   port: 8085

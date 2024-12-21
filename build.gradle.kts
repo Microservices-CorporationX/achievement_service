@@ -26,6 +26,7 @@ dependencies {
     implementation("org.springframework.retry:spring-retry")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
+
     /**
      * Database
      */
