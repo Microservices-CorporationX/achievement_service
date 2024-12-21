@@ -7,6 +7,7 @@ import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class AchievementService {
         return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId);
     }
 
+    @Transactional
     public void createProgressIfNecessary(Long userId, Long achievementId) {
         achievementProgressRepository.createProgressIfNecessary(userId, achievementId);
     }
