@@ -2,6 +2,7 @@ package faang.school.achievement.handler.team.manager;
 
 import faang.school.achievement.cache.AchievementCache;
 import faang.school.achievement.dto.AchievementDto;
+import faang.school.achievement.exception.AchievementNotFoundException;
 import faang.school.achievement.exception.DataValidationException;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.dto.team.TeamEvent;
@@ -37,10 +38,10 @@ public class ManagerAchievementHandlerTest {
         TeamEvent event = prepareEvent();
         when(achievementCache.get(anyString())).thenReturn(null);
 
-        DataValidationException exception = assertThrows(DataValidationException.class,
+        AchievementNotFoundException exception = assertThrows(AchievementNotFoundException.class,
                 () -> managerAchievementHandler.handleEvent(event));
 
-        assertEquals("Achievement with key 'MANAGER' not found.", exception.getMessage());
+        assertEquals("Failed to get 'MANAGER' achievement from cache.", exception.getMessage());
     }
 
     @Test
