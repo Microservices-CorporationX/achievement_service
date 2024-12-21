@@ -19,11 +19,11 @@ public class AchievementService {
     private final AchievementMapper achievementMapper;
 
     @Transactional
-    @Cacheable(value = "achievements", key = "#name.toUpperCase()")
-    public AchievementCacheDto getAchievementDtoFromCacheByName(String name) {
-        Achievement achievement = achievementRepository.findByName(name.toUpperCase()).orElseThrow(() ->
+    @Cacheable(value = "achievements", key = "#title.toUpperCase()")
+    public AchievementCacheDto getAchievementByTitle(String title) {
+        Achievement achievement = achievementRepository.findByTitle(title.toUpperCase()).orElseThrow(() ->
                 new EntityNotFoundException("Achievement not found"));
-        log.info("Get achievement by name: {}", name);
+        log.info("Get achievement by name from Database: {}", title);
         return achievementMapper.toDto(achievement);
     }
 }

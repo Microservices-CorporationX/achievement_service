@@ -11,21 +11,23 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class AchievementCacheService implements CommandLineRunner {
+public class AchievementCacheWarmupService implements CommandLineRunner {
     private final AchievementRepository achievementRepository;
     private final AchievementService achievementService;
 
     @Override
     public void run(String... args) {
         try {
-            Iterable<Achievement> achievements = achievementRepository.findAll();
-            for (Achievement achievement : achievements) {
-                achievementService.getAchievementDtoFromCacheByName(achievement.getTitle());
-                log.info("Preloaded achievement: {}", achievement.getTitle());
-            }
+            achievementRepository.findAll().parallelStream()
+                    .forEach(this::preloadAchievement);
         } catch (CachePrefetchException e) {
             log.error("Failed to preload achievements: {}", e.getMessage());
             throw e;
         }
+    }
+
+    private void preloadAchievement(Achievement achievement) {
+        achievementService.getAchievementByTitle(achievement.getTitle());
+        log.info("Preloaded achievement: {}", achievement.getTitle());
     }
 }

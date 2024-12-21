@@ -73,13 +73,13 @@ class AchievementServiceTest {
 
     @Test
     @DisplayName("Test get achievement dto by name: first call: returns dto and caches result")
-    void testGetAchievementDtoFromCacheByNameFirstCall() {
-        when(achievementRepository.findByName(achievementName.toUpperCase())).thenReturn(Optional.of(achievement));
+    void testGetAchievementByTitleFirstCall() {
+        when(achievementRepository.findByTitle(achievementName.toUpperCase())).thenReturn(Optional.of(achievement));
         when(achievementMapper.toDto(achievement)).thenReturn(dto);
 
-        AchievementCacheDto result = achievementService.getAchievementDtoFromCacheByName(achievementName);
+        AchievementCacheDto result = achievementService.getAchievementByTitle(achievementName);
 
-        verify(achievementRepository, times(1)).findByName(achievementName.toUpperCase());
+        verify(achievementRepository, times(1)).findByTitle(achievementName.toUpperCase());
         verify(achievementMapper, times(1)).toDto(achievement);
 
         assertNotNull(result);
@@ -96,13 +96,13 @@ class AchievementServiceTest {
     @Test
     @DisplayName("Test get achievement dto by name: two calls: returns dto and caches result")
     void testGetAchievementDtoByNameFromCacheTwoCalls() {
-        when(achievementRepository.findByName(achievementName.toUpperCase())).thenReturn(Optional.of(achievement));
+        when(achievementRepository.findByTitle(achievementName.toUpperCase())).thenReturn(Optional.of(achievement));
         when(achievementMapper.toDto(achievement)).thenReturn(dto);
 
-        AchievementCacheDto firstCall = achievementService.getAchievementDtoFromCacheByName(achievementName);
-        AchievementCacheDto secondCall = achievementService.getAchievementDtoFromCacheByName(achievementName);
+        AchievementCacheDto firstCall = achievementService.getAchievementByTitle(achievementName);
+        AchievementCacheDto secondCall = achievementService.getAchievementByTitle(achievementName);
 
-        verify(achievementRepository, times(1)).findByName(achievementName.toUpperCase());
+        verify(achievementRepository, times(1)).findByTitle(achievementName.toUpperCase());
         verify(achievementMapper, times(1)).toDto(achievement);
 
         assertNotNull(firstCall);
@@ -121,13 +121,13 @@ class AchievementServiceTest {
     @DisplayName("Get achievement dto from cache: fail: wrong name")
     void testGetAchievementDtoFromCacheFail_InvalidName() {
         String name = "fake";
-        when(achievementRepository.findByName(name.toUpperCase())).thenReturn(Optional.empty());
+        when(achievementRepository.findByTitle(name.toUpperCase())).thenReturn(Optional.empty());
 
         EntityNotFoundException ex = assertThrows(EntityNotFoundException.class,
-                () -> achievementService.getAchievementDtoFromCacheByName(name));
+                () -> achievementService.getAchievementByTitle(name));
         assertEquals("Achievement not found", ex.getMessage());
 
-        verify(achievementRepository, times(1)).findByName(name.toUpperCase());
+        verify(achievementRepository, times(1)).findByTitle(name.toUpperCase());
         verify(achievementMapper, never()).toDto(achievement);
     }
 }
