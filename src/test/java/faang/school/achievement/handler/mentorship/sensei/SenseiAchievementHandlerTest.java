@@ -3,6 +3,7 @@ package faang.school.achievement.handler.mentorship.sensei;
 import faang.school.achievement.cache.AchievementCache;
 import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.dto.mentorship.MentorshipStartEvent;
+import faang.school.achievement.exception.AchievementNotFoundException;
 import faang.school.achievement.exception.DataValidationException;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.service.AchievementService;
@@ -36,10 +37,10 @@ public class SenseiAchievementHandlerTest {
         MentorshipStartEvent event = prepareEvent();
         when(achievementCache.get(anyString())).thenReturn(null);
 
-        DataValidationException exception = assertThrows(DataValidationException.class,
+        AchievementNotFoundException exception = assertThrows(AchievementNotFoundException.class,
                 () -> senseiAchievementHandler.handleEvent(event));
 
-        assertEquals("Achievement with key 'SENSEI' not found.", exception.getMessage());
+        assertEquals("Failed to get 'SENSEI' achievement from cache.", exception.getMessage());
     }
 
     @Test

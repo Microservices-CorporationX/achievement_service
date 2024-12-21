@@ -3,6 +3,7 @@ package faang.school.achievement.handler.recommendation.niceguy;
 import faang.school.achievement.cache.AchievementCache;
 import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.dto.recommendation.RecommendationEvent;
+import faang.school.achievement.exception.AchievementNotFoundException;
 import faang.school.achievement.exception.DataValidationException;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.service.AchievementService;
@@ -36,10 +37,10 @@ public class NiceGuyAchievementHandlerTest {
         RecommendationEvent event = prepareEvent();
         when(achievementCache.get(anyString())).thenReturn(null);
 
-        DataValidationException exception = assertThrows(DataValidationException.class,
+        AchievementNotFoundException exception = assertThrows(AchievementNotFoundException.class,
                 () -> niceGuyAchievementHandler.handleEvent(event));
 
-        assertEquals("Achievement with key 'NICE GUY' not found.", exception.getMessage());
+        assertEquals("Failed to get 'NICE GUY' achievement from cache.", exception.getMessage());
     }
 
     @Test
