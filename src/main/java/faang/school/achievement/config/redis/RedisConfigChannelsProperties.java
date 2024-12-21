@@ -1,4 +1,4 @@
-package faang.school.achievement.config;
+package faang.school.achievement.config.redis;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

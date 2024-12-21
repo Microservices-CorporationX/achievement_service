@@ -1,6 +1,6 @@
 package faang.school.achievement.publisher;
 
-import faang.school.achievement.config.RedisConfigChannelsProperties;
+import faang.school.achievement.config.redis.RedisConfigChannelsProperties;
 import faang.school.achievement.event.AchievementEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

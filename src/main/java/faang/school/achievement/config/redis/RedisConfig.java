@@ -19,7 +19,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Slf4j
 @RequiredArgsConstructor
 public class RedisConfig {
-    private final RedisProperties redisProperties;
+    private final RedisConfigProperties redisConfigProperties;
+    private final RedisConfigChannelsProperties redisConfigChannelsProperties;
     private final ObjectMapper objectMapper;
 
     @Bean
@@ -30,7 +31,7 @@ public class RedisConfig {
         template.setHashKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper));
         template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper));
-        log.info("Connection to redis initialized at port: {}", redisProperties.port());
+        log.info("Connection to redis initialized at port: {}", redisConfigProperties.port());
         return template;
     }
 
@@ -66,11 +67,11 @@ public class RedisConfig {
 
     @Bean
     public ChannelTopic achievementChannelTopic() {
-        return new ChannelTopic(redisProperties.channel().achievementChannel());
+        return new ChannelTopic(redisConfigChannelsProperties.achievement());
     }
 
     @Bean
     public ChannelTopic followerChannelTopic() {
-        return new ChannelTopic(redisProperties.channel().followerChannel());
+        return new ChannelTopic(redisConfigChannelsProperties.follower());
     }
 }

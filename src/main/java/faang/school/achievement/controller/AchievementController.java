@@ -23,6 +23,7 @@ public class AchievementController {
     @GetMapping
     public ResponseEntity<String> getAchievement(@RequestParam @NotBlank (message = "Name is required") String title) {
         return ResponseEntity.ok(achievementService.getAchievementByTitle(title).getTitle());
+    }
 
     @PostMapping("/publish")
     public ResponseEntity<AchievementDto> publishAchievementEvent(@RequestBody AchievementDto achievementDto) {

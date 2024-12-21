@@ -1,14 +1,13 @@
 package faang.school.achievement.service;
 
 import faang.school.achievement.dto.AchievementCacheDto;
-import faang.school.achievement.mapper.AchievementMapper;
 import faang.school.achievement.event.AchievementEvent;
 import faang.school.achievement.exception.AchievementAlreadyExistsException;
+import faang.school.achievement.mapper.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.Rarity;
 import faang.school.achievement.model.UserAchievement;
 import faang.school.achievement.publisher.AchievementEventPublisher;
-import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.AchievementRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,18 +19,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -200,5 +194,8 @@ class AchievementServiceTest {
         AchievementAlreadyExistsException exception = assertThrows(AchievementAlreadyExistsException.class, () ->
                 achievementService.publishAchievementEvent(userId, achievementId));
 
+        assertEquals("User 1 already has achievement 1", exception.getMessage());
+        verify(userAchievementRepository, times(1)).save(any(UserAchievement.class));
+        verify(achievementEventPublisher, never()).publish(any(AchievementEvent.class));
     }
 }

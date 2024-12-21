@@ -47,7 +47,7 @@ public class AchievementControllerTest {
     @Test
     @DisplayName("testPublishAchievementEvent")
     void testPublishAchievementEvent() throws Exception {
-        String publishAchievementEventUrl = "/achievement/publish";
+        String publishAchievementEventUrl = "/achievements/publish";
         doNothing().when(achievementService)
                 .publishAchievementEvent(achievementDto.getUserId(), achievementDto.getAchievementId());
 

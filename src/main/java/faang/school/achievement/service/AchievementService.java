@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -35,7 +34,7 @@ public class AchievementService {
         log.info("Get achievement by name from Database: {}", title);
         return achievementMapper.toDto(achievement);
     }
-}
+
     public void publishAchievementEvent(long userId, long achievementId) {
         Achievement achievement = achievementRepository.findById(achievementId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Achievement %d not found", achievementId)));
