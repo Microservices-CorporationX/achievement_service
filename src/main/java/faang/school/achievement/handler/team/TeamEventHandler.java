@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 public abstract class TeamEventHandler implements EventHandler<TeamEvent> {
 
-    @Async("teamEventPool")
+    @Async("taskExecutor")
     public abstract void handleEvent(TeamEvent event);
 }
