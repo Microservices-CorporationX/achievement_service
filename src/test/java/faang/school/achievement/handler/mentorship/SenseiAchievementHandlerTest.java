@@ -6,6 +6,7 @@ import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.service.AchievementService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -30,10 +31,16 @@ public class SenseiAchievementHandlerTest {
     AchievementProgressRepository progressRepository;
     String achievementTitle = "SENSEI";
 
+    SenseiAchievementHandler senseiAchievementHandler;
+
+    @BeforeEach
+    public void init(){
+        senseiAchievementHandler = new SenseiAchievementHandler(achievementCache, achievementService, progressRepository);
+        senseiAchievementHandler.setAchievementTitle(achievementTitle);
+    }
+
     @Test
     public void testIncreaseCurrentPoints() {
-        SenseiAchievementHandler senseiAchievementHandler = new SenseiAchievementHandler(achievementCache, achievementService, progressRepository, achievementTitle);
-
         long mentorId = 1L;
         long achievementId = 1L;
         long currentPoints = 19L;
@@ -58,8 +65,6 @@ public class SenseiAchievementHandlerTest {
 
     @Test
     public void testUserHasAchievement(){
-        SenseiAchievementHandler senseiAchievementHandler = new SenseiAchievementHandler(achievementCache, achievementService, progressRepository, achievementTitle);
-
         long mentorId = 1L;
         long achievementId = 1L;
 
@@ -82,8 +87,6 @@ public class SenseiAchievementHandlerTest {
 
     @Test
     public void testAchievementGiven() {
-        SenseiAchievementHandler senseiAchievementHandler = new SenseiAchievementHandler(achievementCache, achievementService, progressRepository, achievementTitle);
-
         long mentorId = 1L;
         long achievementId = 1L;
         long currentPoints = 19L;
