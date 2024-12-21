@@ -15,7 +15,7 @@ import java.util.Optional;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class HandsomeAchievementHandler implements EventHandler {
+public class HandsomeAchievementHandler implements EventHandler<ProfilePicEvent> {
 
     private final AchievementCache achievementCache;
     private final AchievementService achievementService;
