@@ -21,9 +21,16 @@ spring:
     redis:
       port: 6379
       host: localhost
-      channel:
+      channels:
         achievement: achievement_channel
         follower: follower_channel
+        skill: skill_channel
+
+  retry:
+    maxAttempts: 3
+    initialDelay: 1000
+    multiplier: 2
+    maxDelay: 10000
 
 server:
   port: 8085
