@@ -16,4 +16,6 @@ public class RedisProperties {
     private String host;
     @Value("${spring.data.redis.channel.profile-pic}")
     private String profilePicChannel;
+    @Value("${spring.data.redis.channel.mentorship-channel}")
+    private String mentorshipChannel;
 }
