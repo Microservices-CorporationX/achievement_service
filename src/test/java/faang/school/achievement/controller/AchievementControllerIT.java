@@ -95,7 +95,7 @@ public class AchievementControllerIT {
 
     @Test
     public void testGetAllAchievements() throws Exception {
-        int totalAchievements = 10;
+        int totalAchievements = 11;
 
         MvcResult result = mockMvc.perform(
                 get("/achievements")

@@ -4,8 +4,8 @@ import faang.school.achievement.event.comment.CommentEvent;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
-import faang.school.achievement.service.AchievementCache;
 import faang.school.achievement.service.AchievementService;
+import faang.school.achievement.service.Cache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +25,7 @@ public class EvilCommenterAchievementHandlerTest {
     private AchievementService achievementService;
 
     @Mock
-    private AchievementCache achievementCache;
+    private Cache<Achievement> achievementCache;
 
     @InjectMocks
     private EvilCommenterAchievementHandler eventHandler;
