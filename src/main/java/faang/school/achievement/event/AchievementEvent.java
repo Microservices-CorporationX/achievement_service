@@ -8,6 +8,8 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class AchievementEvent {
-    private long achievementId;
-    private long userId;
+
+    private Long userId;
+    private String title;
+    private String description;
 }

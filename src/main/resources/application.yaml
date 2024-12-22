@@ -30,6 +30,7 @@ spring:
         follower: follower_channel
         skill: skill_channel
         project: project_channel
+        comment: comment_channel
 
 async:
   thread-name-prefix: AsyncThread-

@@ -15,9 +15,10 @@ public abstract class AbstractEventHandler<T> implements EventHandler<T> {
     private final Cache<Achievement> achievementCache;
     private final AchievementService achievementService;
 
-    @Async("achievementHandlingExecutor")
+    @Async("eventHandlingTaskExecutor")
     public void handleAchievement(Long userId, String achievementTitle) {
         try {
+            log.info("{}", achievementTitle);
             Achievement achievement = achievementCache.get(achievementTitle);
             handleAchievementProgress(userId, achievement);
         } catch (Exception e) {

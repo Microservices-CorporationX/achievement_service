@@ -21,7 +21,9 @@ public abstract class AbstractEventListener<T> implements MessageListener, Redis
         try {
             log.info("Received message for event - {}", eventType.getSimpleName());
             T event = objectMapper.readValue(message.getBody(), eventType);
-            handlers.forEach(handler -> handler.handleEvent(event));
+            handlers.stream()
+                    .filter(handler -> handler.supportsEvent(eventType))
+                    .forEach(handler -> handler.handleEvent(event));
         } catch (IOException e) {
             String exceptionMessage = String.format("Unable to parse event: %s, with message: %s",
                     eventType.getName(), message);

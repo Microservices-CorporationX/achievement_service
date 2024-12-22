@@ -1,6 +1,6 @@
 package faang.school.achievement.handler.impl;
 
-import faang.school.achievement.event.SkillAcquiredEvent;
+import faang.school.achievement.event.skill.SkillAcquiredEvent;
 import faang.school.achievement.handler.AbstractEventHandler;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.service.Cache;
@@ -21,5 +21,10 @@ public class WhoeverAchievementHandler extends AbstractEventHandler<SkillAcquire
     @Override
     public void handleEvent(SkillAcquiredEvent event) {
         handleAchievement(event.getRecipientId(), ACHIEVEMENT_TITLE);
+    }
+
+    @Override
+    public boolean supportsEvent(Class<?> eventType) {
+        return SkillAcquiredEvent.class.equals(eventType);
     }
 }

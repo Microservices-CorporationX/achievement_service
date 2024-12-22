@@ -7,3 +7,5 @@ databaseChangeLog:
       file: db/changelog/changeset/achievement_setup_V003.sql
   - include:
       file: db/changelog/changeset/achievement_added_skill_master_V004.sql
+  - include:
+      file: db/changelog/changeset/achievement_setup_V005.sql
