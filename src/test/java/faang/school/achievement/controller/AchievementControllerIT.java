@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.redis.testcontainers.RedisContainer;
 import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.model.Rarity;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -38,6 +39,11 @@ public class AchievementControllerIT {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @BeforeAll
+
+    static void setup() {
+    }
 
     @Container
     public static PostgreSQLContainer<?> POSTGRESQL_CONTAINER =

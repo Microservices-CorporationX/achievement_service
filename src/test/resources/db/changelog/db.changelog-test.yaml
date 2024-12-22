@@ -3,5 +3,3 @@ databaseChangeLog:
       file: classpath:db/changelog/changeset/achievement_V001__initial_test.sql
   - include:
       file: classpath:db/changelog/db.changelog-master.yaml
-  - include:
-      file: classpath:db/changelog/changeset/achievement_setup_test_V002.sql

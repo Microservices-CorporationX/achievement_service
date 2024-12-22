@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AchievementService {
-    private final AchievementCache achievementCache;
+    private final Cache<Achievement> achievementCache;
     private final AchievementMapper achievementMapper;
     private final AchievementRepository achievementRepository;
     private final AchievementProgressRepository achievementProgressRepository;

@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 class AchievementServiceTest {
 
     @Mock
-    private AchievementCache achievementCache;
+    private Cache<Achievement> achievementCache;
 
     @Spy
     private AchievementMapper achievementMapper = Mappers.getMapper(AchievementMapper.class);

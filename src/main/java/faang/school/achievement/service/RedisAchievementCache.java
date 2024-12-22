@@ -16,36 +16,34 @@ import java.util.NoSuchElementException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AchievementCache {
-
-    private static final String KEY_MAP = "Achievements";
+public class RedisAchievementCache implements Cache<Achievement> {
 
     private final AchievementRepository achievementRepository;
     private final AchievementRedisService redisService;
 
     @PostConstruct
-    public void fillCache() {
+    private void fillCache() {
         Map<String, Achievement> achievementsByTitle = new HashMap<>();
         achievementRepository.findAll()
                 .forEach(achievement -> achievementsByTitle.put(achievement.getTitle(), achievement));
 
-        redisService.saveAchievement(KEY_MAP, achievementsByTitle);
+        redisService.saveAchievement(achievementsByTitle);
         log.info("Achievements saved in cache");
     }
 
     @PreDestroy
-    private void clearingCache() {
+    private void clearCache() {
         redisService.cleanAchievements();
         log.info("Achievement cache cleared");
     }
 
 
     public Achievement get(String title) {
-        Achievement achievement = redisService.getAchievement(KEY_MAP, title);
+        Achievement achievement = redisService.getAchievement(title);
         if (achievement == null) {
-            clearingCache();
+            clearCache();
             fillCache();
-            achievement = redisService.getAchievement(KEY_MAP, title);
+            achievement = redisService.getAchievement(title);
             if (achievement == null) {
                 throw new NoSuchElementException("Achievement with title " + title + " no such");
             }
@@ -54,6 +52,6 @@ public class AchievementCache {
     }
 
     public List<Achievement> getAll() {
-        return redisService.getAllAchievements(KEY_MAP);
+        return redisService.getAllAchievements();
     }
 }

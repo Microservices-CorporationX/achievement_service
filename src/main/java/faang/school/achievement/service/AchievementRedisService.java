@@ -14,19 +14,21 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class AchievementRedisService {
 
+    private static final String KEY_MAP = "Achievements";
+
     private final ObjectMapper objectMapper;
     private final RedisTemplate<String, Map<String, Achievement>> redisTemplate;
 
-    public void saveAchievement(String key, Map<String, Achievement> achievement) {
-        redisTemplate.opsForHash().putAll(key, achievement);
+    public void saveAchievement(Map<String, Achievement> achievement) {
+        redisTemplate.opsForHash().putAll(KEY_MAP, achievement);
     }
 
-    public Achievement getAchievement(String key, String title) {
-        return objectMapper.convertValue(redisTemplate.opsForHash().get(key, title), Achievement.class);
+    public Achievement getAchievement(String title) {
+        return objectMapper.convertValue(redisTemplate.opsForHash().get(KEY_MAP, title), Achievement.class);
     }
 
-    public List<Achievement> getAllAchievements(String key) {
-        return redisTemplate.opsForHash().values(key).stream()
+    public List<Achievement> getAllAchievements() {
+        return redisTemplate.opsForHash().values(KEY_MAP).stream()
                 .map(object -> objectMapper.convertValue(object, Achievement.class))
                 .toList();
     }
