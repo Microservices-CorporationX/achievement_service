@@ -5,6 +5,7 @@ import faang.school.achievement.dto.achievement.AchievementFilterDto;
 import faang.school.achievement.dto.achievement.AchievementProgressDto;
 import faang.school.achievement.dto.achievement.UserAchievementDto;
 import faang.school.achievement.service.AchievementService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,7 @@ public class AchievementController {
     private final AchievementService achievementService;
 
     @GetMapping
-    public List<AchievementDto> getAchievementsByFilter(@RequestBody AchievementFilterDto achievementFilterDto) {
+    public List<AchievementDto> getAchievementsByFilter(@Valid @RequestBody AchievementFilterDto achievementFilterDto) {
         return achievementService.getAchievementsByFilter(achievementFilterDto);
     }
 
