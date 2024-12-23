@@ -1,5 +1,6 @@
 package faang.school.achievement.model;
 
+import faang.school.achievement.enums.Rarity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

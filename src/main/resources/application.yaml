@@ -24,6 +24,7 @@ spring:
       channel:
         achievement-channel: achievement_channel
         follower-channel: follower_channel
+        recommendation-channel: recommendation_channel
 
 server:
   port: 8085

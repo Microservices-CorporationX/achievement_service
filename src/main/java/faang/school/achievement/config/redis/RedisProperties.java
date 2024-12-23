@@ -6,10 +6,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record RedisProperties(
         long port,
         String host,
-        Channel channel) {
+        Channel channel
+) {
+
     public record Channel(
             String achievementChannel,
-            String followerChannel
+            String followerChannel,
+            String recommendationChannel
     ) {
     }
 }

@@ -2,7 +2,7 @@ package faang.school.achievement.mapper;
 
 import faang.school.achievement.dto.AchievementCacheDto;
 import faang.school.achievement.model.Achievement;
-import faang.school.achievement.model.Rarity;
+import faang.school.achievement.enums.Rarity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -3,7 +3,7 @@ package faang.school.achievement.service;
 import faang.school.achievement.dto.AchievementCacheDto;
 import faang.school.achievement.mapper.AchievementMapper;
 import faang.school.achievement.model.Achievement;
-import faang.school.achievement.model.Rarity;
+import faang.school.achievement.enums.Rarity;
 import faang.school.achievement.repository.AchievementRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,6 @@
 package faang.school.achievement.dto;
 
-import faang.school.achievement.model.Rarity;
+import faang.school.achievement.enums.Rarity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

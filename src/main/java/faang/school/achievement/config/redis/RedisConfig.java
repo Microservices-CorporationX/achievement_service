@@ -1,6 +1,7 @@
 package faang.school.achievement.config.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import faang.school.achievement.listener.RecommendationEventListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -50,18 +51,23 @@ public class RedisConfig {
 
     @Bean
     RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
-
         return RedisCacheManager.builder(redisConnectionFactory)
                 .cacheDefaults(redisCacheConfiguration())
                 .build();
     }
 
     @Bean
-    RedisMessageListenerContainer redisContainer(RedisConnectionFactory connectionFactory) {
+    RedisMessageListenerContainer redisContainer(RedisConnectionFactory connectionFactory,
+                                                 RecommendationEventListener recommendationEventListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-
+        container.addMessageListener(recommendationEventListener, recommendationTopic());
         return container;
+    }
+
+    @Bean
+    public ChannelTopic recommendationTopic() {
+        return new ChannelTopic(redisProperties.channel().recommendationChannel());
     }
 
     @Bean

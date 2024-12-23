@@ -18,7 +18,7 @@ public class AchievementController {
     private final AchievementService achievementService;
 
     @GetMapping
-    public ResponseEntity<String> getAchievement(@RequestParam @NotBlank (message = "Name is required") String title) {
+    public ResponseEntity<String> getAchievement(@RequestParam @NotBlank(message = "Name is required") String title) {
         return ResponseEntity.ok(achievementService.getAchievementByTitle(title).getTitle());
     }
 }
