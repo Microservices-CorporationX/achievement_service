@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AchievementService {
-    private final AchievementCache achievementCache;
+    private final Cache<Achievement> achievementCache;
     private final AchievementMapper achievementMapper;
     private final AchievementRepository achievementRepository;
     private final AchievementProgressRepository achievementProgressRepository;
@@ -30,10 +30,12 @@ public class AchievementService {
     private final AchievementPublisher achievementPublisher;
 
     public AchievementDto get(String title) {
+        log.info("Requested achievement with title " + title);
         return achievementMapper.toDto(achievementCache.get(title));
     }
 
     public List<AchievementDto> getAll() {
+        log.info("Requested all achievements");
         return achievementMapper.toDtoList(achievementCache.getAll());
     }
 

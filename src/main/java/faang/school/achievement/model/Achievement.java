@@ -1,5 +1,6 @@
 package faang.school.achievement.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,9 +34,11 @@ public class Achievement {
     @Enumerated(EnumType.ORDINAL)
     private Rarity rarity;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "achievement")
     private List<UserAchievement> userAchievements;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "achievement")
     private List<AchievementProgress> progresses;
 

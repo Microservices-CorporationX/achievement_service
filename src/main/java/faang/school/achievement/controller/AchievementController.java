@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/achievements")
 @RequiredArgsConstructor
 public class AchievementController {
+
     private final AchievementService achievementService;
 
     @GetMapping("/{achievement}")

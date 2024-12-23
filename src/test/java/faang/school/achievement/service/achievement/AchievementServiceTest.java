@@ -9,7 +9,7 @@ import faang.school.achievement.publisher.AchievementPublisher;
 import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.AchievementRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
-import faang.school.achievement.service.AchievementCache;
+import faang.school.achievement.service.Cache;
 import faang.school.achievement.service.AchievementService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ class AchievementServiceTest {
     private AchievementMapper achievementMapper = Mappers.getMapper(AchievementMapper.class);
 
     @Mock
-    private AchievementCache achievementCache;
+    private Cache<Achievement> achievementCache;
 
     @Mock
     AchievementRepository achievementRepository;

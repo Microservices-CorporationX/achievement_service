@@ -3,6 +3,7 @@ package faang.school.achievement.service;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.repository.AchievementRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -10,39 +11,47 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AchievementCache {
+public class RedisAchievementCache implements Cache<Achievement> {
 
     private final AchievementRepository achievementRepository;
-
-    private Map<String, Achievement> achievementsByTitle = new HashMap<>();
+    private final AchievementRedisService redisService;
 
     @PostConstruct
-    public void fillCache() {
+    private void fillCache() {
+        Map<String, Achievement> achievementsByTitle = new HashMap<>();
         achievementRepository.findAll()
                 .forEach(achievement -> achievementsByTitle.put(achievement.getTitle(), achievement));
+
+        redisService.saveAchievement(achievementsByTitle);
         log.info("Achievements saved in cache");
     }
 
+    @PreDestroy
+    private void clearCache() {
+        redisService.cleanAchievements();
+        log.info("Achievement cache cleared");
+    }
+
+
     public Achievement get(String title) {
-        Achievement achievement = achievementsByTitle.get(title);
+        Achievement achievement = redisService.getAchievement(title);
         if (achievement == null) {
-            for (Achievement achievementFromDB : achievementRepository.findAll()) {
-                if (achievementFromDB.getTitle().equals(title)) {
-                    achievement = achievementFromDB;
-                    achievementsByTitle.put(achievement.getTitle(), achievement);
-                    break;
-                }
+            clearCache();
+            fillCache();
+            achievement = redisService.getAchievement(title);
+            if (achievement == null) {
+                throw new NoSuchElementException("Achievement with title " + title + " no such");
             }
         }
-        log.info("Achievement with title {} fetched from cache", title);
         return achievement;
     }
 
     public List<Achievement> getAll() {
-        return achievementsByTitle.values().stream().toList();
+        return redisService.getAllAchievements();
     }
 }

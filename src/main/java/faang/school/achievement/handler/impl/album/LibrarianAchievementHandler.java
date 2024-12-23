@@ -2,7 +2,8 @@ package faang.school.achievement.handler.impl.album;
 
 import faang.school.achievement.event.album.AlbumCreatedEvent;
 import faang.school.achievement.handler.AbstractEventHandler;
-import faang.school.achievement.service.AchievementCache;
+import faang.school.achievement.model.Achievement;
+import faang.school.achievement.service.Cache;
 import faang.school.achievement.service.AchievementService;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ public class LibrarianAchievementHandler extends AbstractEventHandler<AlbumCreat
 
     private final String ACHIEVEMENT_TITLE = "LIBRARIAN";
 
-    public LibrarianAchievementHandler(AchievementCache achievementCache,
+    public LibrarianAchievementHandler(Cache<Achievement> achievementCache,
                                        AchievementService achievementService) {
         super(achievementCache, achievementService);
     }

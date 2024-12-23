@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: classpath:db/changelog/changeset/achievement_V001__initial_test.sql
+  - include:
+      file: classpath:db/changelog/db.changelog-master.yaml
