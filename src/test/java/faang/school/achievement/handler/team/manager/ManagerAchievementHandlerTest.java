@@ -3,7 +3,6 @@ package faang.school.achievement.handler.team.manager;
 import faang.school.achievement.cache.AchievementCache;
 import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.exception.AchievementNotFoundException;
-import faang.school.achievement.exception.DataValidationException;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.dto.team.TeamEvent;
 import faang.school.achievement.service.AchievementService;
@@ -14,10 +13,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -41,7 +39,7 @@ public class ManagerAchievementHandlerTest {
         AchievementNotFoundException exception = assertThrows(AchievementNotFoundException.class,
                 () -> managerAchievementHandler.handleEvent(event));
 
-        assertEquals("Failed to get 'MANAGER' achievement from cache.", exception.getMessage());
+        assertEquals("Failed to get achievement from cache.", exception.getMessage());
     }
 
     @Test
@@ -50,11 +48,14 @@ public class ManagerAchievementHandlerTest {
         AchievementDto achievement = prepareAchievementDto();
         AchievementProgress achievementProgress = prepareAchievementProgress(10);
         when(achievementCache.get(anyString())).thenReturn(achievement);
-        when(achievementService.getProgress(event.getAuthorId(), achievement.getId())).thenReturn(achievementProgress);
+        when(achievementService.hasAchievement(event.getAuthorId(), 1L)).thenReturn(true);
 
-        boolean result = managerAchievementHandler.handleEvent(event);
+        managerAchievementHandler.handleEvent(event);
 
-        assertFalse(result);
+
+        verify(achievementService, never()).createProgressIfNecessary(event.getAuthorId(), achievement.getId());
+        verify(achievementService, never()).saveProgress(achievementProgress);
+        verify(achievementService, never()).giveAchievement(achievement, event.getAuthorId());
     }
 
     @Test
@@ -66,12 +67,11 @@ public class ManagerAchievementHandlerTest {
         when(achievementService.hasAchievement(event.getAuthorId(), 1L)).thenReturn(false);
         when(achievementService.getProgress(event.getAuthorId(), achievement.getId())).thenReturn(achievementProgress);
 
-        boolean result = managerAchievementHandler.handleEvent(event);
+        managerAchievementHandler.handleEvent(event);
 
         verify(achievementService).createProgressIfNecessary(event.getAuthorId(), achievement.getId());
         verify(achievementService).saveProgress(achievementProgress);
         verify(achievementService).giveAchievement(achievement, event.getAuthorId());
-        assertTrue(result);
     }
 
     @Test
@@ -83,11 +83,11 @@ public class ManagerAchievementHandlerTest {
         when(achievementService.hasAchievement(event.getAuthorId(), 1L)).thenReturn(false);
         when(achievementService.getProgress(event.getAuthorId(), achievement.getId())).thenReturn(achievementProgress);
 
-        boolean result = managerAchievementHandler.handleEvent(event);
+        managerAchievementHandler.handleEvent(event);
 
         verify(achievementService).createProgressIfNecessary(event.getAuthorId(), achievement.getId());
         verify(achievementService).saveProgress(achievementProgress);
-        assertFalse(result);
+        verify(achievementService, never()).giveAchievement(achievement, event.getAuthorId());
     }
 
     private TeamEvent prepareEvent() {

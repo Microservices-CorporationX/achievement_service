@@ -13,9 +13,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @EnableFeignClients("faang.school.achievement.client")
-@EnableAsync
+@EnableAsync(proxyTargetClass = true)
 @EnableRetry
-@EnableCaching
 public class AchievementServiceApp {
     public static void main(String[] args) {
         new SpringApplicationBuilder(AchievementServiceApp.class)

@@ -3,7 +3,6 @@ package faang.school.achievement.handler.team.manager;
 import faang.school.achievement.cache.AchievementCache;
 import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.exception.AchievementNotFoundException;
-import faang.school.achievement.exception.DataValidationException;
 import faang.school.achievement.handler.team.TeamEventHandler;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.dto.team.TeamEvent;
@@ -21,13 +20,14 @@ public class ManagerAchievementHandler extends TeamEventHandler {
     private final AchievementService achievementService;
 
     @Override
-    public boolean handleEvent(TeamEvent event) {
+    public void handleEvent(TeamEvent event) {
         log.info("Starting handleEvent for authorId: {}", event.getAuthorId());
-        AchievementDto achievement = getAndValidateAchievement();
+
+        AchievementDto achievement = getAndValidateAchievement("MANAGER");
 
         if (achievementService.hasAchievement(event.getAuthorId(), achievement.getId())) {
-            log.debug("The user with ID {} already has the Manager achievement.", event.getAuthorId());
-            return false;
+            log.debug("The user with ID {} already has the {} achievement.", event.getAuthorId(), achievement.getTitle());
+            return;
         }
 
         achievementService.createProgressIfNecessary(event.getAuthorId(), achievement.getId());
@@ -36,20 +36,18 @@ public class ManagerAchievementHandler extends TeamEventHandler {
         achievementService.saveProgress(progress);
 
         if (achievement.getPoints() == progress.getCurrentPoints()) {
-            log.info("User with ID {} has now received the Manager achievement.", event.getAuthorId());
+            log.info("User with ID {} has now received the {} achievement.", event.getAuthorId(), achievement.getTitle());
             achievementService.giveAchievement(achievement, event.getAuthorId());
-            return true;
         }
         log.info("Finished handleEvent for authorId: {}", event.getAuthorId());
-        return false;
     }
 
-    private AchievementDto getAndValidateAchievement() {
-        AchievementDto achievement = achievementCache.get("MANAGER");
+    private AchievementDto getAndValidateAchievement(String achievementTitle) {
+        AchievementDto achievement = achievementCache.get(achievementTitle);
 
         if (achievement == null) {
-            log.error("Failed to get 'MANAGER' achievement from cache.");
-            throw new AchievementNotFoundException("Failed to get 'MANAGER' achievement from cache.");
+            log.error("Failed to get {} achievement from cache.", achievementTitle);
+            throw new AchievementNotFoundException("Failed to get achievement from cache.");
         }
 
         return achievement;
