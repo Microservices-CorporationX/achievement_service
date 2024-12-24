@@ -14,8 +14,6 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -35,7 +33,6 @@ public class AsyncEventHandlerProcessor {
             Long achievementId = achievement.getId();
             achievementService.createProgressIfNecessary(userId, achievementId);
             AchievementProgress progress = achievementService.getProgress(userId, achievementId);
-            progress.setUpdatedAt(LocalDateTime.now());
             progress.increment();
             achievementService.updateProgress(progress);
 
