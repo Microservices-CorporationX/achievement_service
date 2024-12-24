@@ -21,9 +21,26 @@ spring:
     redis:
       port: 6379
       host: localhost
-      channel:
-        achievement: achievement_channel
-        follower: follower_channel
+      channels:
+        achievementChannel:
+          name: achievement_channel
+        followerChannel:
+          name: follower_channel
+        goalSetChannel:
+          name: goal_set_channel
+
+achievements:
+  collector:
+    title: COLLECTOR
+
+executor:
+  core-pool-size: 10
+  max-pool-size: 20
+  queue_capacity: 1000
+
+retryable:
+  max-attempts: 3
+  delay: 5000
 
 server:
   port: 8085
