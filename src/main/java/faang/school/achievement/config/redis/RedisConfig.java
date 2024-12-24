@@ -1,10 +1,10 @@
 package faang.school.achievement.config.redis;
 
-import faang.school.achievement.listener.ProfilePicEventListener;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import faang.school.achievement.listener.ConglomerateAchievementEventListener;
+import faang.school.achievement.listener.ProfilePicEventListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -87,15 +87,14 @@ public class RedisConfig {
         log.info("Настройка ConglomerateAchievementEventListener для обработки сообщений...");
         return new MessageListenerAdapter(conglomerateAchievementEventListener, "onMessage");
     }
-}
 
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory connectionFactory,
                                                                        MessageListenerAdapter messageListenerAdapter,
                                                                        ChannelTopic profilePicChannel) {
-            RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-            container.setConnectionFactory(connectionFactory);
-            container.addMessageListener(messageListenerAdapter, profilePicChannel);
-            return container;
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(messageListenerAdapter, profilePicChannel);
+        return container;
     }
 }
