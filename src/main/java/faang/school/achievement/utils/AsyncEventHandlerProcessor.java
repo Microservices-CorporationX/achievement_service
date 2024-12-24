@@ -1,10 +1,13 @@
 package faang.school.achievement.utils;
 
+import faang.school.achievement.dto.redisevent.AchievementEvent;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
+import faang.school.achievement.publisher.AchievementPublisher;
 import faang.school.achievement.service.AchievementService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
@@ -13,10 +16,12 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AsyncEventHandlerProcessor {
     private final AchievementService achievementService;
+    private final AchievementPublisher achievementPublisher;
 
     @Async("taskExecutor")
     @Retryable(
@@ -40,6 +45,8 @@ public class AsyncEventHandlerProcessor {
                         .userId(progress.getUserId())
                         .build();
                 achievementService.giveAchievement(userAchievement);
+                achievementPublisher.publish(new AchievementEvent(userId, title));
+                log.info("User {} received an achievement: {}", userId, title);
             }
         }
     }

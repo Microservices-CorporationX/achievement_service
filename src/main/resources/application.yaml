@@ -22,9 +22,9 @@ spring:
       port: 6379
       host: localhost
       channels:
-        achievement:
+        achievementChannel:
           name: achievement_channel
-        follower:
+        followerChannel:
           name: follower_channel
         goalSetChannel:
           name: goal_set_channel

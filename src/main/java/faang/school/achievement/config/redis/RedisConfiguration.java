@@ -59,6 +59,16 @@ public class RedisConfiguration {
     }
 
     @Bean
+    ChannelTopic achievementTopic() {
+        return new ChannelTopic(redisProperties.getChannels().getAchievementChannel().getName());
+    }
+
+    @Bean
+    ChannelTopic followerTopic() {
+        return new ChannelTopic(redisProperties.getChannels().getFollowerChannel().getName());
+    }
+
+    @Bean
     public MessageListenerAdapter goalSetMessageListener(GoalEventListener goalEventListener) {
         return new MessageListenerAdapter(goalEventListener);
     }

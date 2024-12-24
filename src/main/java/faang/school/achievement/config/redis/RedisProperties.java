@@ -16,6 +16,8 @@ public class RedisProperties {
     @Setter
     protected static class Channels {
         private Channel goalSetChannel;
+        private Channel achievementChannel;
+        private Channel followerChannel;
 
         @Getter
         @Setter
