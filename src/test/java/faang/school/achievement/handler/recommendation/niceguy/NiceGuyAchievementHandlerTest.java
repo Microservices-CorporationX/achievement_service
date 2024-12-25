@@ -40,7 +40,7 @@ public class NiceGuyAchievementHandlerTest {
         AchievementNotFoundException exception = assertThrows(AchievementNotFoundException.class,
                 () -> niceGuyAchievementHandler.handleEvent(event));
 
-        assertEquals("Failed to get 'NICE GUY' achievement from cache.", exception.getMessage());
+        assertEquals("Failed to get achievement from cache.", exception.getMessage());
     }
 
     @Test
