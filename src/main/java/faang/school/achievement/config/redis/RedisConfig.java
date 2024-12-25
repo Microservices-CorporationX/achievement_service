@@ -1,6 +1,7 @@
 package faang.school.achievement.config.redis;
 
 import faang.school.achievement.listener.mentorship.MentorshipEventListener;
+import faang.school.achievement.listener.recommendation.RecommendationEventListener;
 import faang.school.achievement.listener.team.TeamEventListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,9 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.channel.mentorship}")
     private String mentorshipChannel;
+
+    @Value("${spring.data.redis.channel.recommendation}")
+    private String recommendationChannel;
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
@@ -66,12 +70,24 @@ public class RedisConfig {
     }
 
     @Bean
+    public MessageListenerAdapter recommendationListener(RecommendationEventListener recommendationEventListener) {
+        return new MessageListenerAdapter(recommendationEventListener);
+    }
+
+    @Bean
+    public ChannelTopic recommendationTopic() {
+        return new ChannelTopic(recommendationChannel);
+    }
+
+    @Bean
     public RedisMessageListenerContainer redisContainer(MessageListenerAdapter teamListener,
-                                                        MessageListenerAdapter mentorshipListener) {
+                                                        MessageListenerAdapter mentorshipListener,
+                                                        MessageListenerAdapter recommendationListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
         container.addMessageListener(teamListener, teamTopic());
         container.addMessageListener(mentorshipListener, mentorshipTopic());
+        container.addMessageListener(recommendationListener, recommendationTopic());
         return container;
     }
 }

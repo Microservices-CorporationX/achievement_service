@@ -4,6 +4,7 @@ import faang.school.achievement.cache.AchievementCache;
 import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.dto.mentorship.MentorshipStartEvent;
 import faang.school.achievement.exception.AchievementNotFoundException;
+import faang.school.achievement.exception.DataValidationException;
 import faang.school.achievement.handler.mentorship.MentorshipEventHandler;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.service.AchievementService;
