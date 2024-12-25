@@ -3,6 +3,7 @@ package faang.school.achievement.service;
 import faang.school.achievement.cache.AchievementCache;
 import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.exception.AchievementException;
+import faang.school.achievement.exception.DataValidationException;
 import faang.school.achievement.filters.achievement.AchievementFilter;
 import faang.school.achievement.mapper.AchievementMapper;
 import faang.school.achievement.model.Achievement;
@@ -65,5 +66,29 @@ public class AchievementService {
                 .toList();
 
         return mapper.toDto(usersAchievements);
+    }
+
+    public boolean hasAchievement(long userId, long achievementId) {
+        return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId);
+    }
+
+    public void createProgressIfNecessary(long userId, long achievementId) {
+        achievementProgressRepository.createProgressIfNecessary(userId, achievementId);
+        log.debug("Progress towards achievement with ID {} for user with ID {} has been created!",
+                achievementId, userId);
+    }
+
+    public AchievementProgress getProgress(long userId, long achievementId) {
+        return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId)
+                .orElseThrow(() -> new DataValidationException(
+                        String.format("Achievement progress not found for userId: %d and achievementId: %d", userId, achievementId)));
+    }
+
+    public void giveAchievement(AchievementDto achievement, long userId) {
+        userAchievementRepository.save(UserAchievement.builder()
+                .achievement(mapper.toEntity(achievement))
+                .userId(userId)
+                .build());
+        log.info("User with ID {} received a new achievement.", userId);
     }
 }
