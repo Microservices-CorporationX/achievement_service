@@ -24,10 +24,10 @@ public class ManagerAchievementHandler extends TeamEventHandler {
     public void handleEvent(TeamEvent event) {
         log.info("Starting handleEvent for authorId: {}", event.getAuthorId());
 
-        AchievementDto achievement = getAndValidateAchievement();
+        AchievementDto achievement = getAndValidateAchievement("MANAGER");
 
         if (achievementService.hasAchievement(event.getAuthorId(), achievement.getId())) {
-            log.debug("The user with ID {} already has the Manager achievement.", event.getAuthorId());
+            log.debug("The user with ID {} already has the {} achievement.", event.getAuthorId(), achievement.getTitle());
             return;
         }
 
@@ -37,18 +37,18 @@ public class ManagerAchievementHandler extends TeamEventHandler {
         achievementService.saveProgress(progress);
 
         if (achievement.getPoints() == progress.getCurrentPoints()) {
-            log.info("User with ID {} has now received the Manager achievement.", event.getAuthorId());
+            log.info("User with ID {} has now received the {} achievement.", event.getAuthorId(), achievement.getTitle());
             achievementService.giveAchievement(achievement, event.getAuthorId());
         }
         log.info("Finished handleEvent for authorId: {}", event.getAuthorId());
     }
 
-    private AchievementDto getAndValidateAchievement() {
-        AchievementDto achievement = achievementCache.get("MANAGER");
+    private AchievementDto getAndValidateAchievement(String achievementTitle) {
+        AchievementDto achievement = achievementCache.get(achievementTitle);
 
         if (achievement == null) {
-            log.error("Failed to get 'MANAGER' achievement from cache.");
-            throw new AchievementNotFoundException("Failed to get 'MANAGER' achievement from cache.");
+            log.error("Failed to get {} achievement from cache.", achievementTitle);
+            throw new AchievementNotFoundException("Failed to get achievement from cache.");
         }
 
         return achievement;
