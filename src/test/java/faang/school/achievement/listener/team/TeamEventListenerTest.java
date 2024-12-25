@@ -61,7 +61,7 @@ public class TeamEventListenerTest {
         RuntimeException exception = assertThrows(RuntimeException.class,
                 () -> eventListener.onMessage(message, messageBody));
 
-        assertEquals("Failed to read TeamEvent from message body", exception.getMessage());
+        assertEquals("Failed to read from message body", exception.getMessage());
     }
 
     private TeamEvent prepareEvent() {

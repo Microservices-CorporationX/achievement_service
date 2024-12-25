@@ -40,7 +40,7 @@ public class ManagerAchievementHandlerTest {
         AchievementNotFoundException exception = assertThrows(AchievementNotFoundException.class,
                 () -> managerAchievementHandler.handleEvent(event));
 
-        assertEquals("Failed to get 'MANAGER' achievement from cache.", exception.getMessage());
+        assertEquals("Failed to get achievement from cache.", exception.getMessage());
     }
 
     @Test

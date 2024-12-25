@@ -29,8 +29,8 @@ public class TeamEventListener implements MessageListener {
                 eventHandler.handleEvent(event);
             });
         } catch (IOException e) {
-            log.error("Error reading value");
-            throw new RuntimeException("Failed to read TeamEvent from message body", e);
+            log.error("Error reading value from {}", message.getChannel());
+            throw new RuntimeException("Failed to read from message body", e);
         }
     }
 }

@@ -40,7 +40,7 @@ public class SenseiAchievementHandlerTest {
         AchievementNotFoundException exception = assertThrows(AchievementNotFoundException.class,
                 () -> senseiAchievementHandler.handleEvent(event));
 
-        assertEquals("Failed to get 'SENSEI' achievement from cache.", exception.getMessage());
+        assertEquals("Failed to get achievement from cache.", exception.getMessage());
     }
 
     @Test
