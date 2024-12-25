@@ -21,7 +21,7 @@ spring:
     redis:
       port: 6379
       host: localhost
-      channels:
+      channel:
         achievement: achievement_channel
         follower: follower_channel
         skill: skill_channel

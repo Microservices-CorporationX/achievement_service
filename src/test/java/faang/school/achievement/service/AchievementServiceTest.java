@@ -2,14 +2,11 @@ package faang.school.achievement.service;
 
 import faang.school.achievement.dto.AchievementCacheDto;
 import faang.school.achievement.event.AchievementEvent;
-import faang.school.achievement.exception.AchievementAlreadyExistsException;
 import faang.school.achievement.mapper.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.Rarity;
-import faang.school.achievement.model.UserAchievement;
 import faang.school.achievement.publisher.AchievementEventPublisher;
 import faang.school.achievement.repository.AchievementRepository;
-import faang.school.achievement.repository.UserAchievementRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -43,14 +40,14 @@ class AchievementServiceTest {
     @MockBean
     private AchievementMapper achievementMapper;
 
+    @Autowired
+    private AchievementService achievementService;
+
     @MockBean
-    private UserAchievementRepository userAchievementRepository;
+    private UserAchievementService userAchievementService;
 
     @MockBean
     private AchievementEventPublisher achievementEventPublisher;
-
-    @Autowired
-    private AchievementService achievementService;
 
     @Autowired
     private CacheManager cacheManager;
@@ -150,52 +147,46 @@ class AchievementServiceTest {
         verify(achievementMapper, never()).toDto(achievement);
     }
 
+
     @Test
-    @DisplayName("testPublishAchievementEventSuccess")
-    void testPublishAchievementEventSuccess() {
+    @DisplayName("Process achievement for user: success")
+    void testProcessAchievementForUser() {
         long userId = 1L;
-        long achievementId = 1L;
+        long achievementId = 999L;
+
+        Achievement achievement = new Achievement();
+        achievement.setId(achievementId);
+        achievement.setTitle("Test Achievement");
+        achievement.setDescription("Description");
+        achievement.setRarity(Rarity.UNCOMMON);
 
         when(achievementRepository.findById(achievementId)).thenReturn(Optional.of(achievement));
-        when(userAchievementRepository.save(any(UserAchievement.class))).thenReturn(new UserAchievement());
 
-        assertDoesNotThrow(() -> achievementService.publishAchievementEvent(userId, achievementId));
+        doNothing().when(userAchievementService).createUserAchievement(userId, achievementId, achievement);
+        doNothing().when(achievementEventPublisher).publish(any(AchievementEvent.class));
 
-        verify(userAchievementRepository, times(1)).save(any(UserAchievement.class));
+
+        assertDoesNotThrow(() -> achievementService.processAchievementForUser(userId, achievementId));
+
+        verify(achievementRepository, times(1)).findById(achievementId);
+        verify(userAchievementService, times(1)).createUserAchievement(userId, achievementId, achievement);
         verify(achievementEventPublisher, times(1)).publish(any(AchievementEvent.class));
     }
 
     @Test
-    @DisplayName("testPublishAchievementEventAchievementNotFound")
-    void testPublishAchievementEventAchievementNotFound() {
+    @DisplayName("Test process achievement for user: achievement not found")
+    void testProcessAchievementForUser_AchievementNotFound() {
         long userId = 1L;
-        long achievementId = 1L;
+        long achievementId = 999L;
 
         when(achievementRepository.findById(achievementId)).thenReturn(Optional.empty());
 
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () ->
-                achievementService.publishAchievementEvent(userId, achievementId));
+        EntityNotFoundException ex = assertThrows(EntityNotFoundException.class,
+                () -> achievementService.processAchievementForUser(userId, achievementId));
 
-        assertEquals("Achievement 1 not found", exception.getMessage());
-        verify(userAchievementRepository, never()).save(any(UserAchievement.class));
-        verify(achievementEventPublisher, never()).publish(any(AchievementEvent.class));
-    }
+        assertEquals(String.format("Achievement %d not found", achievementId), ex.getMessage());
 
-    @Test
-    @DisplayName("testPublishAchievementEventAchievementAlreadyExists")
-    void testPublishAchievementEventAchievementAlreadyExists() {
-        long userId = 1L;
-        long achievementId = 1L;
-
-        when(achievementRepository.findById(achievementId)).thenReturn(Optional.of(achievement));
-        doThrow(new AchievementAlreadyExistsException("User 1 already has achievement 1"))
-                .when(userAchievementRepository).save(any(UserAchievement.class));
-
-        AchievementAlreadyExistsException exception = assertThrows(AchievementAlreadyExistsException.class, () ->
-                achievementService.publishAchievementEvent(userId, achievementId));
-
-        assertEquals("User 1 already has achievement 1", exception.getMessage());
-        verify(userAchievementRepository, times(1)).save(any(UserAchievement.class));
+        verify(userAchievementService, never()).createUserAchievement(userId, achievementId, null);
         verify(achievementEventPublisher, never()).publish(any(AchievementEvent.class));
     }
 }

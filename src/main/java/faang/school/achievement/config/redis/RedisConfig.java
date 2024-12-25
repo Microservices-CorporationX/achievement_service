@@ -20,7 +20,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @RequiredArgsConstructor
 public class RedisConfig {
     private final RedisConfigProperties redisConfigProperties;
-    private final RedisConfigChannelsProperties redisConfigChannelsProperties;
     private final ObjectMapper objectMapper;
 
     @Bean
@@ -67,11 +66,11 @@ public class RedisConfig {
 
     @Bean
     public ChannelTopic achievementChannelTopic() {
-        return new ChannelTopic(redisConfigChannelsProperties.achievement());
+        return new ChannelTopic(redisConfigProperties.channel().achievement());
     }
 
     @Bean
     public ChannelTopic followerChannelTopic() {
-        return new ChannelTopic(redisConfigChannelsProperties.follower());
+        return new ChannelTopic(redisConfigProperties.channel().follower());
     }
 }
