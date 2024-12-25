@@ -30,7 +30,7 @@ public class MentorshipEventListener implements MessageListener {
             });
         } catch (IOException e) {
             log.error("Error reading value from {}", message.getChannel());
-            throw new RuntimeException("Failed to read MentorshipStartEvent from message body", e);
+            throw new RuntimeException("Failed to read from message body", e);
         }
     }
 }
