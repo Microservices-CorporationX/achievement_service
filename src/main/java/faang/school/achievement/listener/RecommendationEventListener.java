@@ -3,7 +3,7 @@ package faang.school.achievement.listener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.achievement.event.RecommendationEvent;
 import faang.school.achievement.exception.MessageProcessingException;
-import faang.school.achievement.hander.RecommendationEventHandler;
+import faang.school.achievement.handler.RecommendationEventHandler;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

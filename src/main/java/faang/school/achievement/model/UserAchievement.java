@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name="user_achievement")
+@Table(name = "user_achievement")
 public class UserAchievement {
 
     @Id
@@ -27,7 +27,7 @@ public class UserAchievement {
     private Achievement achievement;
 
     @Column(name = "user_id", nullable = false)
-    private long userId;
+    private Long userId;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

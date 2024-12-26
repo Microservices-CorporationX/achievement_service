@@ -1,4 +1,4 @@
-package faang.school.achievement.hander;
+package faang.school.achievement.handler;
 
 import faang.school.achievement.dto.AchievementCacheDto;
 import faang.school.achievement.enums.AchievementTitle;
@@ -31,18 +31,18 @@ public class NiceGuyAchievementHandler extends RecommendationEventHandler {
     public void handleEvent(RecommendationEvent event) {
         try {
             AchievementCacheDto achievementCacheDto = achievementService.getAchievementByTitle(AchievementTitle.NICE_GUY.getValue());
-            achievementProgressService.createProgressIfNecessary(event.receivedId(), achievementCacheDto.getId());
-            AchievementProgress progress = achievementProgressService.getProgress(event.receivedId(),
+            achievementProgressService.createProgressIfNecessary(event.receiverId(), achievementCacheDto.getId());
+            AchievementProgress progress = achievementProgressService.getProgress(event.receiverId(),
                     achievementCacheDto.getId());
             progress.increment();
             if (progress.getCurrentPoints() == achievementCacheDto.getPoints()) {
                 Achievement achievement = achievementMapper.toEntity(achievementCacheDto);
-                userAchievementService.giveAchievement(event.receivedId(), achievement);
+                userAchievementService.giveAchievement(event.receiverId(), achievement);
             }
-        } catch (Exception e) {
+        } catch (HandleEventProcessingException e) {
             String errorMessage = String.format(
                     "Error processing recommendation event. User ID: %s, Achievement: NICE GUY, Error: %s",
-                    event.receivedId(), e.getMessage());
+                    event.receiverId(), e.getMessage());
             log.error(errorMessage, e);
             throw new HandleEventProcessingException(errorMessage, e);
         }

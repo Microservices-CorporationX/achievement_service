@@ -1,4 +1,4 @@
-package faang.school.achievement.hander;
+package faang.school.achievement.handler;
 
 import faang.school.achievement.event.RecommendationEvent;
 import lombok.Getter;
