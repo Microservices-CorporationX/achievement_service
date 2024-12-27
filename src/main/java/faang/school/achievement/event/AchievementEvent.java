@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AchievementEvent {
+    private String userName;
     private Long userId;
     private Long achievementId;
+    private String achievementTitle;
 }

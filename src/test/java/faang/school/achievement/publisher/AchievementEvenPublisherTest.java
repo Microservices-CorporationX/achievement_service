@@ -35,8 +35,7 @@ public class AchievementEvenPublisherTest {
     @DisplayName("Test publish achievement event: success")
     void testPublishAchievementEvent_Success() {
 
-
-        AchievementEvent event = new AchievementEvent(1L, 1L);
+        AchievementEvent event = new AchievementEvent("user", 1L, 1L, "Test Achievement");
 
         achievementEventPublisher = new AchievementEventPublisher(redisTemplate, redisConfigProperties);
 
@@ -49,7 +48,7 @@ public class AchievementEvenPublisherTest {
     @DisplayName("Test publish achievement event: failure")
     void testPublishAchievementEvent_Failure() {
 
-        AchievementEvent event = new AchievementEvent(1L, 1L);
+        AchievementEvent event = new AchievementEvent("user", 1L, 1L, "Test Achievement");
 
         achievementEventPublisher = new AchievementEventPublisher(redisTemplate, redisConfigProperties);
 
