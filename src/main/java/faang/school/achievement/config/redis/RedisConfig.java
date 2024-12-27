@@ -71,15 +71,21 @@ public class RedisConfig {
     @Bean
     public ChannelTopic mentorshipTopic() {
         return new ChannelTopic(mentorshipChannel);
+    }
+
+    @Bean
     public MessageListenerAdapter commentListener(CommentEventListener commentEventListener) {
         return new MessageListenerAdapter(commentEventListener);
     }
 
     @Bean
-    public MessageListenerAdapter recommendationListener(RecommendationEventListener recommendationEventListener) {
-        return new MessageListenerAdapter(recommendationEventListener);
     public ChannelTopic commentTopic() {
         return new ChannelTopic(commentChannel);
+    }
+
+    @Bean
+    public MessageListenerAdapter recommendationListener(RecommendationEventListener recommendationEventListener) {
+        return new MessageListenerAdapter(recommendationEventListener);
     }
 
     @Bean
@@ -90,8 +96,8 @@ public class RedisConfig {
     @Bean
     public RedisMessageListenerContainer redisContainer(MessageListenerAdapter teamListener,
                                                         MessageListenerAdapter mentorshipListener,
-                                                        MessageListenerAdapter recommendationListener) {
-    public RedisMessageListenerContainer redisContainer(MessageListenerAdapter commentListener) {
+                                                        MessageListenerAdapter recommendationListener,
+                                                        MessageListenerAdapter commentListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
         container.addMessageListener(commentListener, commentTopic());

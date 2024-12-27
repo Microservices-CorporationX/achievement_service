@@ -21,25 +21,21 @@ public class ExpertAchievementHandler extends CommentEventHandler {
 
     @Override
     public void handleEvent(CommentEvent event) {
-        log.info("Starting handleEvent for authorId: {}", event.getAuthorId());
+        log.info("Starting handle event for user with ID {}", event.getAuthorId());
 
-        AchievementDto achievement = getAndValidateAchievement("EXPERT");
+        AchievementDto achievementDto = getAndValidateAchievement("EXPERT");
 
-        if (achievementService.hasAchievement(event.getAuthorId(), achievement.getId())) {
-            log.debug("The user with ID {} already has the {} achievement.", event.getAuthorId(), achievement.getTitle());
+        if (achievementService.hasAchievement(event.getAuthorId(), achievementDto.getId())) {
+            log.debug("The user with ID {} already has the {} achievement.", event.getAuthorId(), achievementDto.getTitle());
             return;
         }
 
-        achievementService.createProgressIfNecessary(event.getAuthorId(), achievement.getId());
-        AchievementProgress progress = achievementService.getProgress(event.getAuthorId(), achievement.getId());
-        progress.setCurrentPoints(progress.getCurrentPoints() + 1);
-        achievementService.saveProgress(progress);
+        achievementService.createProgressIfNecessary(event.getAuthorId(), achievementDto.getId());
+        AchievementProgress achievementProgress = achievementService.getProgress(event.getAuthorId(), achievementDto.getId());
+        achievementProgress.increment();
+        achievementService.saveProgress(achievementProgress);
 
-        if (achievement.getPoints() == progress.getCurrentPoints()) {
-            log.info("User with ID {} has now received the {} achievement.", event.getAuthorId(), achievement.getTitle());
-            achievementService.giveAchievement(achievement, event.getAuthorId());
-        }
-        log.info("Finished handleEvent for authorId: {}", event.getAuthorId());
+        hasComplete(achievementDto, achievementProgress, event);
     }
 
     private AchievementDto getAndValidateAchievement(String achievementTitle) {
@@ -51,5 +47,13 @@ public class ExpertAchievementHandler extends CommentEventHandler {
         }
 
         return achievement;
+    }
+
+    private void hasComplete(AchievementDto achievementDto, AchievementProgress achievementProgress, CommentEvent event) {
+        if (achievementDto.getPoints() == achievementProgress.getCurrentPoints()) {
+            achievementService.giveAchievement(achievementDto, event.getAuthorId());
+            log.info("User with ID {} has now received the {} achievement.", event.getAuthorId(), achievementDto.getTitle());
+        }
+        log.info("Finished handle event for user with ID {}", event.getAuthorId());
     }
 }

@@ -21,25 +21,21 @@ public class NiceGuyAchievementHandler extends RecommendationEventHandler {
 
     @Override
     public void handleEvent(RecommendationEvent event) {
-        log.info("Starting handleEvent for receiverId: {}", event.getReceiverId());
+        log.info("Starting handle event for user with ID {}", event.getReceiverId());
 
-        AchievementDto achievement = getAndValidateAchievement("NICE GUY");
+        AchievementDto achievementDto = getAndValidateAchievement("NICE GUY");
 
-        if (achievementService.hasAchievement(event.getReceiverId(), achievement.getId())) {
-            log.debug("The user with ID {} already has the {} achievement.", event.getReceiverId(), achievement.getTitle());
+        if (achievementService.hasAchievement(event.getReceiverId(), achievementDto.getId())) {
+            log.debug("The user with ID {} already has the {} achievement.", event.getReceiverId(), achievementDto.getTitle());
             return;
         }
 
-        achievementService.createProgressIfNecessary(event.getReceiverId(), achievement.getId());
-        AchievementProgress progress = achievementService.getProgress(event.getReceiverId(), achievement.getId());
-        progress.setCurrentPoints(progress.getCurrentPoints() + 1);
-        achievementService.saveProgress(progress);
+        achievementService.createProgressIfNecessary(event.getReceiverId(), achievementDto.getId());
+        AchievementProgress achievementProgress = achievementService.getProgress(event.getReceiverId(), achievementDto.getId());
+        achievementProgress.increment();
+        achievementService.saveProgress(achievementProgress);
 
-        if (achievement.getPoints() == progress.getCurrentPoints()) {
-            log.info("User with ID {} has now received the {} achievement.", event.getReceiverId(), achievement.getTitle());
-            achievementService.giveAchievement(achievement, event.getReceiverId());
-        }
-        log.info("Finished handleEvent for mentorId: {}", event.getReceiverId());
+        hasComplete(achievementDto, achievementProgress, event);
     }
 
     private AchievementDto getAndValidateAchievement(String achievementTitle) {
@@ -51,5 +47,13 @@ public class NiceGuyAchievementHandler extends RecommendationEventHandler {
         }
 
         return achievement;
+    }
+
+    private void hasComplete(AchievementDto achievementDto, AchievementProgress achievementProgress, RecommendationEvent event) {
+        if (achievementDto.getPoints() == achievementProgress.getCurrentPoints()) {
+            achievementService.giveAchievement(achievementDto, event.getReceiverId());
+            log.info("User with ID {} has now received the {} achievement.", event.getReceiverId(), achievementDto.getTitle());
+        }
+        log.info("Finished handle event for user with ID {}", event.getReceiverId());
     }
 }

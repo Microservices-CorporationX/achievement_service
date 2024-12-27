@@ -3,20 +3,16 @@ package faang.school.achievement.service;
 import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.exception.DataValidationException;
 import faang.school.achievement.mapper.AchievementMapper;
-import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
-import faang.school.achievement.model.UserAchievement;
 import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class AchievementService {
 
     private final UserAchievementRepository userAchievementRepository;
@@ -43,11 +39,8 @@ public class AchievementService {
         achievementProgressRepository.save(progress);
     }
 
-    public void giveAchievement(AchievementDto achievement, long userId) {
-        userAchievementRepository.save(UserAchievement.builder()
-                .achievement(achievementMapper.toEntity(achievement))
-                .userId(userId)
-                .build());
+    public void giveAchievement(AchievementDto achievementDto, long userId) {
+        userAchievementRepository.giveAchievement(userId, achievementDto.getId());
         log.info("User with ID {} received a new achievement.", userId);
     }
 }

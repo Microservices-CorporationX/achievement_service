@@ -2,9 +2,11 @@ package faang.school.achievement.handler.recommendation.niceguy;
 
 import faang.school.achievement.cache.AchievementCache;
 import faang.school.achievement.dto.AchievementDto;
+import faang.school.achievement.dto.mentorship.MentorshipStartEvent;
 import faang.school.achievement.dto.recommendation.RecommendationEvent;
 import faang.school.achievement.exception.AchievementNotFoundException;
 import faang.school.achievement.exception.DataValidationException;
+import faang.school.achievement.handler.mentorship.sensei.SenseiAchievementHandler;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.service.AchievementService;
 import org.junit.jupiter.api.Test;
