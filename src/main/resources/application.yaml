@@ -26,6 +26,11 @@ spring:
         follower: follower_channel
         mentorship_channel: mentorship_accepted_topic
         skill_acquired_topic: skill_acquire
+  cache:
+    type: redis
+  redis:
+    host: localhost
+    port: 6379
 
 server:
   port: 8085

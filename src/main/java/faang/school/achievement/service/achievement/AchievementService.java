@@ -1,5 +1,8 @@
 package faang.school.achievement.service.achievement;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import faang.school.achievement.dto.user.achievement.AchievementDto;
+import faang.school.achievement.mapper.achievement.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
@@ -10,6 +13,8 @@ import faang.school.achievement.validator.achievement.AchievementServiceValidato
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +25,9 @@ public class AchievementService {
     private final AchievementRepository achievementRepository;
     private final AchievementProgressRepository achievementProgressRepository;
     private final AchievementServiceValidator validator;
+    private final AchievementMapper achievementMapper;
+    private final RedisTemplate<String, AchievementDto> redisTemplateAchievementCache;
+    private static final String CACHE_KEY_PREFIX = "achievement:";
 
     public boolean hasAchievement(long userId, long achievementId) {
         log.info("validate Argument");
@@ -34,7 +42,7 @@ public class AchievementService {
         validator.checkTitle(title);
 
         log.info("getting achievement from db by id");
-        return achievementRepository.getAchievementByTitle(title);
+        return achievementMapper.toEntity(getAchievementDtoByTitle(title));
     }
 
     public void createProgressIfNecessary(long userId, long achievementId) {
@@ -63,5 +71,19 @@ public class AchievementService {
 
         log.info("add new userAchievement in db");
         userAchievementRepository.save(userAchievement);
+    }
+    // не работает ((((((( @Cacheable(value = "achievement",key = "#title")
+    private AchievementDto getAchievementDtoByTitle(String title){
+        AchievementDto cachedAchievementDto = (AchievementDto) redisTemplateAchievementCache.opsForValue().get(CACHE_KEY_PREFIX + title);
+        if (cachedAchievementDto != null) {
+            return cachedAchievementDto;
+        }
+
+        Achievement achievement = achievementRepository.getAchievementByTitle(title);
+        AchievementDto achievementDto = achievementMapper.toDto(achievement);
+
+        redisTemplateAchievementCache.opsForValue().set(CACHE_KEY_PREFIX + title, achievementDto);
+
+        return achievementDto;
     }
 }
