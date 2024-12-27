@@ -3,6 +3,7 @@ package faang.school.achievement.service;
 import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.exception.DataValidationException;
 import faang.school.achievement.mapper.AchievementMapperImpl;
+import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
 import faang.school.achievement.repository.AchievementProgressRepository;

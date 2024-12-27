@@ -14,5 +14,4 @@ public class AsyncConfig implements AsyncConfigurer {
     public ExecutorService taskExecutor() {
         return Executors.newCachedThreadPool();
     }
-
 }

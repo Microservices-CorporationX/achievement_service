@@ -1,5 +1,8 @@
 package faang.school.achievement.config.redis;
 
+import faang.school.achievement.listener.mentorship.MentorshipEventListener;
+import faang.school.achievement.listener.recommendation.RecommendationEventListener;
+import faang.school.achievement.listener.team.TeamEventListener;
 import faang.school.achievement.listener.comment.CommentEventListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +26,15 @@ public class RedisConfig {
     @Value("${spring.data.redis.port}")
     private int redisPort;
 
+    @Value("${spring.data.redis.channel.team}")
+    private String teamChannel;
+
+    @Value("${spring.data.redis.channel.mentorship}")
+    private String mentorshipChannel;
+
+    @Value("${spring.data.redis.channel.recommendation}")
+    private String recommendationChannel;
+
     @Value("${spring.data.redis.channel.comment}")
     private String commentChannel;
 
@@ -42,20 +54,50 @@ public class RedisConfig {
     }
 
     @Bean
+    public MessageListenerAdapter teamListener(TeamEventListener teamEventListener) {
+        return new MessageListenerAdapter(teamEventListener);
+    }
+
+    @Bean
+    public ChannelTopic teamTopic() {
+        return new ChannelTopic(teamChannel);
+    }
+
+    @Bean
+    public MessageListenerAdapter mentorshipListener(MentorshipEventListener mentorshipEventListener) {
+        return new MessageListenerAdapter(mentorshipEventListener);
+    }
+
+    @Bean
+    public ChannelTopic mentorshipTopic() {
+        return new ChannelTopic(mentorshipChannel);
     public MessageListenerAdapter commentListener(CommentEventListener commentEventListener) {
         return new MessageListenerAdapter(commentEventListener);
     }
 
     @Bean
+    public MessageListenerAdapter recommendationListener(RecommendationEventListener recommendationEventListener) {
+        return new MessageListenerAdapter(recommendationEventListener);
     public ChannelTopic commentTopic() {
         return new ChannelTopic(commentChannel);
     }
 
     @Bean
+    public ChannelTopic recommendationTopic() {
+        return new ChannelTopic(recommendationChannel);
+    }
+
+    @Bean
+    public RedisMessageListenerContainer redisContainer(MessageListenerAdapter teamListener,
+                                                        MessageListenerAdapter mentorshipListener,
+                                                        MessageListenerAdapter recommendationListener) {
     public RedisMessageListenerContainer redisContainer(MessageListenerAdapter commentListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
         container.addMessageListener(commentListener, commentTopic());
+        container.addMessageListener(teamListener, teamTopic());
+        container.addMessageListener(mentorshipListener, mentorshipTopic());
+        container.addMessageListener(recommendationListener, recommendationTopic());
         return container;
     }
 }
