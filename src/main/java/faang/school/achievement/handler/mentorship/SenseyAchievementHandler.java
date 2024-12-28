@@ -40,7 +40,7 @@ public class SenseyAchievementHandler implements MentorshipHandler {
         UserDto userDto = userServiceClient.getUser(mentorId);
 
         log.info("getting achievement by title from achievement repository");
-        Achievement achievement = achievementService.getAchievementByTitle("SENSEI");
+        Achievement achievement = achievementService.getAchievementByTitleWithOutUserAndProgress("SENSEI");
         long achievementId = achievement.getId();
 
         log.info("validate that user does not have SENSEI achievement");

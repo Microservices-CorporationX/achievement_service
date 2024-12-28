@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.achievement.dto.user.achievement.AchievementDto;
 import faang.school.achievement.listener.MentorshipEventListener;
 import faang.school.achievement.listener.SkillEventListener;
+import faang.school.achievement.model.Achievement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +19,10 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
 
@@ -58,20 +61,13 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, AchievementDto> redisTemplateAchievementCache() {
-        RedisTemplate<String, AchievementDto> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory());
-        Jackson2JsonRedisSerializer<AchievementDto> serializer = new Jackson2JsonRedisSerializer<>(AchievementDto.class);
+    public RedisCacheManager cacheManager(RedisConnectionFactory jedisConnectionFactory) {
+        Jackson2JsonRedisSerializer<Achievement> serializer = new Jackson2JsonRedisSerializer<>(Achievement.class);
         serializer.setObjectMapper(objectMapper);
-        template.setValueSerializer(serializer);
-        template.setKeySerializer(serializer);
-        return template;
-    }
-    @Bean
-    public RedisCacheManager cacheManager(JedisConnectionFactory jedisConnectionFactory, RedisTemplate<String, AchievementDto> redisTemplateAchievementCache) {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofMinutes(1000))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisTemplateAchievementCache.getValueSerializer()));
+                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer));
 
         return RedisCacheManager.builder(jedisConnectionFactory)
                 .cacheDefaults(config)

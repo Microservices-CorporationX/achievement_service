@@ -71,7 +71,7 @@ class SenseyAchievementHandlerTest {
 
         verify(userContext).setUserId(event.getUserContextId());
         verify(userServiceClient).getUser(event.getReceiverUserId());
-        verify(achievementService).getAchievementByTitle("SENSEI");
+        verify(achievementService).getAchievementByTitleWithOutUserAndProgress("SENSEI");
         verify(achievement).getId();
         verify(achievementService).hasAchievement(event.getReceiverUserId(), 2L);
         verify(achievementProgress).increment();
@@ -92,7 +92,7 @@ class SenseyAchievementHandlerTest {
 
         verify(userContext).setUserId(event.getUserContextId());
         verify(userServiceClient).getUser(event.getReceiverUserId());
-        verify(achievementService).getAchievementByTitle("SENSEI");
+        verify(achievementService).getAchievementByTitleWithOutUserAndProgress("SENSEI");
         verify(achievement).getId();
         verify(achievementService).hasAchievement(event.getReceiverUserId(), 2L);
         verify(achievementProgress).increment();
@@ -105,7 +105,7 @@ class SenseyAchievementHandlerTest {
 
     private void setUpForMainTest() {
         when(userServiceClient.getUser(event.getReceiverUserId())).thenReturn(userDto);
-        when(achievementService.getAchievementByTitle("SENSEI")).thenReturn(achievement);
+        when(achievementService.getAchievementByTitleWithOutUserAndProgress("SENSEI")).thenReturn(achievement);
         when(achievement.getId()).thenReturn(2L);
         when(achievementService.hasAchievement(event.getReceiverUserId(), 2L)).thenReturn(false);
         when(achievementService.getProgress(event.getReceiverUserId(), 2L)).thenReturn(achievementProgress);

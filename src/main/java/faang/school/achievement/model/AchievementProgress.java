@@ -1,5 +1,6 @@
 package faang.school.achievement.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,7 @@ public class AchievementProgress {
 
     @ManyToOne
     @JoinColumn(name = "achievement_id", nullable = false)
+    @JsonBackReference
     private Achievement achievement;
 
     @Column(name = "user_id", nullable = false)

@@ -22,7 +22,7 @@ public class WhoeverAchievementHandler implements SkillAcquiredHandler {
     @Override
     public void handleEvent(SkillAcquiredEvent event) {
         Achievement achievement =
-                achievementService.getAchievementByTitle("SKILLS");
+                achievementService.getAchievementByTitleWithOutUserAndProgress("SKILLS");
 
         if (!achievementService.hasAchievement(event.getUserId(), achievement.getId())) {
             AchievementProgress achievementProgress =
