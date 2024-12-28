@@ -10,6 +10,8 @@ import faang.school.achievement.validator.achievement.AchievementServiceValidato
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,8 +30,8 @@ public class AchievementService {
         log.info("check whether the user has an achievement");
         return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId);
     }
-
-    public Achievement getAchievementByTitle(String title) {
+    @Cacheable(value = "achievement", key = "#title", cacheManager = "cacheManager")
+    public Achievement getAchievementByTitleWithOutUserAndProgress(String title) {
         log.info("validate Argument");
         validator.checkTitle(title);
 

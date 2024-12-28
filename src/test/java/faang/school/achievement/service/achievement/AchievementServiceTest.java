@@ -15,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.annotation.Bean;
 
 import java.util.Optional;
 
@@ -81,13 +80,13 @@ class AchievementServiceTest {
         Mockito.doThrow(IllegalArgumentException.class).when(validator).checkTitle(ArgumentMatchers.anyString());
 
         assertThrows(IllegalArgumentException.class,
-                () -> achievementService.getAchievementByTitle(""));
+                () -> achievementService.getAchievementByTitleWithOutUserAndProgress(""));
     }
 
     @Test
     void testSuccessfulGetAchievement() {
         when(achievementRepository.getAchievementByTitle(achievement.getTitle())).thenReturn(achievement);
-        achievementService.getAchievementByTitle("title");
+        achievementService.getAchievementByTitleWithOutUserAndProgress("title");
         verify(achievementRepository).getAchievementByTitle(achievement.getTitle());
     }
 
