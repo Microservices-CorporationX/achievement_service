@@ -16,14 +16,10 @@ public class UserAchievementService {
     private final UserAchievementRepository userAchievementRepository;
 
     public boolean hasAchievement(long userId, long achievementId) {
-        validateUserId(userId);
-        validateAchievementId(achievementId);
         return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId);
     }
 
     public void giveAchievement(long userId, Achievement achievement) {
-        validateUserId(userId);
-        validateAchievement(achievement);
         userAchievementRepository.save(create(userId, achievement));
     }
 
@@ -34,29 +30,5 @@ public class UserAchievementService {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
-    }
-
-    private void validateUserId(long userId) {
-        if (userId <= 0) {
-            log.error("Exception occurred during userId validation, caused by:" +
-                    " userId can not be less or equals to 0");
-            throw new IllegalArgumentException("Invalid userId");
-        }
-    }
-
-    private void validateAchievementId(long achievementId) {
-        if (achievementId <= 0) {
-            log.error("Exception occurred during achievementId validation, caused by:" +
-                    " achievementId can not be less or equals to 0");
-            throw new IllegalArgumentException("Invalid userId");
-        }
-    }
-
-    private void validateAchievement(Achievement achievement) {
-        if (achievement == null) {
-            log.error("Exception occurred during achievement validation in UserAchievementService, " +
-                    "caused by: Achievement == null");
-            throw new IllegalArgumentException("Achievement can not be null");
-        }
     }
 }

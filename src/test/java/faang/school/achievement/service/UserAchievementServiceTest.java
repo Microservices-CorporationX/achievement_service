@@ -44,26 +44,6 @@ public class UserAchievementServiceTest {
     }
 
     @Test
-    void testHasAchievementUserIdThrowIllegalArgumentException() {
-        long invalidUserId = -1L;
-
-        assertThrows(IllegalArgumentException.class,
-                () -> userAchievementService.hasAchievement(invalidUserId, achievementId));
-
-        verify(userAchievementRepository, never()).save(any());
-    }
-
-    @Test
-    void testHasAchievementAchievementIdThrowIllegalArgumentException() {
-        long invalidAchievementId = -1L;
-
-        assertThrows(IllegalArgumentException.class,
-                () -> userAchievementService.hasAchievement(userId, invalidAchievementId));
-
-        verify(userAchievementRepository, never()).save(any());
-    }
-
-    @Test
     void testGiveAchievementSuccess() {
         var achievement = setAchievement();
 
@@ -77,27 +57,6 @@ public class UserAchievementServiceTest {
         assertEquals(achievement, saved.getAchievement());
         assertNotNull(saved.getCreatedAt());
         assertNotNull(saved.getUpdatedAt());
-    }
-
-    @Test
-    void testGiveAchievementUserIdThrowIllegalArgumentException() {
-        long invalidUserId = -1L;
-        Achievement achievement = setAchievement();
-
-        assertThrows(IllegalArgumentException.class,
-                () -> userAchievementService.giveAchievement(invalidUserId, achievement));
-
-        verify(userAchievementRepository, never()).save(any());
-    }
-
-    @Test
-    void testGiveAchievementAchievementThrowIllegalArgumentException() {
-        Achievement nullAchievement = null;
-
-        assertThrows(IllegalArgumentException.class,
-                () -> userAchievementService.giveAchievement(userId, nullAchievement));
-
-        verify(userAchievementRepository, never()).save(any());
     }
 
     private Achievement setAchievement() {
