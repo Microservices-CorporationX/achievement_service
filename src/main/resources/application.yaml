@@ -24,6 +24,7 @@ spring:
       channel:
         achievement: achievement_channel
         follower: follower_channel
+        mentorship-accepted-channel: mentorshipAccepted_channel
 
 server:
   port: 8085
@@ -35,3 +36,6 @@ logging:
 project-service:
   host: localhost
   port: 8082
+
+achievement-titles:
+  sensei: SENSEI
