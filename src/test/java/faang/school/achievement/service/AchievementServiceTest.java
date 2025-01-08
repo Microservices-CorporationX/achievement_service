@@ -2,7 +2,6 @@ package faang.school.achievement.service;
 
 import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.exception.DataValidationException;
-import faang.school.achievement.mapper.AchievementMapper;
 import faang.school.achievement.mapper.AchievementMapperImpl;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
@@ -107,13 +106,15 @@ public class AchievementServiceTest {
 
     @Test
     public void testGiveAchievement() {
-        AchievementDto achievement = AchievementDto.builder().build();
+        AchievementDto achievement = AchievementDto.builder()
+                .id(achievementId)
+                .build();
         UserAchievement userAchievement = UserAchievement.builder()
                 .achievement(achievementMapper.toEntity(achievement))
                 .userId(userId)
                 .build();
         achievementService.giveAchievement(achievement, userId);
 
-        verify(userAchievementRepository).save(userAchievement);
+        verify(userAchievementRepository).giveAchievement(userId, achievementId);
     }
 }

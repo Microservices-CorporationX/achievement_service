@@ -1,11 +1,11 @@
-package faang.school.achievement.handler.team.manager;
+package faang.school.achievement.handler.comment.expert;
 
 import faang.school.achievement.cache.AchievementCache;
 import faang.school.achievement.dto.AchievementDto;
+import faang.school.achievement.dto.comment.CommentEvent;
 import faang.school.achievement.exception.AchievementNotFoundException;
-import faang.school.achievement.handler.team.TeamEventHandler;
+import faang.school.achievement.handler.comment.CommentEventHandler;
 import faang.school.achievement.model.AchievementProgress;
-import faang.school.achievement.dto.team.TeamEvent;
 import faang.school.achievement.service.AchievementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,16 +14,16 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ManagerAchievementHandler extends TeamEventHandler {
+public class ExpertAchievementHandler extends CommentEventHandler {
 
     private final AchievementCache achievementCache;
     private final AchievementService achievementService;
 
     @Override
-    public void handleEvent(TeamEvent event) {
+    public void handleEvent(CommentEvent event) {
         log.info("Starting handle event for user with ID {}", event.getAuthorId());
 
-        AchievementDto achievementDto = getAndValidateAchievement("MANAGER");
+        AchievementDto achievementDto = getAndValidateAchievement("EXPERT");
 
         if (achievementService.hasAchievement(event.getAuthorId(), achievementDto.getId())) {
             log.debug("The user with ID {} already has the {} achievement.", event.getAuthorId(), achievementDto.getTitle());
@@ -49,7 +49,7 @@ public class ManagerAchievementHandler extends TeamEventHandler {
         return achievement;
     }
 
-    private void hasComplete(AchievementDto achievementDto, AchievementProgress achievementProgress, TeamEvent event) {
+    private void hasComplete(AchievementDto achievementDto, AchievementProgress achievementProgress, CommentEvent event) {
         if (achievementDto.getPoints() == achievementProgress.getCurrentPoints()) {
             achievementService.giveAchievement(achievementDto, event.getAuthorId());
             log.info("User with ID {} has now received the {} achievement.", event.getAuthorId(), achievementDto.getTitle());

@@ -3,6 +3,7 @@ package faang.school.achievement.config.redis;
 import faang.school.achievement.listener.mentorship.MentorshipEventListener;
 import faang.school.achievement.listener.recommendation.RecommendationEventListener;
 import faang.school.achievement.listener.team.TeamEventListener;
+import faang.school.achievement.listener.comment.CommentEventListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +34,9 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.channel.recommendation}")
     private String recommendationChannel;
+
+    @Value("${spring.data.redis.channel.comment}")
+    private String commentChannel;
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
@@ -70,6 +74,16 @@ public class RedisConfig {
     }
 
     @Bean
+    public MessageListenerAdapter commentListener(CommentEventListener commentEventListener) {
+        return new MessageListenerAdapter(commentEventListener);
+    }
+
+    @Bean
+    public ChannelTopic commentTopic() {
+        return new ChannelTopic(commentChannel);
+    }
+
+    @Bean
     public MessageListenerAdapter recommendationListener(RecommendationEventListener recommendationEventListener) {
         return new MessageListenerAdapter(recommendationEventListener);
     }
@@ -82,9 +96,11 @@ public class RedisConfig {
     @Bean
     public RedisMessageListenerContainer redisContainer(MessageListenerAdapter teamListener,
                                                         MessageListenerAdapter mentorshipListener,
-                                                        MessageListenerAdapter recommendationListener) {
+                                                        MessageListenerAdapter recommendationListener,
+                                                        MessageListenerAdapter commentListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
+        container.addMessageListener(commentListener, commentTopic());
         container.addMessageListener(teamListener, teamTopic());
         container.addMessageListener(mentorshipListener, mentorshipTopic());
         container.addMessageListener(recommendationListener, recommendationTopic());

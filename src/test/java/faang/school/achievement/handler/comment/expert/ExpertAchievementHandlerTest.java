@@ -1,12 +1,9 @@
-package faang.school.achievement.handler.recommendation.niceguy;
+package faang.school.achievement.handler.comment.expert;
 
 import faang.school.achievement.cache.AchievementCache;
 import faang.school.achievement.dto.AchievementDto;
-import faang.school.achievement.dto.mentorship.MentorshipStartEvent;
-import faang.school.achievement.dto.recommendation.RecommendationEvent;
+import faang.school.achievement.dto.comment.CommentEvent;
 import faang.school.achievement.exception.AchievementNotFoundException;
-import faang.school.achievement.exception.DataValidationException;
-import faang.school.achievement.handler.mentorship.sensei.SenseiAchievementHandler;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.service.AchievementService;
 import org.junit.jupiter.api.Test;
@@ -23,7 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class NiceGuyAchievementHandlerTest {
+public class ExpertAchievementHandlerTest {
 
     @Mock
     private AchievementCache achievementCache;
@@ -32,70 +29,73 @@ public class NiceGuyAchievementHandlerTest {
     private AchievementService achievementService;
 
     @InjectMocks
-    private NiceGuyAchievementHandler niceGuyAchievementHandler;
+    private ExpertAchievementHandler expertAchievementHandler;
 
     @Test
     public void testHandleEventIfAchievementNull() {
-        RecommendationEvent event = prepareEvent();
+        CommentEvent event = prepareEvent();
         when(achievementCache.get(anyString())).thenReturn(null);
 
         AchievementNotFoundException exception = assertThrows(AchievementNotFoundException.class,
-                () -> niceGuyAchievementHandler.handleEvent(event));
+                () -> expertAchievementHandler.handleEvent(event));
 
         assertEquals("Failed to get achievement from cache.", exception.getMessage());
     }
 
     @Test
     public void testHandleEventIfUserAlreadyHasAchievement() {
-        RecommendationEvent event = prepareEvent();
+        CommentEvent event = prepareEvent();
         AchievementDto achievement = prepareAchievementDto();
         AchievementProgress achievementProgress = prepareAchievementProgress(10);
         when(achievementCache.get(anyString())).thenReturn(achievement);
-        when(achievementService.hasAchievement(event.getReceiverId(), 1L)).thenReturn(true);
+        when(achievementService.hasAchievement(event.getAuthorId(), 1L)).thenReturn(true);
 
-        niceGuyAchievementHandler.handleEvent(event);
+        expertAchievementHandler.handleEvent(event);
 
-        verify(achievementService, never()).createProgressIfNecessary(event.getReceiverId(), achievement.getId());
+
+        verify(achievementService, never()).createProgressIfNecessary(event.getAuthorId(), achievement.getId());
         verify(achievementService, never()).saveProgress(achievementProgress);
-        verify(achievementService, never()).giveAchievement(achievement, event.getReceiverId());
+        verify(achievementService, never()).giveAchievement(achievement, event.getAuthorId());
     }
 
     @Test
     public void testHandleEventIfUserGivenAchievement() {
-        RecommendationEvent event = prepareEvent();
+        CommentEvent event = prepareEvent();
         AchievementDto achievement = prepareAchievementDto();
         AchievementProgress achievementProgress = prepareAchievementProgress(9);
         when(achievementCache.get(anyString())).thenReturn(achievement);
-        when(achievementService.hasAchievement(event.getReceiverId(), 1L)).thenReturn(false);
-        when(achievementService.getProgress(event.getReceiverId(), achievement.getId())).thenReturn(achievementProgress);
+        when(achievementService.hasAchievement(event.getAuthorId(), 1L)).thenReturn(false);
+        when(achievementService.getProgress(event.getAuthorId(), achievement.getId())).thenReturn(achievementProgress);
 
-        niceGuyAchievementHandler.handleEvent(event);
+        expertAchievementHandler.handleEvent(event);
 
-        verify(achievementService).createProgressIfNecessary(event.getReceiverId(), achievement.getId());
+        verify(achievementService).createProgressIfNecessary(event.getAuthorId(), achievement.getId());
         verify(achievementService).saveProgress(achievementProgress);
-        verify(achievementService).giveAchievement(achievement, event.getReceiverId());
+        verify(achievementService).giveAchievement(achievement, event.getAuthorId());
     }
 
     @Test
     public void testHandleEventIfUserNotGivenAchievement() {
-        RecommendationEvent event = prepareEvent();
+        CommentEvent event = prepareEvent();
         AchievementDto achievement = prepareAchievementDto();
         AchievementProgress achievementProgress = prepareAchievementProgress(8);
         when(achievementCache.get(anyString())).thenReturn(achievement);
-        when(achievementService.hasAchievement(event.getReceiverId(), 1L)).thenReturn(false);
-        when(achievementService.getProgress(event.getReceiverId(), achievement.getId())).thenReturn(achievementProgress);
+        when(achievementService.hasAchievement(event.getAuthorId(), 1L)).thenReturn(false);
+        when(achievementService.getProgress(event.getAuthorId(), achievement.getId())).thenReturn(achievementProgress);
 
-        niceGuyAchievementHandler.handleEvent(event);
+        expertAchievementHandler.handleEvent(event);
 
-        verify(achievementService).createProgressIfNecessary(event.getReceiverId(), achievement.getId());
+        verify(achievementService).createProgressIfNecessary(event.getAuthorId(), achievement.getId());
         verify(achievementService).saveProgress(achievementProgress);
-        verify(achievementService, never()).giveAchievement(achievement, event.getReceiverId());
+        verify(achievementService, never()).giveAchievement(achievement, event.getAuthorId());
     }
 
-    private RecommendationEvent prepareEvent() {
-        return RecommendationEvent.builder()
+    private CommentEvent prepareEvent() {
+        return CommentEvent.builder()
                 .authorId(1L)
-                .receiverId(2L)
+                .commentId(2L)
+                .postId(3L)
+                .content("1234")
                 .build();
     }
 
