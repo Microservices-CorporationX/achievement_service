@@ -28,7 +28,7 @@ public class NiceGuyAchievementHandler extends RecommendationEventHandler {
     @Async
     @Transactional
     public void handleEvent(RecommendationEvent event) {
-        AchievementCacheDto achievementCacheDto = achievementService.getAchievementByTitle(AchievementTitle.NICE_GUY.getValue());
+        AchievementCacheDto achievementCacheDto = achievementService.getAchievementByTitle(AchievementTitle.NICE_GUY.name());
         if (!userAchievementService.hasAchievement(event.receiverId(), achievementCacheDto.getId())) {
             achievementProgressService.createProgressIfNecessary(event.receiverId(), achievementCacheDto.getId());
             AchievementProgress progress = achievementProgressService.getProgress(event.receiverId(), achievementCacheDto.getId());

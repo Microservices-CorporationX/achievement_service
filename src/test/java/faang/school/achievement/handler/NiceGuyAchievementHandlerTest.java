@@ -35,7 +35,7 @@ public class NiceGuyAchievementHandlerTest {
     @InjectMocks
     private NiceGuyAchievementHandler niceGuyAchievementHandler;
 
-    private final String title = AchievementTitle.NICE_GUY.getValue();
+    private final String title = AchievementTitle.NICE_GUY.name();
 
     @Test
     void testHandleEventGiveAchievementFailed() {
