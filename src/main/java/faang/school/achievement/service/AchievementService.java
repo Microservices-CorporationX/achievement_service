@@ -32,14 +32,6 @@ public class AchievementService {
         log.info("Get achievement by name from Database: {}", title);
         return achievementMapper.toDto(achievement);
     }
-    @Transactional
-    @Cacheable(value = "achievements", key = "#title.toUpperCase()")
-    public AchievementCacheDto getAchievementDtoFromCacheByName(String name) {
-        Achievement achievement = achievementRepository.findByName(name.toUpperCase()).orElseThrow(() ->
-                new EntityNotFoundException("Achievement not found"));
-        log.info("Get achievement by name: {}", name);
-        return achievementMapper.toDto(achievement);
-    }
 
     @Transactional
     public boolean hasAchievement(long userId, long achievementId) {

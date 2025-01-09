@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class MentorshipAcceptedEventListener implements MessageListener {
     private final ObjectMapper objectMapper;
+
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {

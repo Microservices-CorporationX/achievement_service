@@ -9,7 +9,8 @@ public record RedisProperties(
         Channel channel) {
     public record Channel(
             String achievementChannel,
-            String followerChannel
+            String followerChannel,
+            String mentorshipAcceptedChannel
     ) {
     }
 }

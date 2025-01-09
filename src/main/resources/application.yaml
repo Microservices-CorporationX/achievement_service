@@ -40,4 +40,7 @@ project-service:
   port: 8082
 
 achievement-titles:
-  sensei: SENSEI
+  sensei:
+    title: SENSEI
+    required-points: 30
+

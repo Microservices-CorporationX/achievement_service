@@ -1,6 +1,7 @@
 package faang.school.achievement.config.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import faang.school.achievement.listener.MentorshipAcceptedEventListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -57,9 +58,11 @@ public class RedisConfig {
     }
 
     @Bean
-    RedisMessageListenerContainer redisContainer(RedisConnectionFactory connectionFactory) {
+    RedisMessageListenerContainer redisContainer(RedisConnectionFactory connectionFactory,
+                                                 MentorshipAcceptedEventListener mentorshipAcceptedEventListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(mentorshipAcceptedEventListener, mentorshipAcceptedTopic());
 
         return container;
     }
@@ -72,5 +75,10 @@ public class RedisConfig {
     @Bean
     public ChannelTopic followerChannelTopic() {
         return new ChannelTopic(redisProperties.channel().followerChannel());
+    }
+
+    @Bean
+    public ChannelTopic mentorshipAcceptedTopic() {
+        return new ChannelTopic(redisProperties.channel().mentorshipAcceptedChannel());
     }
 }
