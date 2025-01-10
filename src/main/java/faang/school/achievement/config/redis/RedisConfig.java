@@ -1,6 +1,7 @@
 package faang.school.achievement.config.redis;
 
 import faang.school.achievement.listener.mentorship.MentorshipEventListener;
+import faang.school.achievement.listener.post.PostEventListener;
 import faang.school.achievement.listener.recommendation.RecommendationEventListener;
 import faang.school.achievement.listener.team.TeamEventListener;
 import faang.school.achievement.listener.comment.CommentEventListener;
@@ -37,6 +38,9 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.channel.comment}")
     private String commentChannel;
+
+    @Value("${spring.data.redis.channel.post}")
+    private String postChannel;
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
@@ -94,16 +98,28 @@ public class RedisConfig {
     }
 
     @Bean
+    public MessageListenerAdapter postListener(PostEventListener postEventListener) {
+        return new MessageListenerAdapter(postEventListener);
+    }
+
+    @Bean
+    public ChannelTopic postTopic() {
+        return new ChannelTopic(postChannel);
+    }
+
+    @Bean
     public RedisMessageListenerContainer redisContainer(MessageListenerAdapter teamListener,
                                                         MessageListenerAdapter mentorshipListener,
                                                         MessageListenerAdapter recommendationListener,
-                                                        MessageListenerAdapter commentListener) {
+                                                        MessageListenerAdapter commentListener,
+                                                        MessageListenerAdapter postListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
         container.addMessageListener(commentListener, commentTopic());
         container.addMessageListener(teamListener, teamTopic());
         container.addMessageListener(mentorshipListener, mentorshipTopic());
         container.addMessageListener(recommendationListener, recommendationTopic());
+        container.addMessageListener(postListener, postTopic());
         return container;
     }
 }
