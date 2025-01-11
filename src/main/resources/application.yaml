@@ -28,6 +28,7 @@ spring:
         mentorship: mentorship_channel
         recommendation: recommendation_channel
         comment: comment_channel
+        project: project_channel
 
 server:
   port: 8085
