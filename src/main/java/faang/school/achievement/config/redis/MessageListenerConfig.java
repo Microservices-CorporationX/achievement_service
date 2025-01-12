@@ -12,12 +12,13 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 
 @Configuration
 @RequiredArgsConstructor
-public class RedisConfig {
+public class MessageListenerConfig {
 
     private final MentorshipEventListener mentorshipEventListener;
 
     @Value("${spring.data.redis.channel.mentorship}")
     private String mentorshipEventTopicName;
+
 
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory redisConnectionFactory) {

@@ -1,5 +1,10 @@
 package faang.school.achievement.service;
 
+import faang.school.achievement.dto.AchievementDto;
+import faang.school.achievement.dto.AchievementFilterDto;
+import faang.school.achievement.dto.AchievementProgressDto;
+import faang.school.achievement.filter.AchievementFilter;
+import faang.school.achievement.mapper.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
@@ -25,7 +30,9 @@ public class AchievementService {
 
     private final UserAchievementRepository userAchievementRepository;
     private final AchievementProgressRepository achievementProgressRepository;
+    private final AchievementMapper achievementMapper;
     private final AchievementRepository achievementRepository;
+    private final List<AchievementFilter> achievementFilters;
     private final Cache cache;
 
     @EventListener(ApplicationReadyEvent.class)
@@ -38,17 +45,42 @@ public class AchievementService {
     @Async("threadPool")
     public void handleAchievement(long userId, String achievementKey) {
         log.info("Trying to handle achievement {} for user {}", achievementKey, userId);
-        Achievement sensei = getAchievementFromCache(achievementKey);
+        Achievement achievement = getAchievementFromCache(achievementKey);
 
-        if (hasAchievement(userId, sensei.getId())) {
+        if (hasAchievement(userId, achievement.getId())) {
             log.debug("User {} already has achievement {}", userId, achievementKey);
             return;
         }
 
-        createProgressIfNecessary(userId, sensei.getId());
-        AchievementProgress achievementProgress = getProgress(userId, sensei.getId());
+        createProgressIfNecessary(userId, achievement.getId());
+        AchievementProgress achievementProgress = getProgress(userId, achievement.getId());
         achievementProgress.increment();
-        handleEnoughPointsForAchievement(userId, achievementProgress, sensei);
+        handleEnoughPointsForAchievement(userId, achievementProgress, achievement);
+    }
+
+    public List<AchievementDto> getAllPossibleAchievements(AchievementFilterDto filterDto) {
+        log.info("Trying to get all possible achievements with the following filters: {}", filterDto);
+        return achievementMapper.toAchievementDto(getFilteredAchievements(filterDto));
+    }
+
+    public List<AchievementDto> getAllUserAchievements(long userId) {
+        log.info("Trying to get all achievements for user: {}", userId);
+        List<UserAchievement> userAchievements = userAchievementRepository.findByUserId(userId);
+        List<Achievement> achievements = userAchievements.stream()
+                .map(UserAchievement::getAchievement)
+                .toList();
+        return achievementMapper.toAchievementDto(achievements);
+    }
+
+    public List<AchievementProgressDto> getUnfinishedUserAchievements(long userId) {
+        log.info("Trying to get all unfinished achievements for user: {}", userId);
+        List<AchievementProgress> unfinishedUserAchievements = achievementProgressRepository.findByUserId(userId);
+        return achievementMapper.toAchievementProgressDto(unfinishedUserAchievements);
+    }
+
+    public AchievementDto getAchievement(long achievementId) {
+        log.info("Trying to get achievement: {}", achievementId);
+        return achievementMapper.toAchievementDto(getAchievementById(achievementId));
     }
 
     private Achievement getAchievementFromCache(String achievementKey) {
@@ -101,5 +133,22 @@ public class AchievementService {
                 achievementProgress.getId(), achievementProgress.getUserId());
 
         achievementProgressRepository.delete(achievementProgress);
+    }
+
+    private List<Achievement> getFilteredAchievements(AchievementFilterDto filterDto) {
+        return achievementFilters.stream()
+                .filter(filter -> filter.isApplicable(filterDto))
+                .reduce(
+                        achievementRepository.findAll(),
+                        (achievements, filter) -> filter.apply(achievements, filterDto),
+                        (list1, list2) -> list2
+                );
+    }
+
+    private Achievement getAchievementById(long achievementId) {
+        return achievementRepository.findById(achievementId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(
+                        "Achievement with id %d does not exist", achievementId
+                )));
     }
 }

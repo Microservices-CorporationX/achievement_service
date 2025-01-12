@@ -15,6 +15,7 @@ public class ThreadPoolConfig {
     public ThreadPoolTaskExecutor threadPool() {
         ThreadPoolTaskExecutor threadPool = new ThreadPoolTaskExecutor();
         threadPool.setCorePoolSize(coreSize);
+        threadPool.initialize();
         return threadPool;
     }
 }
