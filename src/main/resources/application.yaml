@@ -24,6 +24,10 @@ spring:
       channel:
         achievement: achievement_channel
         follower: follower_channel
+        mentorship: mentorship_channel
+      cache:
+        key:
+          sensei: SENSEI
 
 server:
   port: 8085
@@ -35,3 +39,6 @@ logging:
 project-service:
   host: localhost
   port: 8082
+
+thread-pool:
+  core-size: 5

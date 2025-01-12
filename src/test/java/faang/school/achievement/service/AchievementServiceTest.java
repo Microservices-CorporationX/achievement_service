@@ -14,23 +14,36 @@ import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.cache.Cache;
+import org.springframework.cache.support.SimpleValueWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class AchievementServiceTest {
 
+    @InjectMocks
     private AchievementService achievementService;
+
+    @Mock
+    private UserAchievementRepository userAchievementRepository;
+
+    @Mock
+    private AchievementProgressRepository achievementProgressRepository;
 
     @Mock
     private AchievementMapper achievementMapper;
@@ -39,15 +52,15 @@ public class AchievementServiceTest {
     private AchievementRepository achievementRepository;
 
     @Mock
-    private AchievementProgressRepository achievementProgressRepository;
-
-    @Mock
-    private UserAchievementRepository userAchievementRepository;
+    private Cache cache;
 
     private AchievementFilter achievementFilter;
     private List<AchievementFilter> achievementFilters;
 
     private long userId;
+    private long achievementId;
+    private String achievementKey;
+    private Achievement senseiAchievement;
     private Achievement firstAchievement;
     private Achievement secondAchievement;
     private Achievement thirdAchievement;
@@ -55,39 +68,119 @@ public class AchievementServiceTest {
 
     @BeforeEach
     public void setUp() {
-        achievementFilter = Mockito.mock(AchievementFilter.class);
-        achievementFilters = List.of(achievementFilter);
-
-        achievementService = new AchievementService(
-                achievementMapper,
-                achievementRepository,
-                achievementProgressRepository,
-                userAchievementRepository,
-                achievementFilters
-        );
-
         userId = 5L;
+        achievementId = 1L;
+        achievementKey = "SENSEI";
+
+        senseiAchievement = Achievement.builder()
+                .id(achievementId)
+                .title(achievementKey)
+                .points(15)
+                .build();
 
         firstAchievement = Achievement.builder()
                 .id(1L)
                 .title("firstAchievement")
-                .rarity(Rarity.RARE)
+                .rarity(Rarity.EPIC)
                 .build();
+
         secondAchievement = Achievement.builder()
                 .id(2L)
                 .title("secondAchievement")
                 .rarity(Rarity.EPIC)
                 .build();
+
         thirdAchievement = Achievement.builder()
                 .id(3L)
                 .title("thirdAchievement")
                 .rarity(Rarity.RARE)
                 .build();
+
         achievements = List.of(
                 firstAchievement,
                 secondAchievement,
                 thirdAchievement
         );
+
+        achievementFilter = Mockito.mock(AchievementFilter.class);
+        achievementFilters = List.of(achievementFilter);
+
+        achievementService = new AchievementService(
+                userAchievementRepository,
+                achievementProgressRepository,
+                achievementMapper,
+                achievementRepository,
+                achievementFilters,
+                cache
+        );
+    }
+
+    @Test
+    public void testHandleAchievement() {
+        // arrange
+        AchievementProgress achievementProgress = AchievementProgress.builder()
+                .userId(userId)
+                .achievement(senseiAchievement)
+                .currentPoints(10)
+                .build();
+
+        when(cache.get(achievementKey))
+                .thenReturn(new SimpleValueWrapper(senseiAchievement));
+        when(achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId))
+                .thenReturn(Optional.of(achievementProgress));
+
+        long expectedPointsAfterIncrement = achievementProgress.getCurrentPoints() + 1;
+
+        // act
+        achievementService.handleAchievement(userId, achievementKey);
+
+        // assert
+        assertEquals(expectedPointsAfterIncrement, achievementProgress.getCurrentPoints());
+    }
+
+    @Test
+    public void testHandleAchievementUserAlreadyHasAchievement() {
+        // arrange
+        when(cache.get(achievementKey))
+                .thenReturn(new SimpleValueWrapper(senseiAchievement));
+        when(userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId))
+                .thenReturn(true);
+
+        // act
+        achievementService.handleAchievement(userId, achievementKey);
+
+        // assert
+        verify(achievementProgressRepository, times(0))
+                .findByUserIdAndAchievementId(userId, achievementId);
+    }
+
+    @Test
+    public void testHandleAchievementEnoughPointsToReceiveAchievement() {
+        // arrange
+        AchievementProgress achievementProgress = AchievementProgress.builder()
+                .userId(userId)
+                .achievement(senseiAchievement)
+                .currentPoints(14)
+                .build();
+        UserAchievement userAchievement = UserAchievement.builder()
+                .userId(userId)
+                .achievement(senseiAchievement)
+                .build();
+
+        when(cache.get(achievementKey))
+                .thenReturn(new SimpleValueWrapper(senseiAchievement));
+        when(achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId))
+                .thenReturn(Optional.of(achievementProgress));
+
+        // act
+        achievementService.handleAchievement(userId, achievementKey);
+
+        // assert
+        ArgumentCaptor<UserAchievement> userAchievementArgumentCaptor
+                = ArgumentCaptor.forClass(UserAchievement.class);
+        verify(userAchievementRepository).save(userAchievementArgumentCaptor.capture());
+        verify(achievementProgressRepository).delete(achievementProgress);
+        assertEquals(userAchievement, userAchievementArgumentCaptor.getValue());
     }
 
     @Test

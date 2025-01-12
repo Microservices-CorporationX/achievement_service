@@ -49,4 +49,8 @@ public class AchievementProgress {
     public void increment() {
         currentPoints++;
     }
+
+    public boolean hasEarnedEnoughPointsForAchievement() {
+        return currentPoints >= achievement.getPoints();
+    }
 }

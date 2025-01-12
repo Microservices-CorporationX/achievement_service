@@ -14,7 +14,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-public class RedisConfig {
+public class RedisTemplateConfig {
 
     @Value("${spring.data.redis.channel.achievement}")
     private String achievementTopic;
