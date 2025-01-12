@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -24,6 +25,7 @@ public class SenseiAchievementHandler implements MentorshipStartEventHandler {
 
     @Async
     @Override
+    @Transactional
     public void handleEvent(MentorshipStartEvent event) {
         Achievement achievement = achievementCache.getAchievement(achievementTitle)
                 .orElseThrow(() -> new IllegalArgumentException("Wrong achievement title"));
@@ -33,8 +35,7 @@ public class SenseiAchievementHandler implements MentorshipStartEventHandler {
         if (!achievementService.hasAchievement(mentorId, achievementId)) {
             achievementService.createProgressIfNecessary(mentorId, achievementId);
             AchievementProgress progress = achievementService.getProgress(mentorId, achievementId);
-            progress.increment();
-            achievementProgressRepository.save(progress);
+            achievementProgressRepository.incrementCurrentPoints(progress.getId());
 
             if (progress.getCurrentPoints() >= achievement.getPoints()) {
                 achievementService.giveAchievement(mentorId, achievement);

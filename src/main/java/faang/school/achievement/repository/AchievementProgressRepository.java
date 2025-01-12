@@ -13,19 +13,27 @@ import java.util.Optional;
 public interface AchievementProgressRepository extends CrudRepository<AchievementProgress, Long> {
 
     @Query(value = """
-            SELECT ap
-            FROM AchievementProgress ap
-            WHERE ap.userId = :userId AND ap.achievement.id = :achievementId
-    """)
+                    SELECT ap
+                    FROM AchievementProgress ap
+                    WHERE ap.userId = :userId AND ap.achievement.id = :achievementId
+            """)
     Optional<AchievementProgress> findByUserIdAndAchievementId(long userId, long achievementId);
 
     @Query(nativeQuery = true, value = """
-            INSERT INTO user_achievement_progress (user_id, achievement_id, current_points)
-            VALUES (:userId, :achievementId, 0)
-            ON CONFLICT DO NOTHING
-    """)
+                    INSERT INTO user_achievement_progress (user_id, achievement_id, current_points)
+                    VALUES (:userId, :achievementId, 0)
+                    ON CONFLICT DO NOTHING
+            """)
     @Modifying
     void createProgressIfNecessary(long userId, long achievementId);
 
     List<AchievementProgress> findByUserId(long userId);
+
+    @Modifying
+    @Query(nativeQuery = true, value = """
+            UPDATE user_achievement_progress
+            SET current_points = current_points + 1
+            WHERE id = :progressId
+            """)
+    void incrementCurrentPoints(long progressId);
 }
