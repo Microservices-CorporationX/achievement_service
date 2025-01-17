@@ -24,6 +24,8 @@ spring:
       channel:
         achievement: achievement_channel
         follower: follower_channel
+        team: team_channel
+
         profile-pic: profile_pic_channel
         mentorship-channel: mentorship_channel
 server:
@@ -39,3 +41,6 @@ project-service:
 
 achievement-title:
   sensei: SENSEI
+application:
+  constants:
+    increment_progress_points: 1
