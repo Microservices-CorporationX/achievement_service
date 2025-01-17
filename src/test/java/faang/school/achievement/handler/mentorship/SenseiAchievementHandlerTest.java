@@ -45,6 +45,7 @@ public class SenseiAchievementHandlerTest {
         long achievementId = 1L;
         long currentPoints = 19L;
         long points = currentPoints + 1;
+        long progressId = 1L;
 
         MentorshipStartEvent event = mock(MentorshipStartEvent.class);
         Achievement achievement = mock(Achievement.class);
@@ -57,9 +58,10 @@ public class SenseiAchievementHandlerTest {
         when(achievementService.getProgress(mentorId, achievementId)).thenReturn(progress);
         when(progress.getCurrentPoints()).thenReturn(currentPoints);
         when(achievement.getPoints()).thenReturn(points);
+        when(progress.getId()).thenReturn(progressId);
 
         senseiAchievementHandler.handleEvent(event);
-        verify(progressRepository, times(1)).save(progress);
+        verify(progressRepository, times(1)).incrementCurrentPoints(progressId);
         verify(achievementService, times(0)).giveAchievement(mentorId, achievement);
     }
 
@@ -91,6 +93,7 @@ public class SenseiAchievementHandlerTest {
         long achievementId = 1L;
         long currentPoints = 19L;
         long points = currentPoints;
+        long progressId = 1L;
 
         MentorshipStartEvent event = mock(MentorshipStartEvent.class);
         Achievement achievement = mock(Achievement.class);
@@ -103,9 +106,10 @@ public class SenseiAchievementHandlerTest {
         when(achievementService.getProgress(mentorId, achievementId)).thenReturn(progress);
         when(progress.getCurrentPoints()).thenReturn(currentPoints);
         when(achievement.getPoints()).thenReturn(points);
+        when(progress.getId()).thenReturn(progressId);
 
         senseiAchievementHandler.handleEvent(event);
-        verify(progressRepository, times(1)).save(progress);
+        verify(progressRepository, times(1)).incrementCurrentPoints(progressId);
         verify(achievementService, times(1)).giveAchievement(mentorId, achievement);
     }
 }
