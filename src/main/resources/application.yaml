@@ -27,6 +27,7 @@ spring:
         team: team_channel
 
         profile-pic: profile_pic_channel
+        mentorship-channel: mentorship_channel
 server:
   port: 8085
 
@@ -38,6 +39,8 @@ project-service:
   host: localhost
   port: 8082
 
+achievement-title:
+  sensei: SENSEI
 application:
   constants:
     increment_progress_points: 1

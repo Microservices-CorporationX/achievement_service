@@ -1,5 +1,7 @@
 package faang.school.achievement.config.redis;
 
+import faang.school.achievement.listener.MentorshipStartEventListener;
+import faang.school.achievement.listener.ProfilePicEventListener;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -42,9 +44,15 @@ public class RedisConfig {
         log.info(CREATE_CHANNEL_LOG_MESSAGE, redisProperties.getTeamChannel());
         return new ChannelTopic(redisProperties.getTeamChannel());
     }
+
     @Bean
     public ChannelTopic profilePicChannel() {
         return new ChannelTopic(redisProperties.getProfilePicChannel());
+    }
+
+    @Bean
+    public ChannelTopic mentorshipChannel() {
+        return new ChannelTopic(redisProperties.getMentorshipChannel());
     }
 
     @Bean
@@ -89,11 +97,22 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory connectionFactory,
-                                                                       MessageListenerAdapter messageListenerAdapter,
-                                                                       ChannelTopic profilePicChannel) {
+    public MessageListenerAdapter mentorshipStartListenerAdapter(MentorshipStartEventListener listener) {
+        return new MessageListenerAdapter(listener);
+    }
+
+    @Bean
+    public RedisMessageListenerContainer redisMessageListenerContainer
+            (RedisConnectionFactory connectionFactory,
+             MessageListenerAdapter messageListenerAdapter,
+             ChannelTopic profilePicChannel,
+             MessageListenerAdapter mentorshipStartListenerAdapter,
+             ChannelTopic mentorshipChannel
+            ) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(messageListenerAdapter, profilePicChannel);
+        container.addMessageListener(mentorshipStartListenerAdapter, mentorshipChannel);
         container.addMessageListener(messageListenerAdapter, profilePicChannel);
         return container;
     }
