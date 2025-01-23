@@ -9,3 +9,5 @@ databaseChangeLog:
       file: db/changelog/changeset/achievement_V004_add_niceguy_achievement.sql
   - include:
       file: db/changelog/changeset/achievement_V005_edit_expert_achievement_points.sql
+  - include:
+      file: db/changelog/changeset/achievement_V006_add_businessman_achievement.sql
