@@ -6,17 +6,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Repository
 public interface AchievementProgressRepository extends JpaRepository<AchievementProgress, Long> {
 
-    @Query(value = """
-                    SELECT ap
-                    FROM AchievementProgress ap
-                    WHERE ap.userId = :userId AND ap.achievement.id = :achievementId
-            """)
     Optional<AchievementProgress> findByUserIdAndAchievementId(long userId, long achievementId);
 
     @Query(nativeQuery = true, value = """
@@ -33,5 +29,6 @@ public interface AchievementProgressRepository extends JpaRepository<Achievement
             WHERE id = :progressId
             """)
     @Modifying
+    @Transactional
     void incrementUserAchievementProgress(@Param("progressId") long progressId);
 }
