@@ -121,8 +121,7 @@ public class RedisConfig {
                                                         MessageListenerAdapter mentorshipListener,
                                                         MessageListenerAdapter recommendationListener,
                                                         MessageListenerAdapter commentListener,
-                                                        MessageListener projectEventListener) {
-                                                        MessageListenerAdapter commentListener,
+                                                        MessageListener projectEventListener,
                                                         MessageListenerAdapter followerListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
