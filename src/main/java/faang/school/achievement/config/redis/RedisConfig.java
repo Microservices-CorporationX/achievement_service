@@ -3,6 +3,7 @@ package faang.school.achievement.config.redis;
 import faang.school.achievement.listener.comment.CommentEventListener;
 import faang.school.achievement.listener.mentorship.MentorshipEventListener;
 import faang.school.achievement.listener.recommendation.RecommendationEventListener;
+import faang.school.achievement.listener.subscription.FollowerEventListener;
 import faang.school.achievement.listener.team.TeamEventListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +42,9 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.channel.project}")
     private String projectChannel;
+
+    @Value("${spring.data.redis.channel.follower}")
+    private String followerChannel;
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
@@ -103,11 +107,22 @@ public class RedisConfig {
     }
 
     @Bean
+    public MessageListenerAdapter followerListener(FollowerEventListener followerEventListener) {
+        return new MessageListenerAdapter(followerEventListener);
+    }
+
+    @Bean
+    public ChannelTopic followerTopic() {
+        return new ChannelTopic(followerChannel);
+    }
+
+    @Bean
     public RedisMessageListenerContainer redisContainer(MessageListenerAdapter teamListener,
                                                         MessageListenerAdapter mentorshipListener,
                                                         MessageListenerAdapter recommendationListener,
                                                         MessageListenerAdapter commentListener,
-                                                        MessageListener projectEventListener) {
+                                                        MessageListener projectEventListener,
+                                                        MessageListenerAdapter followerListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
         container.addMessageListener(commentListener, commentTopic());
@@ -115,6 +130,7 @@ public class RedisConfig {
         container.addMessageListener(mentorshipListener, mentorshipTopic());
         container.addMessageListener(recommendationListener, recommendationTopic());
         container.addMessageListener(projectEventListener, projectTopic());
+        container.addMessageListener(followerListener, followerTopic());
         return container;
     }
 }

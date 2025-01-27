@@ -1,8 +1,8 @@
-package faang.school.achievement.handler.recommendation.niceguy;
+package faang.school.achievement.handler.subscription.followers;
 
 import faang.school.achievement.cache.AchievementCache;
 import faang.school.achievement.dto.AchievementDto;
-import faang.school.achievement.dto.recommendation.RecommendationEvent;
+import faang.school.achievement.dto.subscription.FollowerEvent;
 import faang.school.achievement.exception.AchievementNotFoundException;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.service.AchievementService;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class NiceGuyAchievementHandlerTest {
+public class FollowersAchievementHandlerTest {
 
     @Mock
     private AchievementCache achievementCache;
@@ -29,77 +29,74 @@ public class NiceGuyAchievementHandlerTest {
     private AchievementService achievementService;
 
     @InjectMocks
-    private NiceGuyAchievementHandler niceGuyAchievementHandler;
+    private FollowersAchievementHandler followersAchievementHandler;
 
     @Test
     public void testHandleEventIfAchievementNull() {
-        RecommendationEvent event = prepareEvent();
+        FollowerEvent event = prepareEvent();
         when(achievementCache.get(anyString())).thenReturn(null);
 
         AchievementNotFoundException exception = assertThrows(AchievementNotFoundException.class,
-                () -> niceGuyAchievementHandler.handleEvent(event));
+                () -> followersAchievementHandler.handleEvent(event));
 
         assertEquals("Failed to get achievement from cache.", exception.getMessage());
     }
 
     @Test
     public void testHandleEventIfUserAlreadyHasAchievement() {
-        RecommendationEvent event = prepareEvent();
+        FollowerEvent event = prepareEvent();
         AchievementDto achievement = prepareAchievementDto();
-        AchievementProgress achievementProgress = prepareAchievementProgress(10);
+        AchievementProgress achievementProgress = prepareAchievementProgress(100);
         when(achievementCache.get(anyString())).thenReturn(achievement);
-        when(achievementService.hasAchievement(event.getReceiverId(), 1L)).thenReturn(true);
+        when(achievementService.hasAchievement(event.getFolloweeId(), achievement.getId())).thenReturn(true);
 
-        niceGuyAchievementHandler.handleEvent(event);
+        followersAchievementHandler.handleEvent(event);
 
-        verify(achievementService, never()).createProgressIfNecessary(event.getReceiverId(), achievement.getId());
+        verify(achievementService, never()).createProgressIfNecessary(event.getFolloweeId(), achievement.getId());
         verify(achievementService, never()).saveProgress(achievementProgress);
-        verify(achievementService, never()).giveAchievement(achievement, event.getReceiverId());
+        verify(achievementService, never()).giveAchievement(achievement, event.getFolloweeId());
     }
 
     @Test
     public void testHandleEventIfUserGivenAchievement() {
-        RecommendationEvent event = prepareEvent();
+        FollowerEvent event = prepareEvent();
         AchievementDto achievement = prepareAchievementDto();
-        AchievementProgress achievementProgress = prepareAchievementProgress(9);
+        AchievementProgress achievementProgress = prepareAchievementProgress(99);
         when(achievementCache.get(anyString())).thenReturn(achievement);
-        when(achievementService.hasAchievement(event.getReceiverId(), 1L)).thenReturn(false);
-        when(achievementService.getProgress(event.getReceiverId(), achievement.getId())).thenReturn(achievementProgress);
+        when(achievementService.hasAchievement(event.getFolloweeId(), achievement.getId())).thenReturn(false);
+        when(achievementService.getProgress(event.getFolloweeId(), achievement.getId())).thenReturn(achievementProgress);
 
-        niceGuyAchievementHandler.handleEvent(event);
+        followersAchievementHandler.handleEvent(event);
 
-        verify(achievementService).createProgressIfNecessary(event.getReceiverId(), achievement.getId());
+        verify(achievementService).createProgressIfNecessary(event.getFolloweeId(), achievement.getId());
         verify(achievementService).saveProgress(achievementProgress);
-        verify(achievementService).giveAchievement(achievement, event.getReceiverId());
+        verify(achievementService).giveAchievement(achievement, event.getFolloweeId());
     }
 
     @Test
     public void testHandleEventIfUserNotGivenAchievement() {
-        RecommendationEvent event = prepareEvent();
+        FollowerEvent event = prepareEvent();
         AchievementDto achievement = prepareAchievementDto();
-        AchievementProgress achievementProgress = prepareAchievementProgress(8);
+        AchievementProgress achievementProgress = prepareAchievementProgress(98);
         when(achievementCache.get(anyString())).thenReturn(achievement);
-        when(achievementService.hasAchievement(event.getReceiverId(), 1L)).thenReturn(false);
-        when(achievementService.getProgress(event.getReceiverId(), achievement.getId())).thenReturn(achievementProgress);
+        when(achievementService.hasAchievement(event.getFolloweeId(), achievement.getId())).thenReturn(false);
+        when(achievementService.getProgress(event.getFolloweeId(), achievement.getId())).thenReturn(achievementProgress);
 
-        niceGuyAchievementHandler.handleEvent(event);
+        followersAchievementHandler.handleEvent(event);
 
-        verify(achievementService).createProgressIfNecessary(event.getReceiverId(), achievement.getId());
+        verify(achievementService).createProgressIfNecessary(event.getFolloweeId(), achievement.getId());
         verify(achievementService).saveProgress(achievementProgress);
-        verify(achievementService, never()).giveAchievement(achievement, event.getReceiverId());
+        verify(achievementService, never()).giveAchievement(achievement, event.getFolloweeId());
     }
 
-    private RecommendationEvent prepareEvent() {
-        return RecommendationEvent.builder()
-                .authorId(1L)
-                .receiverId(2L)
-                .build();
+    private FollowerEvent prepareEvent() {
+        return new FollowerEvent(1L, 2L);
     }
 
     private AchievementDto prepareAchievementDto() {
         return AchievementDto.builder()
-                .id(1L)
-                .points(10L)
+                .id(3L)
+                .points(100L)
                 .build();
     }
 
