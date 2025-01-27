@@ -1,14 +1,15 @@
 package faang.school.achievement.config.redis;
 
+import faang.school.achievement.listener.comment.CommentEventListener;
 import faang.school.achievement.listener.mentorship.MentorshipEventListener;
 import faang.school.achievement.listener.recommendation.RecommendationEventListener;
 import faang.school.achievement.listener.subscription.FollowerEventListener;
 import faang.school.achievement.listener.team.TeamEventListener;
-import faang.school.achievement.listener.comment.CommentEventListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -38,6 +39,9 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.channel.comment}")
     private String commentChannel;
+
+    @Value("${spring.data.redis.channel.project}")
+    private String projectChannel;
 
     @Value("${spring.data.redis.channel.follower}")
     private String followerChannel;
@@ -98,6 +102,11 @@ public class RedisConfig {
     }
 
     @Bean
+    public ChannelTopic projectTopic() {
+        return new ChannelTopic(projectChannel);
+    }
+
+    @Bean
     public MessageListenerAdapter followerListener(FollowerEventListener followerEventListener) {
         return new MessageListenerAdapter(followerEventListener);
     }
@@ -112,6 +121,8 @@ public class RedisConfig {
                                                         MessageListenerAdapter mentorshipListener,
                                                         MessageListenerAdapter recommendationListener,
                                                         MessageListenerAdapter commentListener,
+                                                        MessageListener projectEventListener) {
+                                                        MessageListenerAdapter commentListener,
                                                         MessageListenerAdapter followerListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
@@ -119,6 +130,7 @@ public class RedisConfig {
         container.addMessageListener(teamListener, teamTopic());
         container.addMessageListener(mentorshipListener, mentorshipTopic());
         container.addMessageListener(recommendationListener, recommendationTopic());
+        container.addMessageListener(projectEventListener, projectTopic());
         container.addMessageListener(followerListener, followerTopic());
         return container;
     }
