@@ -2,9 +2,9 @@ name: CIForMedusaMaster
 
 on:
   push:
-    branches: [ "Medusa-master-stream7" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "Medusa-master-stream7" ]
+    branches: [ "master" ]
 
 jobs:
   build_and_run_tests:
