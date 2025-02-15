@@ -18,9 +18,6 @@
 * База поднимается в отдельном сервисе [infra](../infra)
 * Redis поднимается в единственном инстансе тоже в [infra](../infra)
 * Liquibase сам накатывает нужные миграции на голый PostgreSql при старте приложения
-* В тестах используется [testcontainers](https://testcontainers.com/), в котором тоже запускается отдельный инстанс
-  postgres
-* В коде продемонстрирована работа как с JdbcTemplate, так и с JPA (Hibernate)
 
 # Как начать разработку начиная с шаблона?
 
@@ -72,8 +69,7 @@ java -jar build/libs/ServiceTemplate-1.0.jar
 
 # Код
 
-RESTful приложения калькулятор с единственным endpoint'ом, который принимает 2 числа и выдает результаты их сложения,
-вычитаяни, умножения и деления
+RESTful приложение
 
 * Обычная трёхслойная
   архитектура – [Controller](src/main/java/faang/school/achievement/controller), [Service](src/main/java/faang/school/achievement/service), [Repository](src/main/java/faang/school/achievement/repository)
@@ -94,16 +90,12 @@ RESTful приложения калькулятор с единственным 
 
 # Тесты
 
-Написаны только для единственного REST endpoint'а
 * SpringBootTest
 * MockMvc
 * Testcontainers
 * AssertJ
 * JUnit5
-* Parameterized tests
 
 # TODO
 
 * Dockerfile, который подключается к сети запущенной postgres в docker-compose
-* Redis connectivity
-* ...
