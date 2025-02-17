@@ -43,7 +43,7 @@ rm -rf .git
 git init
 git remote add origin <link_to_repo>
 git add .
-git commit -m "<msg>"
+git commit -m "Initial commit"
 ```
 
 Готово, можно начинать работу!
