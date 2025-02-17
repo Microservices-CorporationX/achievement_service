@@ -24,14 +24,14 @@
 1. Сначала нужно склонировать этот репозиторий
 
 ```shell
-git clone https://github.com/FAANG-School/ServiceTemplate
+git clone <link_to_repo>
 ```
 
 2. Далее удаляем служебную директорию для git
 
 ```shell
 # Переходим в корневую директорию проекта
-cd ServiceTemplate
+cd Service
 rm -rf .git
 ```
 
@@ -62,7 +62,7 @@ gradle build
 Запустить jar'ник
 
 ```shell
-java -jar build/libs/ServiceTemplate-1.0.jar
+java -jar build/libs/Service-1.0.jar
 ```
 
 Но легче всё это делать через IDE
