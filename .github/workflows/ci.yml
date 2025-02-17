@@ -1,4 +1,4 @@
-name: CIForMedusaMaster
+name: CIForCorpXMaster
 
 on:
   push:
