@@ -72,7 +72,7 @@ java -jar build/libs/ServiceTemplate-1.0.jar
 RESTful приложение
 
 * Обычная трёхслойная
-  архитектура – [Controller], [Service](src/main/java/ru/corporationx/achievement/service), [Repository](src/main/java/ru/corporationx/achievement/repository)
+  архитектура – [Service](src/main/java/ru/corporationx/achievement/service), [Repository](src/main/java/ru/corporationx/achievement/repository)
 * Реализован простой Messaging через [Redis pub/sub](https://redis.io/docs/manual/pubsub/)
   * [Конфигурация](src/main/java/ru/corporationx/achievement/config/redis/RedisConfig.java) –
     сетапится [RedisTemplate](https://docs.spring.io/spring-data/redis/docs/current/api/org/springframework/data/redis/core/RedisTemplate.html) –
