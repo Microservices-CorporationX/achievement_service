@@ -1,6 +1,6 @@
-# Service Template
+# Achievement Service
 
-Стандартный шаблон проекта на SpringBoot
+Обработка достижений пользователей
 
 # Использованные технологии
 
@@ -15,8 +15,8 @@
 
 # База данных
 
-* База поднимается в отдельном сервисе [infra](../infra)
-* Redis поднимается в единственном инстансе тоже в [infra](../infra)
+* База поднимается в отдельном сервисе [infra](https://github.com/Microservices-CorporationX/infra)
+* Redis поднимается в единственном инстансе тоже в [infra](https://github.com/Microservices-CorporationX/infra)
 * Liquibase сам накатывает нужные миграции на голый PostgreSql при старте приложения
 
 # Как начать разработку начиная с шаблона?
@@ -50,7 +50,7 @@ git commit -m "<msg>"
 
 # Как запустить локально?
 
-Сначала нужно развернуть базу данных из директории [infra](../infra)
+Сначала нужно развернуть базу данных из директории [infra](https://github.com/Microservices-CorporationX/infra)
 
 Далее собрать gradle проект
 
@@ -73,16 +73,13 @@ RESTful приложение
 
 * Обычная трёхслойная
   архитектура – [Controller](src/main/java/faang/school/achievement/controller), [Service](src/main/java/faang/school/achievement/service), [Repository](src/main/java/faang/school/achievement/repository)
-* Написан [GlobalExceptionHandler](src/main/java/faang/school/achievement/controller/GlobalExceptionHandler.java)
-  который умеет возвращать ошибки в формате `{"code":"CODE", "message": "message"}`
 * Реализован простой Messaging через [Redis pub/sub](https://redis.io/docs/manual/pubsub/)
-  * [Конфигурация](src/main/java/faang/school/achievement/config/RedisConfig.java) –
+  * [Конфигурация](src/main/java/ru/corporationx/achievement/config/redis/RedisConfig.java) –
     сетапится [RedisTemplate](https://docs.spring.io/spring-data/redis/docs/current/api/org/springframework/data/redis/core/RedisTemplate.html) –
     класс, для удобной работы с Redis силами Spring
-  * [Отправитель](src/main/java/faang/school/achievement/service/messaging/RedisCalculationPublisher.java) – генерит
-    рандомные запросы и отправляет в очередь
-  * [Получатель](src/main/java/faang/school/achievement/service/messaging/RedisCalculationSubscriber.java) –
-    получает запросы и отправляет задачи асинхронно выполняться
+  * [Обработчики достижений](src/main/java/ru/corporationx/achievement/handler) – обработчики ивентов, на основе которых выдаются достижения
+  * [Получатели](src/main/java/ru/corporationx/achievement/listener) –
+    получают ивенты и отправляет их обрабатываться асинхронно
 
 # Тесты
 
