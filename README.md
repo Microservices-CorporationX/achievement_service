@@ -73,12 +73,13 @@ RESTful приложение
 
 * Обычная трёхслойная
   архитектура – [Service](src/main/java/ru/corporationx/achievement/service), [Repository](src/main/java/ru/corporationx/achievement/repository)
+* Слой Repository реализован на JPA (Hibernate)
 * Реализован простой Messaging через [Redis pub/sub](https://redis.io/docs/manual/pubsub/)
-  * [Конфигурация](src/main/java/ru/corporationx/achievement/config/redis/RedisConfig.java) –
+* [Конфигурация](src/main/java/ru/corporationx/achievement/config/redis/RedisConfig.java) –
     сетапится [RedisTemplate](https://docs.spring.io/spring-data/redis/docs/current/api/org/springframework/data/redis/core/RedisTemplate.html) –
     класс, для удобной работы с Redis силами Spring
-  * [Обработчики достижений](src/main/java/ru/corporationx/achievement/handler) – обработчики ивентов, на основе которых выдаются достижения
-  * [Получатели](src/main/java/ru/corporationx/achievement/listener) –
+* [Обработчики достижений](src/main/java/ru/corporationx/achievement/handler) – обработчики ивентов, на основе которых выдаются достижения
+* [Получатели](src/main/java/ru/corporationx/achievement/listener) –
     получают ивенты и отправляет их обрабатываться асинхронно
 
 # Тесты
